@@ -146,6 +146,51 @@ body {
   font-size: 36pt;
 }
 
+#controllerButtons{
+  display:flexbox;
+  flex-direction: row; /* change this to row instead of 'column' */
+  flex-wrap:wrap; /* added flex-wrap */
+  margin-left: 10%;
+}
+
+#controllerButtons:hover {
+  cursor: pointer;
+  background-color: var(--swatch-contrast);
+  color: white;
+}
+
+#controllerText{
+  font-size: 1vw;
+  top:10%;
+}
+
+#controllerTitle{
+  font-size: 1vw;
+  text-align: center;
+  vertical-align: top;
+}
+
+#comp{
+  display: flex;
+}
+
+#controller {
+  background-image: linear-gradient(to bottom, #baba60, #aa44d2);
+  border-color: black;
+  border-width: 2px;
+  border-style: solid;
+  border-radius: 10px;
+  padding-top: 5%;
+  padding-bottom: 5%;
+  position: absolute;
+  right: 0.5%;
+  top: 60%;
+  width: 39%;
+  height: 5%;
+  display: flex;
+  flex-direction: column;
+}
+
 #list-selector-heading {
   position: absolute;
   left: 0%;
@@ -160,19 +205,41 @@ body {
   justify-content: center;
 }
 
-#add-list-button {
-  float: left;
+#topIndividual{
+  margin-left: 2%;
 }
 
+#searchBar{
+  vertical-align: center;
+  height: 10%;
+}
+
+.topControls{
+  box-shadow: 0px 5px 8px -9px rgba(0,0,0,0,75);
+  display: flex;
+  vertical-align: top;
+  justify-content:space-between;
+}
+
+#add-list-button {
+ 
+ 
+  top: 90%;
+ 
+  
+  align-items: center;
+}
+ 
 #list-selector-list {
   position: absolute;
   left: 0%;
   top: 19%;
-  width: 50%;
+  width: 60%;
   height: 70%;
   display: flex;
   flex-direction: column;
-  overflow: scroll;
+  overflow-x:none;
+  overflow-y: scroll;
 }
 
 .list-card,

@@ -78,11 +78,12 @@ function ListCard(props) {
         cardStatus = true;
     }
     let cardElement =
+    <Box>
         <ListItem
             id={idNamePair._id}
             key={idNamePair._id}
-            sx={{ marginTop: '15px', display: 'flex', p: 1 }}
-            style={{ width: '100%', fontSize: '48pt' }}
+            sx={{backgroundColor: 'gray', marginTop: '15px', display: 'flex', p: 1 }}
+            style={{ width: '100%', fontSize: '48pt'}}
             button
             onClick={(event) => {
                 handleLoadList(event, idNamePair._id)
@@ -102,6 +103,7 @@ function ListCard(props) {
                 </IconButton>
             </Box>
         </ListItem>
+        </Box>
 
     if (editActive) {
         cardElement =
