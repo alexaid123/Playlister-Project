@@ -146,32 +146,60 @@ body {
   font-size: 36pt;
 }
 
-#controllerButtons{
-  display:flexbox;
-  flex-direction: row; /* change this to row instead of 'column' */
-  flex-wrap:wrap; /* added flex-wrap */
-  margin-left: 10%;
+.controllerButtons{
+ 
+  background-color: #cccccc;
+  width: 80%;
+  
 }
 
-#controllerButtons:hover {
+.controllerButtons:hover {
   cursor: pointer;
   background-color: var(--swatch-contrast);
   color: white;
 }
 
-#controllerText{
+.controllerText{
+  position: absolute;
   font-size: 1vw;
-  top:10%;
+}
+
+#ena
+{
+  top: 20%;
+}
+
+#dio
+{
+  top: 40%;
+}
+
+#tria
+{
+  top: 60%;
+}
+
+#tes
+{
+  top: 80%;
+}
+
+#pente
+{
+ 
 }
 
 #controllerTitle{
+  position: absolute;
   font-size: 1vw;
+  margin-left: 50%;
   text-align: center;
   vertical-align: top;
+  margin-top: 1px;
 }
 
-#comp{
-  display: flex;
+#ena{
+  top: 100px;
 }
 
 #controller {
@@ -182,10 +210,9 @@ body {
   border-radius: 10px;
   padding-top: 5%;
   padding-bottom: 5%;
-  position: absolute;
-  right: 0.5%;
+  right: 0.5px;
+  left: 10px;
   top: 60%;
-  width: 39%;
   height: 5%;
   display: flex;
   flex-direction: column;
@@ -206,40 +233,140 @@ body {
 }
 
 #topIndividual{
-  margin-left: 2%;
+ 
 }
 
-#searchBar{
+.searchBar{
+  position: relative;
+  height:50%;
+  width:100%;
+  margin-top: 8px;
+  padding: 0;
+}
+
+#topLeft{
+  justify-content: left;
   vertical-align: center;
-  height: 10%;
+  position: relative;
+  margin-left: 3px;
+}
+
+#cHo:hover
+{
+  cursor: pointer;
+  background-color: var(--swatch-contrast);
+  color: white;
+}
+
+.topC{
+  background-color: #b8b808;
+  position: absolute;
+  height:40px; 
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  position: sticky;
 }
 
 .topControls{
   box-shadow: 0px 5px 8px -9px rgba(0,0,0,0,75);
   display: flex;
   vertical-align: top;
-  justify-content:space-between;
+  position: relative;
+  top: 5%;
+  justify-content: space-around;
 }
 
 #add-list-button {
- 
- 
-  top: 90%;
- 
+ height: 10%;
+ width: 100%;
+ position: absolute;
+  justify-content: center;
+  vertical-align: bottom;
+}
+
+#addLB
+{
+
+  position: absolute;
+  display: flex;
+  width:100%;
+  height: 80px;
+  margin-top: 502px;
+  background-color: #b8b808;
+  justify-content: center;
   
-  align-items: center;
+}
+
+#plBContainer{  
+  border-color: black;
+  border-width: 2px;
+  border-style: solid;
+  border-radius: 10px;
+  padding-top: 1%;
+  padding-bottom: 1%;
+  justify-content: center;
+  width: 20%;
+  display: flex;
+  background-color: rgb(229, 247, 156);
+}
+
+#plB{
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
+
+#plBContainer:hover {
+  cursor: pointer;
+  background-color: var(--swatch-contrast);
+  color: white;
+}
+
+#yComp{
+  position: relative;
+  width:100%;
+  left: 0;
+  height: 300px;
+  background-image: linear-gradient(to bottom, #baba60, #aa44d2);
+  border-color: black;
+  border-width: 2px;
+  border-style: solid;
+  border-radius: 10px;
+  padding-top: 5%;
+  padding-bottom: 5%;
+  background-color: #123456;
 }
  
-#list-selector-list {
+.playlist-selector{
+  position: relative;
+}
+
+#ytController
+{
+  position: relative;
+  width:40%;
+}
+
+#nested
+{
+  position: relative;
+}
+
+#mid{
   position: absolute;
-  left: 0%;
-  top: 19%;
-  width: 60%;
-  height: 70%;
   display: flex;
-  flex-direction: column;
+  width:100%;
+  height: 504px;
+  background-color: aqua;
+}
+
+#list-selector-list {
+  position: relative;
+  width: 60%;
+  height: 100%;
   overflow-x:none;
   overflow-y: scroll;
+  background-color: #751c69;
+  border-radius: 20px;
 }
 
 .list-card,

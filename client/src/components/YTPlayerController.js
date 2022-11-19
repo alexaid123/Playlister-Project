@@ -13,28 +13,31 @@ export default function YTPlayerController() {
     {
         
     }
+
+    /*
+        <SkipPreviousIcon onClick = {handleCreateAccount} variant="contained" fontSize="large"></SkipPreviousIcon>
+            
+            <StopIcon fontSize="large"></StopIcon>
+                
+            <PlayCircleFilledWhiteSharpIcon fontSize = 'large' variant="contained"></PlayCircleFilledWhiteSharpIcon>
+              
+                <SkipNextIcon onClick = {handleCreateAccount} variant="contained" fontSize="large"><Link  style={{ textDecoration: 'none', color: 'white' }}to='/register/'>
+                </ Link></SkipNextIcon>
+    */
+
     return (
-        <div id="controller">
+        <div id = "yComp">
         
         <div id = "controllerTitle"> Now Playing </div>
-        <div id = "controllerText"> Playlist: Dance Party </div>
-        <div id = "controllerText"> Song #2 </div>
-        <div id = "controllerText"> Title: Untitled </div>
-        <div id = "controllerText"> Artist: Pink Floyd </div>
+        <div id = "ena" className='controllerText'> Playlist: Dance Party </div>
+        <div id = "dio" className='controllerText'> Song #: 2 </div>
+        <div id = "tria" className='controllerText'> Title: Untitled </div>
+        <div id = "tes" className='controllerText'> Artist: Pink Floyd </div>
          
-        <Box sx={{marginBottom: '-15%', marginTop: '3%', marginLeft: '12.5%', width: '75%', height: '50%', backgroundColor: 'lightGray', '& button': { m: 1 } }}>
-            <div>
-            <SkipPreviousIcon id = "controllerButtons" onClick = {handleCreateAccount} sx={{fontSize: 20, height: 50, width: 50}} variant="contained" size="large"><Link  style={{ textDecoration: 'none', color: 'white' }}to='/register/'>
-                </ Link></SkipPreviousIcon>
-                <StopIcon id = "controllerButtons"  sx={{fontSize: 10, height: 50, width: 50}} variant="contained" size="large">
-                </StopIcon>
-                <PlayCircleFilledWhiteSharpIcon id = "controllerButtons"  fontSize = 'small' sx={{fontSize: "small", height: 45, width: 50}} variant="contained" size="large"><Link  style={{ textDecoration: 'none', color: 'white' }} to='/login/'>
-                </ Link></PlayCircleFilledWhiteSharpIcon>
-              
-                <SkipNextIcon id = "controllerButtons" onClick = {handleCreateAccount} sx={{fontSize: 20, height: 50, width: 50}} variant="contained" size="large"><Link  style={{ textDecoration: 'none', color: 'white' }}to='/register/'>
-                </ Link></SkipNextIcon>
-            </div>
-        </Box>
+        <div id = "pente" className='controllerButtons'>
+        <SkipPreviousIcon sx = {{top: '50%'}}onClick = {handleCreateAccount} fontSize="large"></SkipPreviousIcon>
+            
+        </div>
         
         </div>
         

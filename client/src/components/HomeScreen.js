@@ -14,7 +14,6 @@ import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import TextField from '@mui/material/TextField';
 import SortIcon from '@mui/icons-material/Sort';
 
-
 /*
     This React component lists all the top5 lists in the UI.
     
@@ -37,9 +36,9 @@ const HomeScreen = () => {
     let listCard = "";
     let cardClass = "list-card unselected-list-card";
     if (store) {
-        controller = <Control></Control> 
+        controller = <Control ></Control> 
         listCard = 
-            <List sx={{ hieght: '40%', width: '94%', left: '5%', bgcolor: 'cornsilk' }}>
+            <List>
             {
                 store.idNamePairs.map((pair) => (
                     <ListCard 
@@ -53,43 +52,51 @@ const HomeScreen = () => {
             </List>;
     }
     return (
-        <div id="playlist-selector">
+        <div className="playlist-selector">
         
-            <div>
-                <Box className = "topControls" sx  = {{marginLeft: "2%", marginTop:'1%'}}>
-                <HomeIcon id = "topIndividual" fontSize="large" ></HomeIcon>
-                <GroupsIcon id = "topIndividual" fontSize="large"></GroupsIcon>
-                <PersonOutlineIcon id = "topIndividual" fontSize="large"></PersonOutlineIcon>
-                <TextField sx = {{marginLeft: '10%', height: '10px', width: '40%', marginTop: '-0.5%'}} id="searchBar" label="Search" variant="outlined" />
-                <SortIcon fontSize="large" sx = {{verticalAlign: 'top', paddingLeft: '40%', justifyContent: 'right',  marginTop: '-1%'}} id="searchBar" label="Search" variant="outlined" />
-                </Box>
+            <div className='topC'>
+                <div id = "topLeft">
+                    <HomeIcon id = "cHo" sx = {{padding: "0 10px"}} fontSize="large" ></HomeIcon>
+                    <GroupsIcon id = "cHo" sx = {{padding: "0 10px"}}  fontSize="large"></GroupsIcon>
+                    <PersonOutlineIcon id = "cHo" sx = {{padding: "0 10px"}} fontSize="large"></PersonOutlineIcon>
+                </div>
+                <div>
+                    <input type="text" placeholder = "Search" className = "searchBar" label="Search" variant="outlined" />
+                </div>
+                <div id = "sort">
+                    <SortIcon id = "cHo" fontSize="large" label="Search" variant="outlined" />
+                </div>
             </div>
 
-            <div id = "comp">
-                <span id="list-selector-list">
-                <Box>
+
+            <div id = "mid">
+                <Box id="list-selector-list">
                     {
                         listCard
                     }
                     <MUIDeleteModal />
                 </Box>
-                </span>
-                <Box>
+                <Box id = "ytController">
+                <div id = "plBContainer"> 
+                <Typography id = "plB" variant="h6">Player</Typography>
+                </div>
+                {
+                    controller
+                }
                 {
                     controller
                 }
                 </Box>
             </div>
-    
+            
             <div id="add-list-button">
-                <Box sx = {{marginTop: '40%', justifyContent: "center", display: "flex", textAlign: 'center'}}>
-                    <Fab color="primary" aria-label="add" onClick={handleCreateNewList}>
-                    <AddIcon />
-                    </Fab>
-                    <Typography variant="h2">Your Lists</Typography>
+                <Box id = "addLB">
+                    <AddIcon id = "cHo" sx = {{verticalAlign: "middle", marginTop: "20px"}}onClick={handleCreateNewList} fontSize='large'/>
+                    <Typography sx = {{marginTop: "18px"}} variant="h4">Your Lists</Typography>
                 </Box>
             </div>
-
+            
+           
         </div>)
 }
 
