@@ -388,7 +388,9 @@ body {
  
 .playlist-cards
 {
-  overflow: scroll;
+  height: 10px;
+  overflow-x:none;
+  overflow-y: scroll;
 }
 
 .playlist-selector{
