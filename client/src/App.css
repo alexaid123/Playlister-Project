@@ -329,6 +329,28 @@ body {
   color: white;
 }
 
+#commentsInput{
+  position: absolute;
+  width: 100%;
+  border-radius: 20px;
+  margin-top: 392px;
+}
+
+#yComp3
+{
+  position: relative;
+  left: 0;
+  height: 403px;
+  background-image: linear-gradient(to bottom, #baba60, #aa44d2);
+  border-color: black;
+  border-width: 2px;
+  border-style: solid;
+  border-radius: 10px;
+  padding-top: 5%;
+  padding-bottom: 5%;
+  background-color: #123456;
+}
+
 #yComp{
   position: relative;
   width:100%;
@@ -364,6 +386,11 @@ body {
   background-color: #123456;
 }
  
+.playlist-cards
+{
+  overflow: scroll;
+}
+
 .playlist-selector{
   position: relative;
 }

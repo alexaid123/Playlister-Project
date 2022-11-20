@@ -38,6 +38,7 @@ function SongCard(props) {
     }
     function handleClick(event) {
         // DOUBLE CLICK IS FOR SONG EDITING
+        event.stopPropagation();
         if (event.detail === 2) {
             store.showEditSongModal(index, song);
         }
@@ -68,6 +69,7 @@ function SongCard(props) {
                 type="button"
                 id={"remove-song-" + index}
                 className="list-card-button"
+                style = {{fontSize: '10pt'}}
                 value={"\u2715"}
                 onClick={handleRemoveSong}
             />

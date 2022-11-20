@@ -15,6 +15,7 @@ import TextField from '@mui/material/TextField';
 import SortIcon from '@mui/icons-material/Sort';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
+import Comments from './Comments.js';
 
 /*
     This React component lists all the top5 lists in the UI.
@@ -31,14 +32,36 @@ const HomeScreen = () => {
     }, []);
 
     function handleCreateNewList() {
+        store.closeCurrentList();
         store.createNewList();
         store.start();
     }
+
+    function handlePl()
+    {
+        console.log("Insidee");
+        store.altPlayer(false);
+    }
+
+    function handleYT()
+    {
+        console.log("Insidee");
+        store.altPlayer(true);
+    }
+
+   
     let controller = "";
     let listCard = "";
     let cardClass = "list-card unselected-list-card";
-    if (store) {
+    if(store.player)
+    {
         controller = <Control ></Control> 
+    }
+    else
+    {
+        controller = <Comments ></Comments> 
+    }
+    if (store) {
         listCard = 
             <List>
             {
@@ -85,11 +108,11 @@ const HomeScreen = () => {
                 
                 <Box id = "ytController">
                 <div style = {{display: "flex"}}>
-                <div id = "plBContainer"> 
-                <Typography id = "plB" variant="h6">Player</Typography>
+                <div id = "plBContainer" onClick={handleYT}> 
+                <Typography id = "plB" variant="h6"  >Player</Typography>
                 </div>
-                <div id = "plBContainer"> 
-                <Typography id = "plB" variant="h6">Comments</Typography>
+                <div id = "plBContainer" onClick={handlePl}> 
+               <Typography id = "plB" variant="h6" >Comments</Typography>
                 </div>
                 </div>
                 {

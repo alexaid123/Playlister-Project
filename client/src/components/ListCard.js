@@ -10,6 +10,13 @@ import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
 import Grid from '@mui/material/Grid';
 import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
+import SongCard from './SongCard.js';
+import MUIEditSongModal from './MUIEditSongModal';
+import MUIRemoveSongModal from './MUIRemoveSongModal';
+import List from '@mui/material/List';
+import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp';
+import AddIcon from '@mui/icons-material/Add';
+import WorkspaceScreen from './WorkspaceScreen'
 
 /*
     This is a card in our list of top 5 lists. It lets select
@@ -23,6 +30,33 @@ function ListCard(props) {
     const [editActive, setEditActive] = useState(false);
     const [text, setText] = useState("");
     const { idNamePair, selected } = props;
+
+    let modalJSX = "";
+    if (store.isEditSongModalOpen()) {
+        modalJSX = <MUIEditSongModal />;
+    }
+    else if (store.isRemoveSongModalOpen()) {
+        modalJSX = <MUIRemoveSongModal />;
+    }
+
+    function handleOpen(event, id)
+    {
+        event.stopPropagation();
+        if (!event.target.disabled) {
+            let _id = event.target.id;
+            if (_id.indexOf('list-card-text-') >= 0)
+                _id = ("" + _id).substring("list-card-text-".length);
+            if(store.currentList != null)
+            {
+                store.closeCurrentList();
+            }
+            // CHANGE THE CURRENT LIST
+            else
+            {
+                store.setCurrentList(id);
+            }
+        }
+    }
 
     function handleLoadList(event, id) {
         if (!event.target.disabled) {
@@ -55,6 +89,8 @@ function ListCard(props) {
         console.log(id);
         store.markListForDeletion(id);
     }
+
+   
 
     function handleKeyPress(event) {
         event.stopPropagation();
@@ -115,8 +151,8 @@ function ListCard(props) {
                 <Box sx={{ p: 1, flexGrow: 1 }} style={{marginTop: '30px', fontSize:'15pt'}}>Listens: </Box>
                     <Box sx={{ p: 1 }}>
                         <IconButton onClick={(event) => {
-                                handleDeleteList(event, idNamePair._id)
-                            }} aria-label='delete'>
+                                handleOpen(event, idNamePair._id)
+                            }} >
                             <KeyboardDoubleArrowDownIcon style={{fontSize:'28pt'}} />
                         </IconButton>
                     </Box>
@@ -143,6 +179,57 @@ function ListCard(props) {
                 InputLabelProps={{style: {fontSize: 24}}}
                 autoFocus
             />
+    }
+
+    if(store.currentList != null && idNamePair._id == store.currentList._id)
+    {
+       cardElement = <Box>
+       <ListItem
+           className = "LCard"
+           id={idNamePair._id}
+           key={idNamePair._id}
+           sx={{backgroundColor: 'Beige', marginTop: '15px', display: 'flex', p: 1 }}
+           style={{borderRadius: '20px', left: '5%', width: '90%', fontSize: '28pt'}}
+           button
+           onClick={(event) => {
+               handleLoadList(event, idNamePair._id)
+           }}
+       >
+           <Grid container>
+               <Grid item container>
+                   <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}<div style={{marginLeft: '5px', fontSize:'14pt'}}>By: </div></Box>
+                   <Box sx={{ p: 1 }}>
+                       <IconButton onClick={handleToggleEdit} aria-label='edit'>
+                           <ThumbUpAltIcon style={{fontSize:'28pt'}} /><div style = {{marginLeft: "10px"}}>0</div>
+                       </IconButton>
+                   </Box>
+                   <Box sx={{ p: 1 }}>
+                       <IconButton onClick={(event) => {
+                               handleDeleteList(event, idNamePair._id)
+                           }} aria-label='delete'>
+                           <ThumbDownAltIcon style={{fontSize:'28pt'}} /><div style = {{marginLeft: "10px"}}>0</div>
+                       </IconButton>
+                   </Box>
+               </Grid>
+               <Grid item xs = {12} sm = {12} md = {12} lg = {12}>
+               
+                <WorkspaceScreen></WorkspaceScreen>
+
+               </Grid>
+               <Grid item container>
+               <Box sx={{ p: 1, flexGrow: 1 }} style={{marginTop: '30px', fontSize:'15pt'}}>Published: </Box>
+               <Box sx={{ p: 1, flexGrow: 1 }} style={{marginTop: '30px', fontSize:'15pt'}}>Listens: </Box>
+                   <Box sx={{ p: 1 }}>
+                       <IconButton onClick={(event) => {
+                               handleOpen(event, idNamePair._id)
+                           }}>
+                           <KeyboardDoubleArrowUpIcon style={{fontSize:'28pt'}} />
+                       </IconButton>
+                   </Box>
+               </Grid>
+           </Grid>
+       </ListItem>
+   </Box>
     }
     return (
         cardElement
