@@ -323,6 +323,21 @@ body {
   font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
 }
 
+#plBContainerP{
+  border-color: white;
+  border-width: 2px;
+  border-style: solid;
+  border-radius: 10px;
+  padding-top: 1%;
+  padding-bottom: 1%;
+  justify-content: center;
+  width: 20%;
+  display: flex;
+  background-color: black;
+  color: white;
+  cursor: pointer;
+}
+
 #plBContainer:hover {
   cursor: pointer;
   background-color: var(--swatch-contrast);
@@ -330,10 +345,10 @@ body {
 }
 
 #commentsInput{
-  position: absolute;
+  position: relative;
   width: 100%;
   border-radius: 20px;
-  margin-top: 392px;
+  margin-top: 75px;
 }
 
 #yComp3
@@ -385,7 +400,29 @@ body {
   padding-bottom: 5%;
   background-color: #123456;
 }
- 
+
+.dropDown
+{
+  position: absolute;
+  margin-top: 0px;
+  width: 1%;
+  margin-left: 83%;
+}
+
+.alex:hover
+{
+  cursor: pointer;
+  background-color: var(--swatch-contrast);
+  color: white;
+}
+
+.sortMen
+{
+  font-size: 15pt;
+  border-color: #111111;
+  border: '4px solid green'
+}
+
 .playlist-cards
 {
   height: 10px;

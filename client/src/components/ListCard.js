@@ -46,15 +46,23 @@ function ListCard(props) {
             let _id = event.target.id;
             if (_id.indexOf('list-card-text-') >= 0)
                 _id = ("" + _id).substring("list-card-text-".length);
-            if(store.currentList != null)
+            /*if(store.currentList != null)
             {
                 store.closeCurrentList();
-            }
+            }*/
             // CHANGE THE CURRENT LIST
             else
             {
                 store.setCurrentList(id);
             }
+        }
+    }
+
+    function handleCloseB(event, id)
+    {
+        event.stopPropagation();
+        if (!event.target.disabled) {
+            store.closeCurrentList();
         }
     }
 
@@ -221,7 +229,7 @@ function ListCard(props) {
                <Box sx={{ p: 1, flexGrow: 1 }} style={{marginTop: '30px', fontSize:'15pt'}}>Listens: </Box>
                    <Box sx={{ p: 1 }}>
                        <IconButton onClick={(event) => {
-                               handleOpen(event, idNamePair._id)
+                               handleCloseB(event, idNamePair._id)
                            }}>
                            <KeyboardDoubleArrowUpIcon style={{fontSize:'28pt'}} />
                        </IconButton>

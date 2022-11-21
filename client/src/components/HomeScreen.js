@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { GlobalStoreContext } from '../store'
 import ListCard from './ListCard.js'
 import MUIDeleteModal from './MUIDeleteModal'
@@ -16,6 +16,7 @@ import SortIcon from '@mui/icons-material/Sort';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import Comments from './Comments.js';
+import Dropdown from './Dropdown';
 
 /*
     This React component lists all the top5 lists in the UI.
@@ -26,6 +27,13 @@ import Comments from './Comments.js';
 
 const HomeScreen = () => {
     const { store } = useContext(GlobalStoreContext);
+    const[open, setOpen] = useState(false);
+
+    const options = [
+        { key: 1, text: 'Choice 1', value: 1 },
+        { key: 2, text: 'Choice 2', value: 2 },
+        { key: 3, text: 'Choice 3', value: 3 },
+      ]
 
     useEffect(() => {
         store.loadIdNamePairs();
@@ -49,17 +57,22 @@ const HomeScreen = () => {
         store.altPlayer(true);
     }
 
-   
+    let pbutton = "";
+    let cbutton = "";
     let controller = "";
     let listCard = "";
     let cardClass = "list-card unselected-list-card";
     if(store.player)
     {
         controller = <Control ></Control> 
+        pbutton = <div id = "plBContainerP" onClick={handleYT}> <Typography id = "plB" variant="h6"  >Player</Typography> </div>
+        cbutton = <div id = "plBContainer" onClick={handlePl}> <Typography id = "plB" variant="h6" >Comments</Typography> </div>
     }
     else
     {
         controller = <Comments ></Comments> 
+        pbutton = <div id = "plBContainer" onClick={handleYT}> <Typography id = "plB" variant="h6"  >Player</Typography> </div>
+        cbutton = <div id = "plBContainerP" onClick={handlePl}> <Typography id = "plB" variant="h6" >Comments</Typography> </div>
     }
     if (store) {
         listCard = 
@@ -90,7 +103,7 @@ const HomeScreen = () => {
                 </div>
                 <div style = {{display: "flex"}}>
                     <div style = {{marginTop: "6px",fontSize: "17pt", marginRight: "5px"}}>Sort By </div>
-                    <SortIcon id = "cHo" fontSize="large" label="Search" variant="outlined" />
+                    <SortIcon onClick = {() => setOpen(!open) } id = "cHo" fontSize="large" label="Search" variant="outlined" />
                 </div>
             </div>
 
@@ -108,17 +121,18 @@ const HomeScreen = () => {
                 
                 <Box id = "ytController">
                 <div style = {{display: "flex"}}>
-                <div id = "plBContainer" onClick={handleYT}> 
-                <Typography id = "plB" variant="h6"  >Player</Typography>
-                </div>
-                <div id = "plBContainer" onClick={handlePl}> 
-               <Typography id = "plB" variant="h6" >Comments</Typography>
-                </div>
+                
+                    {pbutton}
+               
+                
+                    {cbutton}
+            
                 </div>
                 {
                     controller
                 }
                 </Box>
+                {open && <Dropdown></Dropdown>}
             </Grid>
             
             <div id="add-list-button">

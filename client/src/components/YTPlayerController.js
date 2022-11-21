@@ -19,10 +19,6 @@ export default function YTPlayerController() {
     return (
         <Grid container direction = "column">
             <div id = "yComp2">
-            
-            
-            
-
             </div>
         
             <Grid item container xs = {12} sm = {12} md={12}>
