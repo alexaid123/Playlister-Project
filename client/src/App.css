@@ -351,6 +351,11 @@ body {
   margin-top: 5px;
 }
 
+#bCom
+{
+  background-image: linear-gradient(to bottom, #baba60, #aa44d2);
+}
+
 #yComp3
 {
   position: relative;
@@ -473,6 +478,25 @@ body {
 
 .list-card:aria-disabled,
 .list-card[aria-disabled] {
+  border: 1px solid #999999;
+  background-color: #cccccc;
+  color: #666666;
+  pointer-events: none;
+}
+
+
+.list-cardComment,
+.selected-list-cardComment,
+.unselected-list-cardComment {
+  font-size: 18pt;
+  margin: 10px;
+  padding: 20px;
+  border-radius: 25px;
+  word-wrap: break-word;
+}
+
+.list-cardComment:aria-disabled,
+.list-cardComment[aria-disabled] {
   border: 1px solid #999999;
   background-color: #cccccc;
   color: #666666;

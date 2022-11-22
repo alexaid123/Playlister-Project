@@ -5,19 +5,17 @@ function CommentCard(props) {
     const { store } = useContext(GlobalStoreContext);
     const { comment, index } = props;
 
-    let cardClass = "list-card unselected-list-card";
+    let cardClass = "list-cardComment unselected-list-card";
     return (
         <div
             key={index}
             id={'song-' + index + '-card'}
             className={cardClass}>
-            {index + 1}.
-            <a
-                id={'comment-' + index + '-link'}
-                className="song-link"
-                href={comment.youTubeId}>
-                {comment.user} by {comment.comment}
-            </a>
+            
+               
+                <div><a href = "test">{comment.user}</a> </div> 
+                <div>{comment.comment}</div>    
+            
         </div>
     );
 }

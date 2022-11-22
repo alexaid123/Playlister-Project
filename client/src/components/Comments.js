@@ -30,7 +30,7 @@ export default function Comments() {
             {
                 console.log(text);
                 inputRef.current.value = "";
-                let cm = {user: "alex", comment: "TEst"};
+                let cm = {user: "alex", comment: text};
                 store.currentList.comments.push(cm);
                 store.updateCurrentList();
                 setText("");
@@ -46,19 +46,13 @@ export default function Comments() {
 
     return (
         <Grid container direction = "column">
-            <div id = "yComp3">
-            
-            <Grid item xs = {12} sm = {12} md = {12} lg = {12}>
-            </Grid>
-            
-
-
-
-
+            <div id = "yComp3" style = {{width: '100%'}}>
+           
             <Box>
                     {store.currentList != null && <List 
+                        className="bCom"
                         id="playlist-cards" 
-                        sx={{ height: '360px', overflowY: 'scroll', width: '100%', bgcolor: 'background.paper' }}
+                        sx={{marginTop: '-25px', height: '390px', overflowY: 'scroll', width: '100%'}}
                     >
                         {
                             store.currentList.comments.map((comment, index) => (
@@ -78,7 +72,6 @@ export default function Comments() {
                         <Grid item xs = {1} sm = {1} md = {1} lg = {1}></Grid>
                         </Grid>
                     </List>}        
-                  
             </Box>
 
 
@@ -89,13 +82,13 @@ export default function Comments() {
 
 
 
-            <input 
+           {store.currentList != null && <input 
                 ref={inputRef}
                 onKeyPress={handleKeyPress}
                 onChange={handleUpdateText}
                 placeholder = "Add Comment"
                 defaultValue={text}
-                type = "text" id = "commentsInput"></input>
+                type = "text" id = "commentsInput"></input>}
             </div>
         </Grid>
         
