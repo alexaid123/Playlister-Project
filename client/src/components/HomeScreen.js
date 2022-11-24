@@ -17,6 +17,8 @@ import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import Comments from './Comments.js';
 import Dropdown from './Dropdown';
+import {Menu, MenuItem} from "@mui/material";
+
 //import YouTubePlayerExample from './PlaylisterYouTubePlayer.js'
 
 /*
@@ -29,10 +31,21 @@ import Dropdown from './Dropdown';
 const HomeScreen = () => {
     const { store } = useContext(GlobalStoreContext);
     const[open, setOpen] = useState(false);
+    const[anchorElm, setAnchorElm] = useState(null);
 
     useEffect(() => {
         store.loadIdNamePairs();
     }, []);
+
+    const handleClose = () => {
+        setAnchorElm(null);
+        setOpen(false);
+    }
+
+    const handleOpen = (e) => {
+        setAnchorElm(e.currentTarget);
+        setOpen(!open);
+    }
 
     function handlePage(one, two, three)
     {
@@ -103,7 +116,10 @@ const HomeScreen = () => {
                 </div>
                 <div style = {{display: "flex"}}>
                     <div style = {{marginTop: "6px",fontSize: "17pt", marginRight: "5px"}}>Sort By </div>
-                    <SortIcon onClick = {() => setOpen(!open) } id = "cHo" fontSize="large" label="Search" variant="outlined" />
+                    <SortIcon onClick = {handleOpen} id = "cHo" fontSize="large" label="Search" variant="outlined" />
+                    <Menu anchorEl = {anchorElm} open = {open} onClose={handleClose}>
+                    <MenuItem onClick={handleClose}>Name (A-Z)</MenuItem>
+                    </Menu>
                 </div>
             </div>
 
