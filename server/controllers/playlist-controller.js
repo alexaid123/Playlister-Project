@@ -1,4 +1,5 @@
-const Playlist = require('../models/playlist-model')
+const Playlist = require('../models/playlist-model');
+const PublishedPlaylist = require('../models/published-model');
 const User = require('../models/user-model');
 /*
     This is our back-end API. It provides all the data services
@@ -7,6 +8,62 @@ const User = require('../models/user-model');
     
     @author McKilla Gorilla
 */
+
+
+createPublishedPlaylist = (req, res) => {
+    console.log("Went inside the function");
+    const body = req.body;
+
+    if (!body) {
+        return res.status(400).json({
+            success: false,
+            error: 'You must provide a Playlist',
+        })
+    }
+    
+    const playlist = new PublishedPlaylist(body);
+    if (!playlist) {
+        return res.status(400).json({ success: false, error: err })
+    }
+
+     asyncPutList = async() =>
+     {
+        const savedList = await playlist.save();
+     }
+    asyncPutList();
+  
+   
+
+
+    User.findOne({ _id: req.userId }, (err, user) => {
+    if (playlist.ownerEmail != user.email) {
+        return res.status(400).json({
+            success: false,
+            error: "authentication error",
+        })
+    }
+        user.publishedPlaylists.push(playlist._id);
+        user
+            .save()
+            .then(() => {
+                playlist
+                    .save()
+                    .then(() => {
+                        return res.status(201).json({
+                            playlist: playlist
+                        })
+                    })
+                    .catch(error => {
+                        return res.status(400).json({
+                            errorMessage: 'Playlist Not Created!'
+                        })
+                    })
+            });
+    })
+}
+
+
+
 createPlaylist = (req, res) => {
     const body = req.body;
 
@@ -139,7 +196,7 @@ getPlaylistPairs = async (req, res) => {
                             _id: list._id,
                             name: list.name
                         };
-                        pairs.push(pair);
+                        pairs.push(list);
                     }
                     return res.status(200).json({ success: true, idNamePairs: pairs })
                 }
@@ -187,6 +244,7 @@ updatePlaylist = async (req, res) => {
                     list.name = body.playlist.name;
                     list.songs = body.playlist.songs; 
                     list.comments = body.playlist.comments;
+                    list.published = body.playlist.published;
                     list
                         .save()
                         .then(() => {
@@ -217,5 +275,6 @@ module.exports = {
     getPlaylistById,
     getPlaylistPairs,
     getPlaylists,
-    updatePlaylist
+    updatePlaylist,
+    createPublishedPlaylist
 }

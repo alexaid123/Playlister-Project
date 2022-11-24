@@ -17,6 +17,7 @@ import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import Comments from './Comments.js';
 import Dropdown from './Dropdown';
+//import YouTubePlayerExample from './PlaylisterYouTubePlayer.js'
 
 /*
     This React component lists all the top5 lists in the UI.
@@ -29,20 +30,19 @@ const HomeScreen = () => {
     const { store } = useContext(GlobalStoreContext);
     const[open, setOpen] = useState(false);
 
-    const options = [
-        { key: 1, text: 'Choice 1', value: 1 },
-        { key: 2, text: 'Choice 2', value: 2 },
-        { key: 3, text: 'Choice 3', value: 3 },
-      ]
-
     useEffect(() => {
         store.loadIdNamePairs();
     }, []);
 
+    function handlePage(one, two, three)
+    {
+        store.altUserLists(one, two, three);
+        console.log(store.allUserLists);
+    }
+
     function handleCreateNewList() {
         store.closeCurrentList();
         store.createNewList();
-        store.start();
     }
 
     function handlePl()
@@ -94,9 +94,9 @@ const HomeScreen = () => {
         
             <div className='topC'>
                 <div id = "topLeft">
-                    <HomeIcon id = "cHo" sx = {{padding: "0 10px"}} fontSize="large" ></HomeIcon>
-                    <GroupsIcon id = "cHo" sx = {{padding: "0 10px"}}  fontSize="large"></GroupsIcon>
-                    <PersonOutlineIcon id = "cHo" sx = {{padding: "0 10px"}} fontSize="large"></PersonOutlineIcon>
+                    <HomeIcon onClick = {() => handlePage(true, false, false) } id = "cHo" sx = {{padding: "0 10px"}} fontSize="large" ></HomeIcon>
+                    <GroupsIcon onClick = {() => handlePage(false, true, false)} id = "cHo" sx = {{padding: "0 10px"}}  fontSize="large"></GroupsIcon>
+                    <PersonOutlineIcon onClick = {() => handlePage(false, false, true)} id = "cHo" sx = {{padding: "0 10px"}} fontSize="large"></PersonOutlineIcon>
                 </div>
                 <div>
                     <input type="text" placeholder = "Search" className = "searchBar" label="Search" variant="outlined" />
