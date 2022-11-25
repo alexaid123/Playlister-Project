@@ -242,7 +242,7 @@ function ListCard(props) {
             />
     }
 
-    if(store.currentList != null && idNamePair._id == store.currentList._id && store.allUserPublished)
+    if(store.currentList != null && idNamePair._id == store.currentList._id && store.allUserPublished && idNamePair.published)
     {
        cardElement = <Box>
        <ListItem
