@@ -9,8 +9,12 @@ import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
 import PlayCircleFilledWhiteSharpIcon from '@mui/icons-material/PlayCircleFilledWhiteSharp';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
+import YouTubePlayerExample from './PlaylisterYouTubePlayer';
+import { GlobalStoreContext } from '../store';
+import { useContext, useEffect, useState } from 'react';
 
 export default function YTPlayerController() {
+    const { store } = useContext(GlobalStoreContext);
     function handleCreateAccount()
     {
         
@@ -19,6 +23,9 @@ export default function YTPlayerController() {
     return (
         <Grid container direction = "column">
             <div id = "yComp2">
+            <div style = {{marginTop: '-5%'}}>
+            <YouTubePlayerExample videoID = "XukK-WbwAzw"></YouTubePlayerExample>
+            </div>
             </div>
         
             <Grid item container xs = {12} sm = {12} md={12}>

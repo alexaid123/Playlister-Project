@@ -26,6 +26,7 @@ export const GlobalStoreActionType = {
     CLOSE_CURRENT_LIST: "CLOSE_CURRENT_LIST",
     CREATE_NEW_LIST: "CREATE_NEW_LIST",
     LOAD_ID_NAME_PAIRS: "LOAD_ID_NAME_PAIRS",
+    LOAD_PUBLISHED_LISTS: "LOAD_PUBLISHED_LISTS",
     MARK_LIST_FOR_DELETION: "MARK_LIST_FOR_DELETION",
     SET_CURRENT_LIST: "SET_CURRENT_LIST",
     SET_LIST_NAME_EDIT_ACTIVE: "SET_LIST_NAME_EDIT_ACTIVE",
@@ -162,6 +163,28 @@ function GlobalStoreContextProvider(props) {
                     allLists: store.allLists,
                     allUserPublished: store.allUserPublished,
                     publicLists: store.publicLists
+                });
+            }
+             // GET ALL THE PUBLISHED LISTS SO WE CAN PRESENT THEM
+             case GlobalStoreActionType.LOAD_PUBLISHED_LISTS: {
+                console.log("inside reducer");
+                return setStore({
+                    currentModal : CurrentModal.NONE,
+                    idNamePairs: store.idNamePairs,
+                    currentList: null,
+                    currentSongIndex: -1,
+                    currentSong: null,
+                    newListCounter: store.newListCounter,
+                    listNameActive: false,
+                    listIdMarkedForDeletion: null,
+                    listMarkedForDeletion: null,
+                    error: null,
+                    called: store.called,
+                    player: store.player,
+                    allUserLists: store.allUserLists,
+                    allLists: store.allLists,
+                    allUserPublished: store.allUserPublished,
+                    publicLists: payload
                 });
             }
             // PREPARE TO DELETE A LIST
@@ -524,12 +547,20 @@ function GlobalStoreContextProvider(props) {
                 type: GlobalStoreActionType.CREATE_NEW_LIST,
                 payload: {}
             });
-            store.loadIdNamePairs();
+            //store.loadIdNamePairs();
             // IF IT'S A VALID LIST THEN LET'S START EDITING IT
         }
         else {
             console.log("API FAILED TO CREATE A NEW LIST");
         }
+    }
+
+    store.incrListCounter = function()
+    {
+        storeReducer({
+            type: GlobalStoreActionType.CREATE_NEW_LIST,
+            payload: {}
+        });
     }
 
     // THIS FUNCTION LOADS ALL THE ID, NAME PAIRS SO WE CAN LIST ALL THE LISTS
@@ -548,6 +579,26 @@ function GlobalStoreContextProvider(props) {
             }
         }
         asyncLoadIdNamePairs();
+    }
+
+
+    store.loadPublishedPlaylists = function ()
+    {
+        async function asyncGetLists() {
+            const response = await api.getPublishedPlaylists();
+            if (response.data.success) {
+                let pairsArray = response.data.data;
+                console.log(pairsArray);
+                storeReducer({
+                    type: GlobalStoreActionType.LOAD_PUBLISHED_LISTS,
+                    payload: pairsArray
+                });
+            }
+            else {
+                console.log("API FAILED TO GET THE LIST PAIRS");
+            }
+        }
+        asyncGetLists();
     }
 
     // THE FOLLOWING 5 FUNCTIONS ARE FOR COORDINATING THE DELETION
@@ -650,7 +701,10 @@ function GlobalStoreContextProvider(props) {
                         type: GlobalStoreActionType.SET_CURRENT_LIST,
                         payload: playlist
                     });
-                    //history.push("/playlist/" + playlist._id);
+                    storeReducer({
+                        type: GlobalStoreActionType.CREATE_NEW_LIST,
+                        payload: playlist
+                    });
                 }
             }
         }

@@ -108,6 +108,7 @@ function ListCard(props) {
         store.currentList.published = true;
         store.publishCurrentList();
         store.updateCurrentList();  
+        store.loadPublishedPlaylists();
         console.log("Published is " + store.currentList.published);
     }
 

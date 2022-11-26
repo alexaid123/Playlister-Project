@@ -115,6 +115,29 @@ body {
   cursor: not-allowed;
 }
 
+.cmDisabled{
+  border-color: black;
+  border-width: 2px;
+  border-style: solid;
+  border-radius: 10px;
+  padding-top: 1%;
+  padding-bottom: 1%;
+  justify-content: center;
+  width: 20%;
+  display: flex;
+  background-color: rgb(229, 247, 156);
+  opacity: 0.25;
+  cursor: not-allowed;
+  pointer-events: none;
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+   -khtml-user-select: none; /* Konqueror HTML */
+     -moz-user-select: none; /* Old versions of Firefox */
+      -ms-user-select: none; /* Internet Explorer/Edge */
+          user-select: none; /* Non-prefixed version, currently
+                                supported by Chrome, Edge, Opera and Firefox */
+}
+
 #top5-list-selector {
   position: absolute;
   left: 0%;
@@ -317,6 +340,13 @@ body {
   width: 20%;
   display: flex;
   background-color: rgb(229, 247, 156);
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+   -khtml-user-select: none; /* Konqueror HTML */
+     -moz-user-select: none; /* Old versions of Firefox */
+      -ms-user-select: none; /* Internet Explorer/Edge */
+          user-select: none; /* Non-prefixed version, currently
+                                supported by Chrome, Edge, Opera and Firefox */
 }
 
 #plB{
@@ -336,6 +366,13 @@ body {
   background-color: black;
   color: white;
   cursor: pointer;
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+   -khtml-user-select: none; /* Konqueror HTML */
+     -moz-user-select: none; /* Old versions of Firefox */
+      -ms-user-select: none; /* Internet Explorer/Edge */
+          user-select: none; /* Non-prefixed version, currently
+                                supported by Chrome, Edge, Opera and Firefox */
 }
 
 #plBContainer:hover {

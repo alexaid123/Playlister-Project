@@ -40,18 +40,13 @@ export default function AppBanner() {
     const loggedOutMenu = (
         <Menu
             anchorEl={anchorEl}
-            anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-            }}
             id={menuId}
             keepMounted
-            transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-            }}
             open={isMenuOpen}
             onClose={handleMenuClose}
+           
+            anchorOrigin={{vertical: 'bottom', horizontal: 'center'}}
+            transformOrigin={{vertical: 'top', horizontal: 'center'}}
         >
             <MenuItem onClick={handleMenuClose}><Link to='/login/'>Login</Link></MenuItem>
             <MenuItem onClick={handleMenuClose}><Link to='/register/'>Create New Account</Link></MenuItem>
@@ -60,16 +55,10 @@ export default function AppBanner() {
     const loggedInMenu = 
         <Menu
             anchorEl={anchorEl}
-            anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-            }}
             id={menuId}
             keepMounted
-            transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-            }}
+            anchorOrigin={{vertical: 'bottom', horizontal: 'center'}}
+            transformOrigin={{vertical: 'top', horizontal: 'center'}}
             open={isMenuOpen}
             onClose={handleMenuClose}
         >

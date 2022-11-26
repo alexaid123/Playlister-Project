@@ -19,6 +19,7 @@ import Comments from './Comments.js';
 import Dropdown from './Dropdown';
 import {Menu, MenuItem} from "@mui/material";
 
+
 //import YouTubePlayerExample from './PlaylisterYouTubePlayer.js'
 
 /*
@@ -32,7 +33,7 @@ const HomeScreen = () => {
     const { store } = useContext(GlobalStoreContext);
     const[open, setOpen] = useState(false);
     const[anchorElm, setAnchorElm] = useState(null);
-
+    console.log(store.publicLists);
     useEffect(() => {
         store.loadIdNamePairs();
     }, []);
@@ -54,7 +55,6 @@ const HomeScreen = () => {
     }
 
     function handleCreateNewList() {
-        store.closeCurrentList();
         store.createNewList();
     }
 
@@ -75,11 +75,16 @@ const HomeScreen = () => {
     let controller = "";
     let listCard = "";
     let cardClass = "list-card unselected-list-card";
+    let comCLass = "cmDisabled";
+    if(store.currentList != null)
+    {
+        comCLass = "plbContainer";
+    }
     if(store.player)
     {
         controller = <Control ></Control> 
         pbutton = <div id = "plBContainerP" onClick={handleYT}> <Typography id = "plB" variant="h6"  >Player</Typography> </div>
-        cbutton = <div id = "plBContainer" onClick={handlePl}> <Typography id = "plB" variant="h6" >Comments</Typography> </div>
+        cbutton = <div className = {comCLass} id = "plBContainer" onClick={handlePl}> <Typography id = "plB" variant="h6" >Comments</Typography> </div>
     }
     else
     {
@@ -92,6 +97,22 @@ const HomeScreen = () => {
             <List>
             {
                 store.idNamePairs.map((pair) => (
+                    <ListCard 
+                        className={cardClass}
+                        key={pair._id}
+                        idNamePair={pair}
+                        selected={false}
+                    />
+                ))
+            }
+            </List>;
+    }
+    if(store.publicLists.length != 0)
+    {
+        listCard = 
+            <List>
+            {
+                store.publicLists.map((pair) => (
                     <ListCard 
                         className={cardClass}
                         key={pair._id}
@@ -117,8 +138,14 @@ const HomeScreen = () => {
                 <div style = {{display: "flex"}}>
                     <div style = {{marginTop: "6px",fontSize: "17pt", marginRight: "5px"}}>Sort By </div>
                     <SortIcon onClick = {handleOpen} id = "cHo" fontSize="large" label="Search" variant="outlined" />
-                    <Menu anchorEl = {anchorElm} open = {open} onClose={handleClose}>
-                    <MenuItem onClick={handleClose}>Name (A-Z)</MenuItem>
+                    <Menu anchorOrigin={{vertical: 'bottom', horizontal: 'right'}}
+                    transformOrigin={{vertical: 'top', horizontal: 'right'}}
+                    anchorEl = {anchorElm} open = {open} onClose={handleClose}>
+                    <MenuItem onClick={handleClose} sx  = {{marginTop: '-8px', border: "1px solid grey"}}>Name (A-Z)</MenuItem>
+                    <MenuItem onClick={handleClose} sx = {{border: "1px solid grey"}}>Publish Date (Newest)</MenuItem>
+                    <MenuItem onClick={handleClose} sx = {{border: "1px solid grey"}}>Listens (High - Low)</MenuItem>
+                    <MenuItem onClick={handleClose} sx = {{border: "1px solid grey"}}>Likes (High - Low)</MenuItem>
+                    <MenuItem onClick={handleClose} sx = {{border: "1px solid grey"}}>Dislikes (High - Low)</MenuItem>
                     </Menu>
                 </div>
             </div>
@@ -148,7 +175,6 @@ const HomeScreen = () => {
                     controller
                 }
                 </Box>
-                {open && <Dropdown></Dropdown>}
             </Grid>
             
             <div id="add-list-button">
