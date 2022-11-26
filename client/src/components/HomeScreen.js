@@ -16,7 +16,6 @@ import SortIcon from '@mui/icons-material/Sort';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import Comments from './Comments.js';
-import Dropdown from './Dropdown';
 import {Menu, MenuItem} from "@mui/material";
 
 
@@ -34,6 +33,9 @@ const HomeScreen = () => {
     const[open, setOpen] = useState(false);
     const[anchorElm, setAnchorElm] = useState(null);
     console.log(store.publicLists);
+
+
+    
     useEffect(() => {
         store.loadIdNamePairs();
     }, []);
@@ -50,6 +52,7 @@ const HomeScreen = () => {
 
     function handlePage(one, two, three)
     {
+        store.currentList = null;
         store.altUserLists(one, two, three);
         console.log(store.allUserLists);
     }

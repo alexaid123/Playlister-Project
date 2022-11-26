@@ -55,7 +55,7 @@ export default function Comments() {
                         sx={{marginTop: '-25px', height: '390px', overflowY: 'scroll', width: '100%'}}
                     >
                         {
-                            store.currentList.comments.map((comment, index) => (
+                            store.currentList != null && store.currentList.comments != null && store.currentList.comments.map((comment, index) => (
                                 <CommentCard
                                     id={'playlist-comment-' + (index)}
                                     key={'playlist-comment-' + (index)}

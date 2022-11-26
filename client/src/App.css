@@ -169,6 +169,16 @@ body {
   font-size: 36pt;
 }
 
+.disableController{
+
+}
+
+.disableController:hover{
+  cursor: not-allowed;
+  opacity: 0.25;
+  background-color: lightgrey;
+}
+
 .controllerButtons{
 }
 

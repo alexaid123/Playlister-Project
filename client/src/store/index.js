@@ -29,6 +29,7 @@ export const GlobalStoreActionType = {
     LOAD_PUBLISHED_LISTS: "LOAD_PUBLISHED_LISTS",
     MARK_LIST_FOR_DELETION: "MARK_LIST_FOR_DELETION",
     SET_CURRENT_LIST: "SET_CURRENT_LIST",
+    SET_CURRENT_SONG: "SET_CURRENT_SONG",
     SET_LIST_NAME_EDIT_ACTIVE: "SET_LIST_NAME_EDIT_ACTIVE",
     EDIT_SONG: "EDIT_SONG",
     REMOVE_SONG: "REMOVE_SONG",
@@ -208,13 +209,14 @@ function GlobalStoreContextProvider(props) {
                     publicLists: store.publicLists
                 });
             }
+
             // UPDATE A LIST
             case GlobalStoreActionType.SET_CURRENT_LIST: {
                 return setStore({
                     currentModal : CurrentModal.NONE,
                     idNamePairs: store.idNamePairs,
-                    currentList: payload,
-                    currentSongIndex: -1,
+                    currentList: payload.list,
+                    currentSongIndex: payload.index,
                     currentSong: null,
                     newListCounter: store.newListCounter,
                     listNameActive: false,
@@ -547,7 +549,7 @@ function GlobalStoreContextProvider(props) {
                 type: GlobalStoreActionType.CREATE_NEW_LIST,
                 payload: {}
             });
-            //store.loadIdNamePairs();
+            store.loadIdNamePairs();
             // IF IT'S A VALID LIST THEN LET'S START EDITING IT
         }
         else {
@@ -699,16 +701,20 @@ function GlobalStoreContextProvider(props) {
                 if (response.data.success) {
                     storeReducer({
                         type: GlobalStoreActionType.SET_CURRENT_LIST,
-                        payload: playlist
-                    });
-                    storeReducer({
-                        type: GlobalStoreActionType.CREATE_NEW_LIST,
-                        payload: playlist
+                        payload: {list: playlist, index: store.currentSongIndex + 1}
                     });
                 }
             }
         }
         asyncSetCurrentList(id);
+    }
+
+    store.changeCurSong = function (inc) {
+       
+        storeReducer({
+            type: GlobalStoreActionType.SET_CURRENT_LIST,
+            payload: {list: store.currentList, index: store.currentSongIndex + inc}
+        });
     }
 
     store.getPlaylistSize = function() {

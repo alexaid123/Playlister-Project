@@ -156,7 +156,7 @@ function ListCard(props) {
             >
                 <Grid container>
                     <Grid item container>
-                        <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}<div style={{marginLeft: '5px', fontSize:'14pt'}}>By: </div></Box>
+                        <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}<div style={{marginLeft: '5px', fontSize:'14pt'}}>By: {idNamePair.ownerEmail} </div></Box>
                        
                     </Grid>
                     <Grid item container>
@@ -175,7 +175,51 @@ function ListCard(props) {
         </Box>  
     }
 
-    
+    if(store.currentList != null && store.allUserPublished && idNamePair._id != store.currentList._id && idNamePair.published)
+    {
+        cardElement = <Box>
+            <ListItem
+                className = "LCard"
+                id={idNamePair._id}
+                key={idNamePair._id}
+                sx={{backgroundColor: 'Beige', marginTop: '15px', display: 'flex', p: 1 }}
+                style={{borderRadius: '20px', left: '5%', width: '90%', fontSize: '28pt'}}
+                button
+                onClick={(event) => {
+                    handleLoadList(event, idNamePair._id)
+                }}
+            >
+                <Grid container>
+                    <Grid item container>
+                        <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}<div style={{marginLeft: '5px', fontSize:'14pt'}}>By: </div></Box>
+                        <Box sx={{ p: 1 }}>
+                            <IconButton onClick={handleToggleEdit} aria-label='edit'>
+                                <ThumbUpAltIcon style={{fontSize:'28pt'}} /><div style = {{marginLeft: "10px"}}>0</div>
+                            </IconButton>
+                        </Box>
+                        <Box sx={{ p: 1 }}>
+                            <IconButton onClick={(event) => {
+                                    handleDeleteList(event, idNamePair._id)
+                                }} aria-label='delete'>
+                                <ThumbDownAltIcon style={{fontSize:'28pt'}} /><div style = {{marginLeft: "10px"}}>0</div>
+                            </IconButton>
+                        </Box>
+                    </Grid>
+                    <Grid item container>
+                    <Box sx={{ p: 1, flexGrow: 1 }} style={{marginTop: '30px', fontSize:'15pt'}}>Published: <span style = {{color: 'green'}}>{idNamePair.updatedAt}</span> </Box>
+                    <Box sx={{ p: 1, flexGrow: 1 }} style={{marginTop: '30px', fontSize:'15pt'}}>Listens: </Box>
+                        <Box sx={{ p: 1 }}>
+                            <IconButton onClick={(event) => {
+                                    handleOpen(event, idNamePair._id)
+                                }} >
+                                <KeyboardDoubleArrowDownIcon style={{fontSize:'28pt'}} />
+                            </IconButton>
+                        </Box>
+                    </Grid>
+                </Grid>
+            </ListItem>
+        </Box>
+    }
 
     if(store.currentList == null && idNamePair.published)
     {
@@ -406,6 +450,87 @@ function ListCard(props) {
                                 handleCloseB(event, idNamePair._id)
                             }}>
                             <KeyboardDoubleArrowUpIcon style={{fontSize:'28pt'}} />
+                        </IconButton>
+                    </Box>
+                </Grid>
+            </Grid>
+        </ListItem>
+    </Box>
+    }
+
+    if(store.currentList != null && store.currentList._id != idNamePair._id && store.allUserLists && idNamePair.published == false)
+    {
+        cardElement = <Box>
+        <ListItem
+            className = "LCard"
+            id={idNamePair._id}
+            key={idNamePair._id}
+            sx={{backgroundColor: 'Beige', marginTop: '15px', display: 'flex', p: 1 }}
+            style={{borderRadius: '20px', left: '5%', width: '90%', fontSize: '28pt'}}
+            button
+            onClick={(event) => {
+                handleLoadList(event, idNamePair._id)
+            }}
+        >
+            <Grid container>
+                <Grid item container>
+                    <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}<div style={{marginLeft: '5px', fontSize:'14pt'}}>By: </div></Box>
+                   
+                </Grid>
+                <Grid item container>
+                <Box sx={{ p: 1, flexGrow: 1 }} style={{marginTop: '30px', fontSize:'15pt'}}> </Box>
+                <Box sx={{ p: 1, flexGrow: 1 }} style={{marginTop: '30px', fontSize:'15pt'}}> </Box>
+                    <Box sx={{ p: 1 }}>
+                        <IconButton onClick={(event) => {
+                                handleOpen(event, idNamePair._id)
+                            }} >
+                            <KeyboardDoubleArrowDownIcon style={{fontSize:'28pt'}} />
+                        </IconButton>
+                    </Box>
+                </Grid>
+            </Grid>
+        </ListItem>
+    </Box>  
+    }
+
+    if(store.currentList != null && store.currentList._id != idNamePair._id && store.allUserLists && idNamePair.published == true)
+    {
+        cardElement = <Box>
+        <ListItem
+            className = "LCard"
+            id={idNamePair._id}
+            key={idNamePair._id}
+            sx={{backgroundColor: 'Beige', marginTop: '15px', display: 'flex', p: 1 }}
+            style={{borderRadius: '20px', left: '5%', width: '90%', fontSize: '28pt'}}
+            button
+            onClick={(event) => {
+                handleLoadList(event, idNamePair._id)
+            }}
+        >
+            <Grid container>
+                <Grid item container>
+                    <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}<div style={{marginLeft: '5px', fontSize:'14pt'}}>By: </div></Box>
+                    <Box sx={{ p: 1 }}>
+                        <IconButton onClick={handleToggleEdit} aria-label='edit'>
+                            <ThumbUpAltIcon style={{fontSize:'28pt'}} /><div style = {{marginLeft: "10px"}}>0</div>
+                        </IconButton>
+                    </Box>
+                    <Box sx={{ p: 1 }}>
+                        <IconButton onClick={(event) => {
+                                handleDeleteList(event, idNamePair._id)
+                            }} aria-label='delete'>
+                            <ThumbDownAltIcon style={{fontSize:'28pt'}} /><div style = {{marginLeft: "10px"}}>0</div>
+                        </IconButton>
+                    </Box>
+                </Grid>
+                <Grid item container>
+                <Box sx={{ p: 1, flexGrow: 1 }} style={{marginTop: '30px', fontSize:'15pt'}}>Published: <span style = {{color: 'green'}}>{idNamePair.updatedAt}</span> </Box>
+                <Box sx={{ p: 1, flexGrow: 1 }} style={{marginTop: '30px', fontSize:'15pt'}}>Listens: </Box>
+                    <Box sx={{ p: 1 }}>
+                        <IconButton onClick={(event) => {
+                                handleOpen(event, idNamePair._id)
+                            }} >
+                            <KeyboardDoubleArrowDownIcon style={{fontSize:'28pt'}} />
                         </IconButton>
                     </Box>
                 </Grid>

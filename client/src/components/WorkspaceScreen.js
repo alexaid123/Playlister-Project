@@ -50,11 +50,11 @@ function WorkspaceScreen() {
             <Grid container>
             <Grid item xs = {1} sm = {1} md = {1} lg = {1}></Grid>
             <Grid item xs = {10} sm = {10} md = {10} lg = {10}>
-            <div className = "LCard" style = {{height: '50%'}}>
-                <IconButton style={{marginLeft: '46%'}} onClick={(event) => { addSong() }}>
+            {!store.currentList.published && <div className = "LCard" style = {{height: '50%'}}>
+                 <IconButton style={{marginLeft: '46%'}} onClick={(event) => { addSong() }}>
                 <AddIcon style={{fontSize:'28pt'}} />
                 </IconButton>
-            </div>
+            </div>}
             </Grid>
             <Grid item xs = {1} sm = {1} md = {1} lg = {1}></Grid>
             </Grid>
