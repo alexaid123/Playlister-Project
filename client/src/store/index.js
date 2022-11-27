@@ -596,6 +596,23 @@ function GlobalStoreContextProvider(props) {
     // FUNCTIONS ARE markListForDeletion, deleteList, deleteMarkedList,
     // showDeleteListModal, and hideDeleteListModal
     store.markListForDeletion = function (id) {
+        if(store.currentList.ownerEmail !== auth.user.email || store.allLists)
+        {
+            console.log("This list does not belong to you");
+            async function getListToDelete(id) {
+                let response = await api.getPublishedPlaylistById(id);
+                if (response.data.success) {
+                    let playlist = response.data.playlist;
+                    storeReducer({
+                        type: GlobalStoreActionType.MARK_LIST_FOR_DELETION,
+                        payload: {id: id, playlist: playlist}
+                    });
+                }
+            }
+            getListToDelete(id);
+        }
+        else
+        {
         async function getListToDelete(id) {
             let response = await api.getPlaylistById(id);
             if (response.data.success) {
@@ -608,6 +625,7 @@ function GlobalStoreContextProvider(props) {
         }
         getListToDelete(id);
     }
+    }
 
     store.unmarkListForDeletion = function () {
                 storeReducer({
@@ -617,7 +635,22 @@ function GlobalStoreContextProvider(props) {
     }
 
     store.deleteList = function (id) {
-        async function processDelete(id) {
+        if(store.allLists)
+        {
+            console.log("This list does not belong to you and " + store.listIdMarkedForDeletion);
+            async function processDelete(id) {
+                let response = await api.deletePublishedPlaylistById(id);
+                store.closeCurrentList();
+                if (response.status === 200) {
+                    store.loadPublishedPlaylists();
+                    history.push("/"); 
+                }
+            }
+            processDelete(id);
+        }
+        else
+        {
+            async function processDelete(id) {
             let response = await api.deletePlaylistById(id);
             store.closeCurrentList();
             
@@ -627,6 +660,7 @@ function GlobalStoreContextProvider(props) {
             }
         }
         processDelete(id);
+        }
     }
     store.deleteMarkedList = function() {
         store.deleteList(store.listIdMarkedForDeletion);
@@ -695,6 +729,18 @@ function GlobalStoreContextProvider(props) {
             }
         }
         asyncSetCurrentList(id);
+    }
+
+    store.setCurrentSong = function (index) {
+        async function asyncSetCurrentList(id) {
+          
+                    storeReducer({
+                        type: GlobalStoreActionType.SET_CURRENT_LIST,
+                        payload: {list: store.currentList, index: id}
+                    });
+                
+            }
+        asyncSetCurrentList(index);
     }
 
     store.setPublishedList = function (id)

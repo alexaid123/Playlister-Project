@@ -155,6 +155,56 @@ deletePlaylist = async (req, res) => {
         asyncFindUser(playlist);
     })
 }
+
+
+
+deletePublishedPlaylist = async (req, res) => {
+    PublishedPlaylist.findById({ _id: req.params.id }, (err, playlist) => {
+        if (err) {
+            return res.status(404).json({
+                errorMessage: 'Playlist not found!',
+            })
+        }
+
+        // DOES THIS LIST BELONG TO THIS USER?
+        async function asyncFindUser(list) {
+            User.findOne({ email: list.ownerEmail }, (err, user) => {
+                if (user._id == req.userId) {
+                    PublishedPlaylist.findOneAndDelete({ _id: req.params.id }, () => {
+
+                        const index = user.publishedPlaylists.indexOf(req.params.id);
+                        if (index > -1) { 
+                            user.publishedPlaylists.splice(index, 1); 
+                        }
+                        
+                        user
+                            .save()
+                                .then(() => {
+                                    return res.status(200).json({});
+                                })
+                                .catch(error => {
+                                    return res.status(400).json({
+                                        errorMessage: 'Playlist Not Created!'
+                                    })
+                                })
+
+                            
+                                
+                    }).catch(err => console.log(err))
+                }
+                else {
+                    return res.status(400).json({ 
+                        errorMessage: "authentication error" 
+                    });
+                }
+            });
+        }
+        asyncFindUser(playlist);
+    })
+}
+
+
+
 getPlaylistById = async (req, res) => {
     await Playlist.findById({ _id: req.params.id }, (err, list) => {
         if (err) {
@@ -337,6 +387,7 @@ updatePublishedPlaylist = async (req, res) => {
 module.exports = {
     createPlaylist,
     deletePlaylist,
+    deletePublishedPlaylist,
     getPlaylistById,
     getPublishedPlaylistById,
     getPlaylistPairs,

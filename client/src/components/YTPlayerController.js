@@ -103,21 +103,21 @@ export default function YTPlayerController(props) {
 
                 <Grid item xs = {1} sm = {1} md={1}></Grid>
                 <Grid item xs = {11} sm = {11} md={11}>
-                    <div className='fCont'> Playlist: {store.currentList != null && store.currentList.songs != null && store.currentList.songs[store.currentSongIndex] != null && store.currentList.songs[store.currentSongIndex].title} </div>
+                    <div className='fCont'> Playlist: {store.currentList != null && store.currentList.songs != null && store.currentList.songs[store.currentSongIndex] != null && store.currentList.name} </div>
                 </Grid>
 
                 <Grid item xs = {1} sm = {1} md={1}></Grid>
                 <Grid item xs = {11} sm = {11} md={11}>
-                    <div className='fCont'> Song #: 2 </div>
+                    <div className='fCont'> Song #: {store.currentList != null && store.currentList.songs != null && store.currentList.songs[store.currentSongIndex] != null && store.currentSongIndex + 1} </div>
                 </Grid>
 
                 <Grid item xs = {1} sm = {1} md={1}></Grid>
                 <Grid item xs = {11} sm = {11} md={11}>
-                    <div className='fCont'> Title: Untitled </div>
+                    <div className='fCont'> Title: {store.currentList != null && store.currentList.songs != null && store.currentList.songs[store.currentSongIndex] != null && store.currentList.songs[store.currentSongIndex].title} </div>
                 </Grid>
                 <Grid item xs = {1} sm = {1} md={1}></Grid>
                 <Grid item xs = {11} sm = {11} md={11}>
-                    <div className='fCont'> Artist: Pink Floyd </div>
+                    <div className='fCont'> Artist: {store.currentList != null && store.currentList.songs != null && store.currentList.songs[store.currentSongIndex] != null && store.currentList.songs[store.currentSongIndex].artist} </div>
                 </Grid>
             </Grid>
 

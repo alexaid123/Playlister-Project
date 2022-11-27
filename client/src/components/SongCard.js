@@ -39,8 +39,12 @@ function SongCard(props) {
     function handleClick(event) {
         // DOUBLE CLICK IS FOR SONG EDITING
         event.stopPropagation();
-        if (event.detail === 2) {
+        if (event.detail === 2 && !store.currentList.published) {
             store.showEditSongModal(index, song);
+        }
+        else
+        {
+            store.setCurrentSong(index);
         }
     }
 
@@ -65,14 +69,14 @@ function SongCard(props) {
                 >
                 {song.title} by {song.artist}
             </span>
-            <input
+           {!store.currentList.published && <input
                 type="button"
                 id={"remove-song-" + index}
                 className="list-card-button"
                 style = {{fontSize: '10pt'}}
                 value={"\u2715"}
                 onClick={handleRemoveSong}
-            />
+            />}
         </div>
     );
 }

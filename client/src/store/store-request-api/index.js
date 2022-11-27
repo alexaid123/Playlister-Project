@@ -45,6 +45,7 @@ export const createPublishedPlaylist = (newListName, newSongs, userName, userEma
     })
 }
 export const deletePlaylistById = (id) => api.delete(`/playlist/${id}`)
+export const deletePublishedPlaylistById = (id) => api.delete(`/publishedplaylist/${id}`)
 export const getPlaylistById = (id) => api.get(`/playlist/${id}`)
 export const getPublishedPlaylistById = (id) => api.get(`/publishedplaylist/${id}`)
 export const getPlaylistPairs = () => api.get(`/playlistpairs/`)
@@ -65,6 +66,7 @@ export const updatePublishedPlaylistById = (id, playlist) => {
 const apis = {
     createPlaylist,
     deletePlaylistById,
+    deletePublishedPlaylistById,
     getPlaylistById,
     getPublishedPlaylistById,
     getPlaylistPairs,

@@ -17,6 +17,7 @@ import List from '@mui/material/List';
 import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp';
 import AddIcon from '@mui/icons-material/Add';
 import WorkspaceScreen from './WorkspaceScreen'
+import AuthContext from '../auth'
 
 /*
     This is a card in our list of top 5 lists. It lets select
@@ -30,6 +31,8 @@ function ListCard(props) {
     const [editActive, setEditActive] = useState(false);
     const [text, setText] = useState("");
     const { idNamePair, selected } = props;
+    const { auth } = useContext(AuthContext);
+
 
     let modalJSX = "";
     if (store.isEditSongModalOpen()) {
@@ -369,7 +372,7 @@ function ListCard(props) {
  
                 </Grid>
                 <Grid item container>
-                <Box sx={{ p: 1, flexGrow: 1 }} style={{marginTop: '13px', fontSize:'15pt'}}>  <button disabled={!store.canUndo()} onClick = {handleUndo} style={{fontSize:'14pt', marginLeft: '0px'}}>Undo</button><button disabled={!store.canRedo()}onClick = {handleRedo} style={{fontSize:'14pt', marginLeft: '10px'}}>Redo</button>  </Box>
+                <Box sx={{ p: 1, flexGrow: 1 }} style={{marginTop: '13px', fontSize:'15pt'}}>  </Box>
                 <Box sx={{ p: 1, flexGrow: 1 }} style={{marginTop: '13px', fontSize:'15pt'}}>  </Box>
                     
                     <Box sx={{ p: 1 }}>
@@ -377,18 +380,16 @@ function ListCard(props) {
                                 handleCloseB(event, idNamePair._id)
                             }}>
                         </IconButton>
-                        <button disabled={store.currentList.published} onClick={(event) => {
-                                handlePublish(event)
-                            }} style={{fontSize:'14pt', marginLeft: '20px'}}>Publish</button>
-                        <button onClick={(event) => {
+    
+                        {idNamePair.ownerEmail === auth.user.email && <button onClick={(event) => {
                                 handleDeleteList(event, idNamePair._id)
-                            }} style={{fontSize:'14pt', marginLeft: '10px'}}>Delete</button>
+                            }} style={{fontSize:'14pt', marginLeft: '10px'}}>Delete</button>}
                         <button style={{fontSize:'14pt', marginLeft: '10px'}}>Duplicate</button>
                     </Box>
                 </Grid>
                 <Grid item container>
-                <Box sx={{ p: 1, flexGrow: 1 }} style={{marginTop: '30px', fontSize:'15pt'}}></Box>
-                <Box sx={{ p: 1, flexGrow: 1 }} style={{marginTop: '30px', fontSize:'15pt'}}></Box>
+                <Box sx={{ p: 1, flexGrow: 1 }} style={{marginTop: '30px', fontSize:'15pt'}}>Published: <span style = {{color: 'green'}}>{idNamePair.updatedAt}</span></Box>
+                <Box sx={{ p: 1, flexGrow: 1 }} style={{marginTop: '30px', fontSize:'15pt'}}>Listens: </Box>
                     <Box sx={{ p: 1 }}>
                         <IconButton onClick={(event) => {
                                 handleCloseB(event, idNamePair._id)
@@ -461,7 +462,7 @@ function ListCard(props) {
         >
             <Grid container>
                 <Grid item container>
-                    <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}<div style={{marginLeft: '5px', fontSize:'14pt'}}>By: {idNamePair.ownerUserName} </div></Box>
+                    <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}<div style={{marginLeft: '5px', fontSize:'14pt'}}>By:{idNamePair.ownerUserName}</div></Box>
                     <Box sx={{ p: 1 }}>
                         <IconButton onClick={handleToggleEdit} aria-label='edit'>
                             <ThumbUpAltIcon style={{fontSize:'28pt'}} /><div style = {{marginLeft: "10px"}}>0</div>
@@ -481,19 +482,23 @@ function ListCard(props) {
  
                 </Grid>
                 <Grid item container>
-                <Box sx={{ p: 1, flexGrow: 1 }} style={{marginTop: '30px', fontSize:'15pt'}}> </Box>
-                <Box sx={{ p: 1, flexGrow: 1 }} style={{marginTop: '30px', fontSize:'15pt'}}> </Box>
+                <Box sx={{ p: 1, flexGrow: 1 }} style={{marginTop: '13px', fontSize:'15pt'}}>  </Box>
+                <Box sx={{ p: 1, flexGrow: 1 }} style={{marginTop: '13px', fontSize:'15pt'}}>  </Box>
                     
                     <Box sx={{ p: 1 }}>
                         <IconButton onClick={(event) => {
                                 handleCloseB(event, idNamePair._id)
                             }}>
                         </IconButton>
-                        <button style={{fontSize:'14pt', marginLeft: '20px'}}>Duplicate</button>
+    
+                        {idNamePair.ownerEmail === auth.user.email && <button onClick={(event) => {
+                                handleDeleteList(event, idNamePair._id)
+                            }} style={{fontSize:'14pt', marginLeft: '10px'}}>Delete</button>}
+                        <button style={{fontSize:'14pt', marginLeft: '10px'}}>Duplicate</button>
                     </Box>
                 </Grid>
                 <Grid item container>
-                <Box sx={{ p: 1, flexGrow: 1 }} style={{marginTop: '30px', fontSize:'15pt'}}>Published: </Box>
+                <Box sx={{ p: 1, flexGrow: 1 }} style={{marginTop: '30px', fontSize:'15pt'}}>Published: <span style = {{color: 'green'}}>{idNamePair.updatedAt}</span></Box>
                 <Box sx={{ p: 1, flexGrow: 1 }} style={{marginTop: '30px', fontSize:'15pt'}}>Listens: </Box>
                     <Box sx={{ p: 1 }}>
                         <IconButton onClick={(event) => {
@@ -505,7 +510,7 @@ function ListCard(props) {
                 </Grid>
             </Grid>
         </ListItem>
-    </Box>
+   </Box>
     }
 
 
@@ -672,7 +677,7 @@ function ListCard(props) {
         >
             <Grid container>
                 <Grid item container>
-                    <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}<div style={{marginLeft: '5px', fontSize:'14pt'}}>By: {idNamePair.ownerUserName} </div></Box>
+                    <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}<div style={{marginLeft: '5px', fontSize:'14pt'}}>By:{idNamePair.ownerUserName}</div></Box>
                     <Box sx={{ p: 1 }}>
                         <IconButton onClick={handleToggleEdit} aria-label='edit'>
                             <ThumbUpAltIcon style={{fontSize:'28pt'}} /><div style = {{marginLeft: "10px"}}>0</div>
@@ -692,19 +697,23 @@ function ListCard(props) {
  
                 </Grid>
                 <Grid item container>
-                <Box sx={{ p: 1, flexGrow: 1 }} style={{marginTop: '30px', fontSize:'15pt'}}> </Box>
-                <Box sx={{ p: 1, flexGrow: 1 }} style={{marginTop: '30px', fontSize:'15pt'}}> </Box>
+                <Box sx={{ p: 1, flexGrow: 1 }} style={{marginTop: '13px', fontSize:'15pt'}}>  </Box>
+                <Box sx={{ p: 1, flexGrow: 1 }} style={{marginTop: '13px', fontSize:'15pt'}}>  </Box>
                     
                     <Box sx={{ p: 1 }}>
                         <IconButton onClick={(event) => {
                                 handleCloseB(event, idNamePair._id)
                             }}>
                         </IconButton>
-                        <button style={{fontSize:'14pt', marginLeft: '20px'}}>Duplicate</button>
+    
+                        {idNamePair.ownerEmail === auth.user.email && <button onClick={(event) => {
+                                handleDeleteList(event, idNamePair._id)
+                            }} style={{fontSize:'14pt', marginLeft: '10px'}}>Delete</button>}
+                        <button style={{fontSize:'14pt', marginLeft: '10px'}}>Duplicate</button>
                     </Box>
                 </Grid>
                 <Grid item container>
-                <Box sx={{ p: 1, flexGrow: 1 }} style={{marginTop: '30px', fontSize:'15pt'}}>Published: </Box>
+                <Box sx={{ p: 1, flexGrow: 1 }} style={{marginTop: '30px', fontSize:'15pt'}}>Published: <span style = {{color: 'green'}}>{idNamePair.updatedAt}</span></Box>
                 <Box sx={{ p: 1, flexGrow: 1 }} style={{marginTop: '30px', fontSize:'15pt'}}>Listens: </Box>
                     <Box sx={{ p: 1 }}>
                         <IconButton onClick={(event) => {
@@ -716,7 +725,7 @@ function ListCard(props) {
                 </Grid>
             </Grid>
         </ListItem>
-    </Box>
+   </Box>
     }
 
 
