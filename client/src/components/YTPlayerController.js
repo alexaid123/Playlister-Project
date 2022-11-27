@@ -121,7 +121,7 @@ export default function YTPlayerController(props) {
                 </Grid>
             </Grid>
 
-            <Grid className = "cBut" item container direction="row" spacing = '0'>
+            <Grid className = "cBut" item container direction="row" spacing = '0' sx = {{marginTop: '20px'}}>
                     <Grid item xs = {3} sm = {3} md={3} lg = {3}>
                         
                     </Grid>

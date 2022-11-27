@@ -9,6 +9,7 @@ const Schema = mongoose.Schema
 const publishedPlaylistSchema = new Schema(
     {
         name: { type: String, required: true },
+        unpublishedID: {type: String, required: true},
         ownerUserName: {type: String, required: true},
         ownerEmail: { type: String, required: true },
         published:{type: Boolean, required: true},

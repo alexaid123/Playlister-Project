@@ -490,54 +490,59 @@ function GlobalStoreContextProvider(props) {
     store.publishCurrentList = function()
     {
         store.currentList.published = true;
-        async function asyncChangeListName(id) {
-            let response = await api.getPlaylistById(id);
-            if (response.data.success) {
-                let playlist = response.data.playlist;
-                playlist.published = true;
-                    async function updateList(playlist) {
-                        response = await api.updatePlaylistById(playlist._id, playlist);
-                        if (response.data.success) {
-                            async function getListPairs(playlist) {
-                                response = await api.getPlaylistPairs();
-                                if (response.data.success) {
-                                    let pairsArray = response.data.idNamePairs;
-                                    storeReducer({
-                                        type: GlobalStoreActionType.CHANGE_LIST_NAME,
-                                        payload: {
-                                            idNamePairs: pairsArray,
-                                            playlist: playlist
-                                        }
-                                    });
-                                }
-                            }
-                            getListPairs(playlist);
-                        }
-                    }
-                    updateList(playlist);
-            }
-        }
-        asyncChangeListName(store.currentList._id);
 
+        let pplaylist;
         async function asyncAdd(id) {
-            const response = await api.createPublishedPlaylist(store.currentList.name, store.currentList.songs, auth.user.userName, auth.user.email, true, store.currentList.comments);
+            console.log("EIMASTE OLLA");
+            const response = await api.createPublishedPlaylist(store.currentList.name, store.currentList._id, store.currentList.songs, auth.user.userName, auth.user.email, true, store.currentList.comments);
             if (response.status === 201) {
                 // IF IT'S A VALID LIST THEN LET'S START EDITING IT
-                
+                pplaylist = response.data.playlist;
+                async function asyncChangeListName(id) {
+                    let response = await api.getPlaylistById(id);
+                    if (response.data.success) {
+                        let playlist = response.data.playlist;
+                        playlist.published = true;
+                        playlist.publishedID = pplaylist._id;
+                            async function updateList(playlist) {
+                                response = await api.updatePlaylistById(playlist._id, playlist);
+                                if (response.data.success) {
+                                    async function getListPairs(playlist) {
+                                        response = await api.getPlaylistPairs();
+                                        if (response.data.success) {
+                                            let pairsArray = response.data.idNamePairs;
+                                            storeReducer({
+                                                type: GlobalStoreActionType.CHANGE_LIST_NAME,
+                                                payload: {
+                                                    idNamePairs: pairsArray,
+                                                    playlist: playlist
+                                                }
+                                            });
+                                        }
+                                    }
+                                    getListPairs(playlist);
+                                }
+                            }
+                            updateList(playlist);
+                    }
+                }
+                asyncChangeListName(store.currentList._id);
+        
+
             }
             else {
                 console.log("API FAILED TO CREATE A NEW LIST");
             }
+            
         }
 
         asyncAdd(store.currentList._id);
-
     }
 
     // THIS FUNCTION CREATES A NEW LIST
     store.createNewList = async function () {
         let newListName = "Untitled " + store.newListCounter;
-        const response = await api.createPlaylist(newListName, [], auth.user.userName, auth.user.email, false, []);
+        const response = await api.createPlaylist(newListName, "null", [], auth.user.userName, auth.user.email, false, []);
         if (response.status === 201) {
             tps.clearAllTransactions();
             let newList = response.data.playlist;
@@ -640,26 +645,56 @@ function GlobalStoreContextProvider(props) {
             console.log("This list does not belong to you and " + store.listIdMarkedForDeletion);
             async function processDelete(id) {
                 let response = await api.deletePublishedPlaylistById(id);
-                store.closeCurrentList();
                 if (response.status === 200) {
-                    store.loadPublishedPlaylists();
-                    history.push("/"); 
+                    async function processDDelete(id) {
+                        let response = await api.deletePlaylistById(store.listMarkedForDeletion.unpublishedID);
+                        store.closeCurrentList();
+                        if (response.status === 200) {
+                            store.closeCurrentList();
+                            store.loadPublishedPlaylists();
+                            history.push("/"); 
+                        }
+                    }
+                    processDDelete(id);
                 }
             }
             processDelete(id);
+            
         }
         else
         {
-            async function processDelete(id) {
-            let response = await api.deletePlaylistById(id);
-            store.closeCurrentList();
-            
-            if (response.status === 200) {
-                store.loadIdNamePairs();
-                history.push("/"); 
+            if(store.listMarkedForDeletion.published)
+            {
+                async function processDelete(id) {
+                    let response = await api.deletePublishedPlaylistById(store.listMarkedForDeletion.publishedID);
+                    if (response.status === 200) {
+                        async function processDDelete(id) {
+                            let response = await api.deletePlaylistById(store.listIdMarkedForDeletion);
+                            store.closeCurrentList();
+                            if (response.status === 200) {
+                                store.closeCurrentList();
+                                store.loadIdNamePairs();
+                                history.push("/"); 
+                            }
+                        }
+                        processDDelete(id);
+                    }
+                }
+                processDelete(id);
             }
-        }
-        processDelete(id);
+            else
+            {
+                async function processDelete(id) {
+                    let response = await api.deletePlaylistById(id);
+                    store.closeCurrentList();
+                    
+                    if (response.status === 200) {
+                        store.loadIdNamePairs();
+                        history.push("/"); 
+                    }
+                }
+                processDelete(id);
+            }
         }
     }
     store.deleteMarkedList = function() {

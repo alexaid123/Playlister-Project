@@ -52,7 +52,14 @@ const HomeScreen = () => {
 
     function handlePage(one, two, three)
     {
-        store.loadPublishedPlaylists();
+        if(!one && two && !three)
+        {
+            store.loadPublishedPlaylists();
+        }
+        if(one && !two && !three)
+        {
+            store.loadIdNamePairs();
+        }
         store.allUserLists = one;
         store.allLists = two;
         store.allUserPublished = three;
