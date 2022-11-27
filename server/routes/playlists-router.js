@@ -13,9 +13,11 @@ router.post('/playlist', auth.verify, PlaylistController.createPlaylist)
 router.post('/publishplaylist', auth.verify, PlaylistController.createPublishedPlaylist)
 router.delete('/playlist/:id', auth.verify, PlaylistController.deletePlaylist)
 router.get('/playlist/:id', auth.verify, PlaylistController.getPlaylistById)
+router.get('/publishedplaylist/:id', PlaylistController.getPublishedPlaylistById)
 router.get('/playlistpairs', auth.verify, PlaylistController.getPlaylistPairs)
 router.get('/playlists', auth.verify, PlaylistController.getPlaylists)
 router.get('/pbplaylists', auth.verify, PlaylistController.getPublishedPlaylists)
 router.put('/playlist/:id', auth.verify, PlaylistController.updatePlaylist)
+router.put('/publishedplaylist/:id', auth.verify, PlaylistController.updatePublishedPlaylist)
 
 module.exports = router

@@ -83,7 +83,7 @@ export default function YTPlayerController(props) {
             <div id = "yComp2">
             <div style = {{marginTop: '-5%'}}>
           <div style = {{position: 'absolute', height: '100%', width: '100%'}}>
-           <ReactPlayer playing = {playing} onEnded = {nextSong} opts={playerOptions} controls = {false} pip = {false} onReady = {onPlayerReady} width = '100%' height= "100%" url = {vid}
+          <ReactPlayer playing = {playing} onEnded = {nextSong} opts={playerOptions} controls = {false} pip = {false} onReady = {onPlayerReady} width = '100%' height= "100%" url = {vid}
            onError={() => console.log('eror')}
            />
         </div> 

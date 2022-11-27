@@ -175,6 +175,16 @@ getPlaylistById = async (req, res) => {
         asyncFindUser(list);
     }).catch(err => console.log(err))
 }
+
+getPublishedPlaylistById = async (req, res) => {
+    await PublishedPlaylist.findById({ _id: req.params.id }, (err, list) => {
+        if (err) {
+            return res.status(400).json({ success: false, error: err });
+        }
+        return res.status(200).json({ success: true, playlist: list })
+    }).catch(err => console.log(err))
+}
+
 getPlaylistPairs = async (req, res) => {
     await User.findOne({ _id: req.userId }, (err, user) => {
         async function asyncFindList(email) {
@@ -282,13 +292,57 @@ updatePlaylist = async (req, res) => {
         asyncFindUser(playlist);
     })
 }
+
+updatePublishedPlaylist = async (req, res) => {
+    const body = req.body
+
+    if (!body) {
+        return res.status(400).json({
+            success: false,
+            error: 'You must provide a body to update',
+        })
+    }
+
+    PublishedPlaylist.findOne({ _id: req.params.id }, (err, playlist) => {
+        if (err) {
+            return res.status(404).json({
+                err,
+                message: 'Playlist not found!',
+            })
+        }
+
+     
+                    playlist.name = body.playlist.name;
+                    playlist.songs = body.playlist.songs; 
+                    playlist.comments = body.playlist.comments;
+                    playlist.published = body.playlist.published;
+                    playlist
+                        .save()
+                        .then(() => {
+                            return res.status(200).json({
+                                success: true,
+                                id: list._id,
+                                message: 'Playlist updated!',
+                            })
+                        })
+                        .catch(error => {
+                            return res.status(404).json({
+                                error,
+                                message: 'Playlist not updated!',
+                            })
+                        })
+
+    })
+}
 module.exports = {
     createPlaylist,
     deletePlaylist,
     getPlaylistById,
+    getPublishedPlaylistById,
     getPlaylistPairs,
     getPlaylists,
     getPublishedPlaylists,
     updatePlaylist,
+    updatePublishedPlaylist,
     createPublishedPlaylist
 }

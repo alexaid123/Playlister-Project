@@ -29,7 +29,7 @@ function WorkspaceScreen() {
     function addSong()
     {
         store.addNewSong();
-        store.loadIdNamePairs();
+        //store.loadIdNamePairs();
     }
     return (
         <Box>

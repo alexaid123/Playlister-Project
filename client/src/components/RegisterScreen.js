@@ -30,6 +30,7 @@ export default function RegisterScreen() {
         
             auth.registerUser(
                 store,
+                formData.get('userName'),
                 formData.get('firstName'),
                 formData.get('lastName'),
                 formData.get('email'), 
@@ -59,6 +60,27 @@ export default function RegisterScreen() {
                     <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
                         <Grid container spacing={2}>
                         <MUIErrorAlert />
+                        <Grid item xs={12} sm={12}>
+                                <TextField
+                                    autoComplete="uname"
+                                    name="userName"
+                                    required
+                                    fullWidth
+                                    id="userName"
+                                    label="User Name"
+                                    autoFocus
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField
+                                    required
+                                    fullWidth
+                                    id="email"
+                                    label="Email Address"
+                                    name="email"
+                                    autoComplete="email"
+                                />
+                            </Grid>
                             <Grid item xs={12} sm={6}>
                                 <TextField
                                     autoComplete="fname"
@@ -80,16 +102,7 @@ export default function RegisterScreen() {
                                     autoComplete="lname"
                                 />
                             </Grid>
-                            <Grid item xs={12}>
-                                <TextField
-                                    required
-                                    fullWidth
-                                    id="email"
-                                    label="Email Address"
-                                    name="email"
-                                    autoComplete="email"
-                                />
-                            </Grid>
+                          
                             <Grid item xs={12}>
                                 <TextField
                                     required

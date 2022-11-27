@@ -22,32 +22,41 @@ const api = axios.create({
 // WORK, AND SOME REQUIRE DATA, WHICH WE WE WILL FORMAT HERE, FOR WHEN
 // WE NEED TO PUT THINGS INTO THE DATABASE OR IF WE HAVE SOME
 // CUSTOM FILTERS FOR QUERIES
-export const createPlaylist = (newListName, newSongs, userEmail, pb, cmt) => {
+export const createPlaylist = (newListName, newSongs, userName, userEmail, pb, cmt) => {
     return api.post(`/playlist/`, {
         // SPECIFY THE PAYLOAD
         name: newListName,
-        songs: newSongs,
+        songs: newSongs, 
         published: pb,
         comments: cmt,
-        ownerEmail: userEmail
+        ownerEmail: userEmail,
+        ownerUserName: userName
     })
 }
-export const createPublishedPlaylist = (newListName, newSongs, userEmail, pb, cmt) => {
+export const createPublishedPlaylist = (newListName, newSongs, userName, userEmail, pb, cmt) => {
     return api.post(`/publishplaylist/`, {
         // SPECIFY THE PAYLOAD
         name: newListName,
         songs: newSongs,
         published: pb,
         comments: cmt,
-        ownerEmail: userEmail
+        ownerEmail: userEmail,
+        ownerUserName: userName
     })
 }
 export const deletePlaylistById = (id) => api.delete(`/playlist/${id}`)
 export const getPlaylistById = (id) => api.get(`/playlist/${id}`)
+export const getPublishedPlaylistById = (id) => api.get(`/publishedplaylist/${id}`)
 export const getPlaylistPairs = () => api.get(`/playlistpairs/`)
 export const getPublishedPlaylists = () => api.get(`/pbplaylists/`)
 export const updatePlaylistById = (id, playlist) => {
     return api.put(`/playlist/${id}`, {
+        // SPECIFY THE PAYLOAD
+        playlist : playlist
+    })
+}
+export const updatePublishedPlaylistById = (id, playlist) => {
+    return api.put(`/publishedplaylist/${id}`, {
         // SPECIFY THE PAYLOAD
         playlist : playlist
     })
@@ -57,9 +66,11 @@ const apis = {
     createPlaylist,
     deletePlaylistById,
     getPlaylistById,
+    getPublishedPlaylistById,
     getPlaylistPairs,
     getPublishedPlaylists,
     updatePlaylistById,
+    updatePublishedPlaylistById,
     createPublishedPlaylist
 }
 

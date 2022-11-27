@@ -32,8 +32,8 @@ const HomeScreen = () => {
     const { store } = useContext(GlobalStoreContext);
     const[open, setOpen] = useState(false);
     const[anchorElm, setAnchorElm] = useState(null);
-    console.log(store.publicLists);
-
+    console.log("published lists is " + store.publicLists);
+    
 
     
     useEffect(() => {
@@ -52,6 +52,10 @@ const HomeScreen = () => {
 
     function handlePage(one, two, three)
     {
+        store.loadPublishedPlaylists();
+        store.allUserLists = one;
+        store.allLists = two;
+        store.allUserPublished = three;
         store.currentList = null;
         store.altUserLists(one, two, three);
         console.log(store.allUserLists);
@@ -95,7 +99,7 @@ const HomeScreen = () => {
         pbutton = <div id = "plBContainer" onClick={handleYT}> <Typography id = "plB" variant="h6"  >Player</Typography> </div>
         cbutton = <div id = "plBContainerP" onClick={handlePl}> <Typography id = "plB" variant="h6" >Comments</Typography> </div>
     }
-    if (store) {
+    if (store && store.allUserLists || store.allUserPublished) {
         listCard = 
             <List>
             {
@@ -110,7 +114,7 @@ const HomeScreen = () => {
             }
             </List>;
     }
-    if(store.publicLists.length != 0)
+    else if(store.publicLists.length !== 0)
     {
         listCard = 
             <List>

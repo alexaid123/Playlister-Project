@@ -16,10 +16,12 @@ import { TextField } from '@mui/material';
 import CommentCard from './CommentCard';
 import List from '@mui/material/List';
 import IconButton from '@mui/material/IconButton';
+import AuthContext from '../auth'
 
 export default function Comments() {
     const { store } = useContext(GlobalStoreContext);
     const [text, setText] = useState("");
+    const { auth } = useContext(AuthContext);
     const inputRef = useRef(null);
     //<input type = "text" id = "commentsInput" placeholder='Add Comment'></input>
     
@@ -30,9 +32,16 @@ export default function Comments() {
             {
                 console.log(text);
                 inputRef.current.value = "";
-                let cm = {user: "alex", comment: text};
+                let cm = {user: auth.user.userName, comment: text};
                 store.currentList.comments.push(cm);
-                store.updateCurrentList();
+                if(store.allLists)
+                {
+                    store.updatePuplishedCurrent();
+                }
+                else
+                {
+                    store.updateCurrentList();
+                }
                 setText("");
             }
            

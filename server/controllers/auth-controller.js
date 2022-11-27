@@ -19,6 +19,7 @@ getLoggedIn = async (req, res) => {
         return res.status(200).json({
             loggedIn: true,
             user: {
+                userName: loggedInUser.userName,
                 firstName: loggedInUser.firstName,
                 lastName: loggedInUser.lastName,
                 email: loggedInUser.email
@@ -70,6 +71,7 @@ loginUser = async (req, res) => {
         }).status(200).json({
             success: true,
             user: {
+                userName: existingUser.userName,
                 firstName: existingUser.firstName,
                 lastName: existingUser.lastName,  
                 email: existingUser.email              
@@ -93,8 +95,8 @@ logoutUser = async (req, res) => {
 
 registerUser = async (req, res) => {
     try {
-        const { firstName, lastName, email, password, passwordVerify } = req.body;
-        if (!firstName || !lastName || !email || !password || !passwordVerify) {
+        const {userName, firstName, lastName, email, password, passwordVerify } = req.body;
+        if (!userName || !firstName || !lastName || !email || !password || !passwordVerify) {
             return res.status(400).json({ errorMessage: "Please enter all required fields." });
         }
         if (password.length < 8) {
@@ -126,7 +128,7 @@ registerUser = async (req, res) => {
         const passwordHash = await bcrypt.hash(password, salt);
 
         const newUser = new User({
-            firstName, lastName, email, passwordHash
+            userName, firstName, lastName, email, passwordHash
         });
         const savedUser = await newUser.save();
 
@@ -140,6 +142,7 @@ registerUser = async (req, res) => {
         }).status(200).json({
             success: true,
             user: {
+                userName: savedUser.userName,
                 firstName: savedUser.firstName,
                 lastName: savedUser.lastName,  
                 email: savedUser.email              

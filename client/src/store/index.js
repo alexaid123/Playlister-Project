@@ -125,14 +125,15 @@ function GlobalStoreContextProvider(props) {
                 })
             }
             // CREATE A NEW LIST
-            case GlobalStoreActionType.CREATE_NEW_LIST: {                
+            case GlobalStoreActionType.CREATE_NEW_LIST: { 
+                console.log("PAYLOAD IS" + payload)               
                 return setStore({
                     currentModal : CurrentModal.NONE,
                     idNamePairs: store.idNamePairs,
-                    currentList: payload,
+                    currentList: store.currentList,
                     currentSongIndex: -1,
                     currentSong: null,
-                    newListCounter: store.newListCounter + 1,
+                    newListCounter: payload,
                     listNameActive: false,
                     listIdMarkedForDeletion: null,
                     listMarkedForDeletion: null,
@@ -149,11 +150,11 @@ function GlobalStoreContextProvider(props) {
             case GlobalStoreActionType.LOAD_ID_NAME_PAIRS: {
                 return setStore({
                     currentModal : CurrentModal.NONE,
-                    idNamePairs: payload,
+                    idNamePairs: payload.pairs,
                     currentList: null,
                     currentSongIndex: -1,
                     currentSong: null,
-                    newListCounter: store.newListCounter,
+                    newListCounter: payload.count,
                     listNameActive: false,
                     listIdMarkedForDeletion: null,
                     listMarkedForDeletion: null,
@@ -168,7 +169,6 @@ function GlobalStoreContextProvider(props) {
             }
              // GET ALL THE PUBLISHED LISTS SO WE CAN PRESENT THEM
              case GlobalStoreActionType.LOAD_PUBLISHED_LISTS: {
-                console.log("inside reducer");
                 return setStore({
                     currentModal : CurrentModal.NONE,
                     idNamePairs: store.idNamePairs,
@@ -298,7 +298,7 @@ function GlobalStoreContextProvider(props) {
                     currentModal : CurrentModal.NONE,
                     idNamePairs: store.idNamePairs,
                     currentList: store.currentList,
-                    currentSongIndex: -1,
+                    currentSongIndex: store.currentSongIndex,
                     currentSong: null,
                     newListCounter: store.newListCounter,
                     listNameActive: false,
@@ -378,7 +378,6 @@ function GlobalStoreContextProvider(props) {
             }
 
             case GlobalStoreActionType.SWITCHPAGE_USER: {
-                console.log(payload.one + " " + payload.two + " " + payload.three);
                 return setStore({
                     currentModal : CurrentModal.NONE,
                     idNamePairs: store.idNamePairs,
@@ -495,7 +494,6 @@ function GlobalStoreContextProvider(props) {
             let response = await api.getPlaylistById(id);
             if (response.data.success) {
                 let playlist = response.data.playlist;
-                console.log(playlist.published);
                 playlist.published = true;
                     async function updateList(playlist) {
                         response = await api.updatePlaylistById(playlist._id, playlist);
@@ -522,9 +520,8 @@ function GlobalStoreContextProvider(props) {
         asyncChangeListName(store.currentList._id);
 
         async function asyncAdd(id) {
-            const response = await api.createPublishedPlaylist(store.currentList.name, store.currentList.songs, auth.user.email, true, store.currentList.comments);
+            const response = await api.createPublishedPlaylist(store.currentList.name, store.currentList.songs, auth.user.userName, auth.user.email, true, store.currentList.comments);
             if (response.status === 201) {
-                console.log(response.status);
                 // IF IT'S A VALID LIST THEN LET'S START EDITING IT
                 
             }
@@ -539,16 +536,15 @@ function GlobalStoreContextProvider(props) {
 
     // THIS FUNCTION CREATES A NEW LIST
     store.createNewList = async function () {
-        let newListName = "Untitled" + store.newListCounter;
-        const response = await api.createPlaylist(newListName, [], auth.user.email, false, []);
+        let newListName = "Untitled " + store.newListCounter;
+        const response = await api.createPlaylist(newListName, [], auth.user.userName, auth.user.email, false, []);
         if (response.status === 201) {
-            console.log(response.status);
             tps.clearAllTransactions();
             let newList = response.data.playlist;
-            storeReducer({
+            /*storeReducer({
                 type: GlobalStoreActionType.CREATE_NEW_LIST,
-                payload: {}
-            });
+                payload: store.newListCounter + 1
+            });*/
             store.loadIdNamePairs();
             // IF IT'S A VALID LIST THEN LET'S START EDITING IT
         }
@@ -557,13 +553,6 @@ function GlobalStoreContextProvider(props) {
         }
     }
 
-    store.incrListCounter = function()
-    {
-        storeReducer({
-            type: GlobalStoreActionType.CREATE_NEW_LIST,
-            payload: {}
-        });
-    }
 
     // THIS FUNCTION LOADS ALL THE ID, NAME PAIRS SO WE CAN LIST ALL THE LISTS
     store.loadIdNamePairs = function () {
@@ -573,7 +562,7 @@ function GlobalStoreContextProvider(props) {
                 let pairsArray = response.data.idNamePairs;
                 storeReducer({
                     type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
-                    payload: pairsArray
+                    payload: {pairs: pairsArray, count: store.newListCounter + 1}
                 });
             }
             else {
@@ -590,7 +579,6 @@ function GlobalStoreContextProvider(props) {
             const response = await api.getPublishedPlaylists();
             if (response.data.success) {
                 let pairsArray = response.data.data;
-                console.log(pairsArray);
                 storeReducer({
                     type: GlobalStoreActionType.LOAD_PUBLISHED_LISTS,
                     payload: pairsArray
@@ -709,6 +697,22 @@ function GlobalStoreContextProvider(props) {
         asyncSetCurrentList(id);
     }
 
+    store.setPublishedList = function (id)
+    {
+        console.log("NELK");
+        async function asyncSetPublishedList(id) {
+            let response = await api.getPublishedPlaylistById(id);
+            if (response.data.success) {
+                let playlist = response.data.playlist;
+                    storeReducer({
+                        type: GlobalStoreActionType.SET_CURRENT_LIST,
+                        payload: {list: playlist, index: store.currentSongIndex + 1}
+                    });
+            }
+        }
+        asyncSetPublishedList(id);
+    }
+
     store.changeCurSong = function (inc) {
        
         storeReducer({
@@ -819,12 +823,27 @@ function GlobalStoreContextProvider(props) {
             if (response.data.success) {
                 storeReducer({
                     type: GlobalStoreActionType.SET_CURRENT_LIST,
-                    payload: store.currentList
+                    payload: {list: store.currentList, index: store.currentSongIndex}
                 });
             }
         }
         asyncUpdateCurrentList();
     }
+
+    store.updatePuplishedCurrent = function()
+    {
+        async function asyncUpdateCurrentList() {
+            const response = await api.updatePublishedPlaylistById(store.currentList._id, store.currentList);
+            if (response.data.success) {
+                storeReducer({
+                    type: GlobalStoreActionType.SET_CURRENT_LIST,
+                    payload: {list: store.currentList, index: store.currentSongIndex}
+                });
+            }
+        }
+        asyncUpdateCurrentList();
+    }
+
     store.undo = function () {
         tps.undoTransaction();
     }
