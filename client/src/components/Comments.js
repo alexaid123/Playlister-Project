@@ -23,7 +23,6 @@ export default function Comments() {
     const [text, setText] = useState("");
     const { auth } = useContext(AuthContext);
     const inputRef = useRef(null);
-    //<input type = "text" id = "commentsInput" placeholder='Add Comment'></input>
     
     function handleKeyPress(event) {
         event.stopPropagation();

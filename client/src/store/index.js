@@ -172,8 +172,8 @@ function GlobalStoreContextProvider(props) {
                 return setStore({
                     currentModal : CurrentModal.NONE,
                     idNamePairs: store.idNamePairs,
-                    currentList: null,
-                    currentSongIndex: -1,
+                    currentList: store.currentList,
+                    currentSongIndex: store.currentSongIndex,
                     currentSong: null,
                     newListCounter: store.newListCounter,
                     listNameActive: false,
@@ -193,8 +193,8 @@ function GlobalStoreContextProvider(props) {
                 return setStore({
                     currentModal : CurrentModal.DELETE_LIST,
                     idNamePairs: store.idNamePairs,
-                    currentList: null,
-                    currentSongIndex: -1,
+                    currentList: store.currentList,
+                    currentSongIndex: store.currentSongIndex,
                     currentSong: null,
                     newListCounter: store.newListCounter,
                     listNameActive: false,
@@ -214,7 +214,7 @@ function GlobalStoreContextProvider(props) {
             case GlobalStoreActionType.SET_CURRENT_LIST: {
                 return setStore({
                     currentModal : CurrentModal.NONE,
-                    idNamePairs: store.idNamePairs,
+                    idNamePairs: payload.pArray,
                     currentList: payload.list,
                     currentSongIndex: payload.index,
                     currentSong: null,
@@ -228,7 +228,7 @@ function GlobalStoreContextProvider(props) {
                     allUserLists: store.allUserLists,
                     allLists: store.allLists,
                     allUserPublished: store.allUserPublished,
-                    publicLists: store.publicLists
+                    publicLists: payload.public
                 });
             }
             // START EDITING A LIST NAME
@@ -490,11 +490,18 @@ function GlobalStoreContextProvider(props) {
     store.publishCurrentList = function()
     {
         store.currentList.published = true;
+ 
+        var today = new Date();
+        var dd = String(today).padStart(2, '0');
+        var mm = String(today).padStart(2, '0'); //January is 0!
+        var yyyy = today.getFullYear();
+        today = mm + ' ' + dd + ',' + yyyy;
+        today = today.substring(4, 10) + ", " + yyyy;
 
         let pplaylist;
         async function asyncAdd(id) {
             console.log("EIMASTE OLLA");
-            const response = await api.createPublishedPlaylist(store.currentList.name, store.currentList._id, store.currentList.songs, auth.user.userName, auth.user.email, true, store.currentList.comments);
+            const response = await api.createPublishedPlaylist(store.currentList.name, store.currentList._id, store.currentList.songs, auth.user.userName, auth.user.email, true, today, store.currentList.comments, 0, 0, 0);
             if (response.status === 201) {
                 // IF IT'S A VALID LIST THEN LET'S START EDITING IT
                 pplaylist = response.data.playlist;
@@ -504,6 +511,7 @@ function GlobalStoreContextProvider(props) {
                         let playlist = response.data.playlist;
                         playlist.published = true;
                         playlist.publishedID = pplaylist._id;
+                        playlist.publishedDate = today;
                             async function updateList(playlist) {
                                 response = await api.updatePlaylistById(playlist._id, playlist);
                                 if (response.data.success) {
@@ -542,7 +550,7 @@ function GlobalStoreContextProvider(props) {
     // THIS FUNCTION CREATES A NEW LIST
     store.createNewList = async function () {
         let newListName = "Untitled " + store.newListCounter;
-        const response = await api.createPlaylist(newListName, "null", [], auth.user.userName, auth.user.email, false, []);
+        const response = await api.createPlaylist(newListName, "null", [], auth.user.userName, auth.user.email, false, "null", [], 0, 0, 0);
         if (response.status === 201) {
             tps.clearAllTransactions();
             let newList = response.data.playlist;
@@ -556,6 +564,29 @@ function GlobalStoreContextProvider(props) {
         else {
             console.log("API FAILED TO CREATE A NEW LIST");
         }
+    }
+
+    store.duplicateCurrentList= function ()
+    {
+        async function createList()
+        {
+            let newListName = "Untitled " + store.newListCounter;
+        const response = await api.createPlaylist("Copy of " + store.currentList.name, store.currentList.publishedID, store.currentList.songs, auth.user.userName, auth.user.email, false, "null", [], 0, 0, 0);
+        if (response.status === 201) {
+            tps.clearAllTransactions();
+            let newList = response.data.playlist;
+            /*storeReducer({
+                type: GlobalStoreActionType.CREATE_NEW_LIST,
+                payload: store.newListCounter + 1
+            });*/
+            store.loadIdNamePairs();
+            // IF IT'S A VALID LIST THEN LET'S START EDITING IT
+        }
+        else {
+            console.log("API FAILED TO CREATE A NEW LIST");
+        }
+        }
+        createList();
     }
 
 
@@ -577,6 +608,69 @@ function GlobalStoreContextProvider(props) {
         asyncLoadIdNamePairs();
     }
 
+
+    store.incrementLikes = function (id)
+    {
+        console.log("made it here");
+        if(store.allLists)
+        {
+            async function getListToLike(id) {
+                let response = await api.getPublishedPlaylistById(id);
+                if (response.data.success) {
+                    let playlist = response.data.playlist;
+                    playlist.likes = playlist.likes + 1;
+                        async function updateList(playlist) {
+                            response = await api.updatePublishedPlaylistById(playlist._id, playlist);
+                            if (response.data.success) {
+                                async function getPublishedPlaylists() {
+                                    const response = await api.getPublishedPlaylists();
+                                    if (response.data.success) {
+                                        let pairsArray = response.data.data;
+                                        storeReducer({
+                                            type: GlobalStoreActionType.LOAD_PUBLISHED_LISTS,
+                                            payload: pairsArray
+                                        });
+                                    }
+                                }
+                                getPublishedPlaylists();
+                            }
+                        }
+                    updateList(playlist);
+                }
+            }
+            getListToLike(id);
+        }
+        else
+        {
+            async function getListToLike(id) {
+                let response = await api.getPlaylistById(id);
+                if (response.data.success) {
+                    let playlist = response.data.playlist;
+                    playlist.likes = playlist.likes + 1;
+                        async function updateList(playlist) {
+                            response = await api.updatePlaylistById(playlist._id, playlist);
+                            if (response.data.success) {
+                                async function getPlaylists() {
+                                    const response = await api.getPlaylistPairs();
+                                    if (response.data.success) {
+                                        
+                                        let pairsArray = response.data.idNamePairs;
+                                        console.log("success " + pairsArray);
+                                       storeReducer({
+                                            type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
+                                            payload: {pairs: pairsArray, count: store.newListCounter}
+                                        });
+                                    }
+                                }
+                                getPlaylists();
+                            }
+                        }
+                    updateList(playlist);
+                }
+            }
+            getListToLike(id);
+        }
+    }
 
     store.loadPublishedPlaylists = function ()
     {
@@ -753,13 +847,19 @@ function GlobalStoreContextProvider(props) {
             let response = await api.getPlaylistById(id);
             if (response.data.success) {
                 let playlist = response.data.playlist;
-
-                response = await api.updatePlaylistById(playlist._id, playlist);
-                if (response.data.success) {
-                    storeReducer({
-                        type: GlobalStoreActionType.SET_CURRENT_LIST,
-                        payload: {list: playlist, index: store.currentSongIndex + 1}
-                    });
+                if(playlist.published)
+                {
+                    store.incrementListens(id);
+                }
+                else
+                {
+                    response = await api.updatePlaylistById(playlist._id, playlist);
+                    if (response.data.success) {
+                        storeReducer({
+                            type: GlobalStoreActionType.SET_CURRENT_LIST,
+                            payload: {list: playlist, index: store.currentSongIndex + 1, public: store.publicLists, pArray: store.idNamePairs}
+                        });
+                    }
                 }
             }
         }
@@ -771,7 +871,7 @@ function GlobalStoreContextProvider(props) {
           
                     storeReducer({
                         type: GlobalStoreActionType.SET_CURRENT_LIST,
-                        payload: {list: store.currentList, index: id}
+                        payload: {list: store.currentList, index: id, public: store.publicLists, pArray: store.idNamePairs}
                     });
                 
             }
@@ -780,25 +880,88 @@ function GlobalStoreContextProvider(props) {
 
     store.setPublishedList = function (id)
     {
+        store.incrementListens(id);
         console.log("NELK");
         async function asyncSetPublishedList(id) {
             let response = await api.getPublishedPlaylistById(id);
             if (response.data.success) {
                 let playlist = response.data.playlist;
-                    storeReducer({
+                    /*storeReducer({
                         type: GlobalStoreActionType.SET_CURRENT_LIST,
                         payload: {list: playlist, index: store.currentSongIndex + 1}
-                    });
+                    });*/
             }
         }
         asyncSetPublishedList(id);
+    }
+
+
+    store.incrementListens = function(id)
+    {
+        if(store.allLists)
+        {
+            async function getListToLike(id) {
+                let response = await api.getPublishedPlaylistById(id);
+                if (response.data.success) {
+                    let playlist = response.data.playlist;
+                    playlist.listens = playlist.listens + 1;
+                        async function updateList(playlist) {
+                            response = await api.updatePublishedPlaylistById(playlist._id, playlist);
+                            if (response.data.success) {
+                                async function getPublishedPlaylists() {
+                                    const response = await api.getPublishedPlaylists();
+                                    if (response.data.success) {
+                                        let pairsArray = response.data.data;
+                                        storeReducer({
+                                            type: GlobalStoreActionType.SET_CURRENT_LIST,
+                                            payload: {list: playlist, index: store.currentSongIndex + 1, public: pairsArray, pArray: store.idNamePairs}
+                                        });
+                                    }
+                                }
+                                getPublishedPlaylists();
+                            }
+                        }
+                    updateList(playlist);
+                }
+            }
+            getListToLike(id);
+        }
+        else
+        {
+            async function getListToLike(id) {
+                let response = await api.getPlaylistById(id);
+                if (response.data.success) {
+                    let playlist = response.data.playlist;
+                    playlist.listens = playlist.listens + 1;
+                        async function updateList(playlist) {
+                            response = await api.updatePlaylistById(playlist._id, playlist);
+                            if (response.data.success) {
+                                async function getPlaylistPairs() {
+                                    const response = await api.getPlaylistPairs();
+                                    if (response.data.success) {
+                                        let pairsArray = response.data.idNamePairs;
+                                        console.log(pairsArray);
+                                        storeReducer({
+                                            type: GlobalStoreActionType.SET_CURRENT_LIST,
+                                            payload: {list: playlist, index: store.currentSongIndex + 1, public: store.publicLists, pArray: pairsArray}
+                                        });
+                                    }
+                                }
+                                getPlaylistPairs();
+                            }
+                        }
+                    updateList(playlist);
+                }
+            }
+            getListToLike(id);
+        }
     }
 
     store.changeCurSong = function (inc) {
        
         storeReducer({
             type: GlobalStoreActionType.SET_CURRENT_LIST,
-            payload: {list: store.currentList, index: store.currentSongIndex + inc}
+            payload: {list: store.currentList, index: store.currentSongIndex + inc, public: store.publicLists, pArray: store.idNamePairs}
         });
     }
 
@@ -904,7 +1067,7 @@ function GlobalStoreContextProvider(props) {
             if (response.data.success) {
                 storeReducer({
                     type: GlobalStoreActionType.SET_CURRENT_LIST,
-                    payload: {list: store.currentList, index: store.currentSongIndex}
+                    payload: {list: store.currentList, index: store.currentSongIndex + 1, public: store.publicLists, pArray: store.idNamePairs}
                 });
             }
         }
@@ -918,7 +1081,7 @@ function GlobalStoreContextProvider(props) {
             if (response.data.success) {
                 storeReducer({
                     type: GlobalStoreActionType.SET_CURRENT_LIST,
-                    payload: {list: store.currentList, index: store.currentSongIndex}
+                    payload: {list: store.currentList, index: store.currentSongIndex + 1, public: store.publicLists, pArray: store.idNamePairs}
                 });
             }
         }

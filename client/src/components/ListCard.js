@@ -120,6 +120,19 @@ function ListCard(props) {
         store.markListForDeletion(id);
     }
 
+    function handleLike(event, id) {
+        event.stopPropagation();
+        if (!event.target.disabled) {
+            let _id = event.target.id;
+            console.log("THE ID FOR THUIS IS " + id);
+            if (_id.indexOf('list-card-text-') >= 0)
+                _id = ("" + _id).substring("list-card-text-".length);
+
+            // CHANGE THE CURRENT LIST
+           store.incrementLikes(id);
+        }
+    }
+
     function handlePublish(event)
     {
         event.stopPropagation();
@@ -142,9 +155,29 @@ function ListCard(props) {
             toggleEdit();
         }
     }
+
+    function handleDuplicate()
+    {
+        console.log("SUccess");
+        store.duplicateCurrentList();
+    }
+
     function handleUpdateText(event) {
         event.stopPropagation();
         setText(event.target.value);
+    }
+
+    function handleClick(event, id)
+    {
+        console.log("Clicked " + event.detail);
+        event.stopPropagation();
+        if (event.detail === 2) {
+           handleToggleEdit(event);
+        }
+        else
+        {
+            handleOpen(event, id);
+        }
     }
 
     let selectClass = "unselected-list-card";
@@ -169,12 +202,12 @@ function ListCard(props) {
                 style={{borderRadius: '20px', left: '5%', width: '90%', fontSize: '28pt'}}
                 button
                 onClick={(event) => {
-                    handleLoadList(event, idNamePair._id)
+                    handleClick(event, idNamePair._id)
                 }}
             >
                 <Grid container>
                     <Grid item container>
-                        <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}<div style={{marginLeft: '5px', fontSize:'14pt'}}>By: {idNamePair.ownerUserName} </div></Box>
+                        <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name} test<div style={{marginLeft: '5px', fontSize:'14pt'}}>By: {idNamePair.ownerUserName} </div></Box>
                        
                     </Grid>
                     <Grid item container>
@@ -246,21 +279,21 @@ function ListCard(props) {
                     <Grid item container>
                         <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}<div style={{marginLeft: '5px', fontSize:'14pt'}}>By: {idNamePair.ownerUserName}</div></Box>
                         <Box sx={{ p: 1 }}>
-                            <IconButton onClick={handleToggleEdit} aria-label='edit'>
-                                <ThumbUpAltIcon style={{fontSize:'28pt'}} /><div style = {{marginLeft: "10px"}}>0</div>
+                            <IconButton onClick={(event) => {handleLike(event, idNamePair._id)}} aria-label='edit'>
+                                <ThumbUpAltIcon style={{fontSize:'28pt'}} /><div style = {{marginLeft: "10px", fontWeight:'bold', color: 'black'}}>{idNamePair.likes}</div>
                             </IconButton>
                         </Box>
                         <Box sx={{ p: 1 }}>
                             <IconButton onClick={(event) => {
                                     handleDeleteList(event, idNamePair._id)
                                 }} aria-label='delete'>
-                                <ThumbDownAltIcon style={{fontSize:'28pt'}} /><div style = {{marginLeft: "10px"}}>0</div>
+                                <ThumbDownAltIcon style={{fontSize:'28pt'}} /><div style = {{marginLeft: "10px", fontWeight:'bold', color: 'black'}}>{idNamePair.dislikes}</div>
                             </IconButton>
                         </Box>
                     </Grid>
                     <Grid item container>
-                    <Box sx={{ p: 1, flexGrow: 1 }} style={{marginTop: '30px', fontSize:'15pt'}}>Published: <span style = {{color: 'green'}}>{idNamePair.updatedAt}</span> </Box>
-                    <Box sx={{ p: 1, flexGrow: 1 }} style={{marginTop: '30px', fontSize:'15pt'}}>Listens: </Box>
+                    <Box sx={{ p: 1, flexGrow: 1 }} style={{marginTop: '30px', fontSize:'15pt'}}>Published: <span style = {{color: 'green'}}>{idNamePair.publishedDate}</span> </Box>
+                    <Box sx={{ p: 1, flexGrow: 1 }} style={{marginTop: '30px', fontSize:'15pt'}}>Listens: <span style = {{color:'red'}}>{idNamePair.listens}</span></Box>
                         <Box sx={{ p: 1 }}>
                             <IconButton onClick={(event) => {
                                     handleOpen(event, idNamePair._id)
@@ -292,21 +325,21 @@ function ListCard(props) {
                     <Grid item container>
                         <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}<div style={{marginLeft: '5px', fontSize:'14pt'}}>By: {idNamePair.ownerUserName}</div></Box>
                         <Box sx={{ p: 1 }}>
-                            <IconButton onClick={handleToggleEdit} aria-label='edit'>
-                                <ThumbUpAltIcon style={{fontSize:'28pt'}} /><div style = {{marginLeft: "10px"}}>0</div>
+                            <IconButton onClick={(event) => {handleLike(event, idNamePair._id)}} aria-label='edit'>
+                                <ThumbUpAltIcon style={{fontSize:'28pt'}} /><div style = {{marginLeft: "10px", fontWeight:'bold', color: 'black'}}>{idNamePair.likes}</div>
                             </IconButton>
                         </Box>
                         <Box sx={{ p: 1 }}>
                             <IconButton onClick={(event) => {
                                     handleDeleteList(event, idNamePair._id)
                                 }} aria-label='delete'>
-                                <ThumbDownAltIcon style={{fontSize:'28pt'}} /><div style = {{marginLeft: "10px"}}>0</div>
+                                <ThumbDownAltIcon style={{fontSize:'28pt'}} /><div style = {{marginLeft: "10px", fontWeight:'bold', color: 'black'}}>{idNamePair.dislikes}</div>
                             </IconButton>
                         </Box>
                     </Grid>
                     <Grid item container>
-                    <Box sx={{ p: 1, flexGrow: 1 }} style={{marginTop: '30px', fontSize:'15pt'}}>Published: <span style = {{color: 'green'}}>{idNamePair.updatedAt}</span> </Box>
-                    <Box sx={{ p: 1, flexGrow: 1 }} style={{marginTop: '30px', fontSize:'15pt'}}>Listens: </Box>
+                    <Box sx={{ p: 1, flexGrow: 1 }} style={{marginTop: '30px', fontSize:'15pt'}}>Published: <span style = {{color: 'green'}}>{idNamePair.publishedDate}</span> </Box>
+                    <Box sx={{ p: 1, flexGrow: 1 }} style={{marginTop: '30px', fontSize:'15pt'}}>Listens: <span style = {{color:'red'}}>{idNamePair.listens}</span></Box>
                         <Box sx={{ p: 1 }}>
                             <IconButton onClick={(event) => {
                                     handleOpen(event, idNamePair._id)
@@ -354,15 +387,15 @@ function ListCard(props) {
                 <Grid item container>
                     <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}<div style={{marginLeft: '5px', fontSize:'14pt'}}>By:{idNamePair.ownerUserName}</div></Box>
                     <Box sx={{ p: 1 }}>
-                        <IconButton onClick={handleToggleEdit} aria-label='edit'>
-                            <ThumbUpAltIcon style={{fontSize:'28pt'}} /><div style = {{marginLeft: "10px"}}>0</div>
+                        <IconButton onClick={(event) => {handleLike(event, idNamePair._id)}} aria-label='edit'>
+                            <ThumbUpAltIcon style={{fontSize:'28pt'}} /><div style = {{marginLeft: "10px", fontWeight:'bold', color: 'black'}}>{idNamePair.likes}</div>
                         </IconButton>
                     </Box>
                     <Box sx={{ p: 1 }}>
                         <IconButton onClick={(event) => {
                                 handleDeleteList(event, idNamePair._id)
                             }} aria-label='delete'>
-                            <ThumbDownAltIcon style={{fontSize:'28pt'}} /><div style = {{marginLeft: "10px"}}>0</div>
+                            <ThumbDownAltIcon style={{fontSize:'28pt'}} /><div style = {{marginLeft: "10px", fontWeight:'bold', color: 'black'}}>{idNamePair.dislikes}</div>
                         </IconButton>
                     </Box>
                 </Grid>
@@ -384,12 +417,12 @@ function ListCard(props) {
                         {idNamePair.ownerEmail === auth.user.email && <button onClick={(event) => {
                                 handleDeleteList(event, idNamePair._id)
                             }} style={{fontSize:'14pt', marginLeft: '10px'}}>Delete</button>}
-                        <button style={{fontSize:'14pt', marginLeft: '10px'}}>Duplicate</button>
+                        <button onClick = {handleDuplicate} style={{fontSize:'14pt', marginLeft: '10px'}}>Duplicate</button>
                     </Box>
                 </Grid>
                 <Grid item container>
-                <Box sx={{ p: 1, flexGrow: 1 }} style={{marginTop: '30px', fontSize:'15pt'}}>Published: <span style = {{color: 'green'}}>{idNamePair.updatedAt}</span></Box>
-                <Box sx={{ p: 1, flexGrow: 1 }} style={{marginTop: '30px', fontSize:'15pt'}}>Listens: </Box>
+                <Box sx={{ p: 1, flexGrow: 1 }} style={{marginTop: '30px', fontSize:'15pt'}}>Published: <span style = {{color: 'green'}}>{idNamePair.publishedDate}</span></Box>
+                <Box sx={{ p: 1, flexGrow: 1 }} style={{marginTop: '30px', fontSize:'15pt'}}>Listens: <span style = {{color:'red'}}>{idNamePair.listens}</span></Box>
                     <Box sx={{ p: 1 }}>
                         <IconButton onClick={(event) => {
                                 handleCloseB(event, idNamePair._id)
@@ -401,52 +434,6 @@ function ListCard(props) {
             </Grid>
         </ListItem>
    </Box>
-    }
-
-    if(store.currentList == null && store.allLists && idNamePair.published)
-    {
-        cardElement = <Box>
-            <ListItem
-                className = "LCard"
-                id={idNamePair._id}
-                key={idNamePair._id}
-                sx={{backgroundColor: 'Beige', marginTop: '15px', display: 'flex', p: 1 }}
-                style={{borderRadius: '20px', left: '5%', width: '90%', fontSize: '28pt'}}
-                button
-                onClick={(event) => {
-                    handleLoadList(event, idNamePair._id)
-                }}
-            >
-                <Grid container>
-                    <Grid item container>
-                        <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}<div style={{marginLeft: '5px', fontSize:'14pt'}}>By: {idNamePair.ownerUserName}</div></Box>
-                        <Box sx={{ p: 1 }}>
-                            <IconButton onClick={handleToggleEdit} aria-label='edit'>
-                                <ThumbUpAltIcon style={{fontSize:'28pt'}} /><div style = {{marginLeft: "10px"}}>0</div>
-                            </IconButton>
-                        </Box>
-                        <Box sx={{ p: 1 }}>
-                            <IconButton onClick={(event) => {
-                                    handleDeleteList(event, idNamePair._id)
-                                }} aria-label='delete'>
-                                <ThumbDownAltIcon style={{fontSize:'28pt'}} /><div style = {{marginLeft: "10px"}}>0</div>
-                            </IconButton>
-                        </Box>
-                    </Grid>
-                    <Grid item container>
-                    <Box sx={{ p: 1, flexGrow: 1 }} style={{marginTop: '30px', fontSize:'15pt'}}>Published: <span style = {{color: 'green'}}>{idNamePair.updatedAt}</span> </Box>
-                    <Box sx={{ p: 1, flexGrow: 1 }} style={{marginTop: '30px', fontSize:'15pt'}}>Listens: </Box>
-                        <Box sx={{ p: 1 }}>
-                            <IconButton onClick={(event) => {
-                                    handleOpen(event, idNamePair._id)
-                                }} >
-                                <KeyboardDoubleArrowDownIcon style={{fontSize:'28pt'}} />
-                            </IconButton>
-                        </Box>
-                    </Grid>
-                </Grid>
-            </ListItem>
-        </Box>
     }
 
 
@@ -464,15 +451,15 @@ function ListCard(props) {
                 <Grid item container>
                     <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}<div style={{marginLeft: '5px', fontSize:'14pt'}}>By:{idNamePair.ownerUserName}</div></Box>
                     <Box sx={{ p: 1 }}>
-                        <IconButton onClick={handleToggleEdit} aria-label='edit'>
-                            <ThumbUpAltIcon style={{fontSize:'28pt'}} /><div style = {{marginLeft: "10px"}}>0</div>
+                        <IconButton onClick={(event) => {handleLike(event, idNamePair._id)}} aria-label='edit'>
+                            <ThumbUpAltIcon style={{fontSize:'28pt'}} /><div style = {{marginLeft: "10px", fontWeight:'bold', color: 'black'}}>{idNamePair.likes}</div>
                         </IconButton>
                     </Box>
                     <Box sx={{ p: 1 }}>
                         <IconButton onClick={(event) => {
                                 handleDeleteList(event, idNamePair._id)
                             }} aria-label='delete'>
-                            <ThumbDownAltIcon style={{fontSize:'28pt'}} /><div style = {{marginLeft: "10px"}}>0</div>
+                            <ThumbDownAltIcon style={{fontSize:'28pt'}} /><div style = {{marginLeft: "10px", fontWeight:'bold', color: 'black'}}>{idNamePair.dislikes}</div>
                         </IconButton>
                     </Box>
                 </Grid>
@@ -494,12 +481,12 @@ function ListCard(props) {
                         {idNamePair.ownerEmail === auth.user.email && <button onClick={(event) => {
                                 handleDeleteList(event, idNamePair._id)
                             }} style={{fontSize:'14pt', marginLeft: '10px'}}>Delete</button>}
-                        <button style={{fontSize:'14pt', marginLeft: '10px'}}>Duplicate</button>
+                        <button onClick = {handleDuplicate} style={{fontSize:'14pt', marginLeft: '10px'}}>Duplicate</button>
                     </Box>
                 </Grid>
                 <Grid item container>
-                <Box sx={{ p: 1, flexGrow: 1 }} style={{marginTop: '30px', fontSize:'15pt'}}>Published: <span style = {{color: 'green'}}>{idNamePair.updatedAt}</span></Box>
-                <Box sx={{ p: 1, flexGrow: 1 }} style={{marginTop: '30px', fontSize:'15pt'}}>Listens: </Box>
+                <Box sx={{ p: 1, flexGrow: 1 }} style={{marginTop: '30px', fontSize:'15pt'}}>Published: <span style = {{color: 'green'}}>{idNamePair.publishedDate}</span></Box>
+                <Box sx={{ p: 1, flexGrow: 1 }} style={{marginTop: '30px', fontSize:'15pt'}}>Listens: <span style = {{color:'red'}}>{idNamePair.listens}</span></Box>
                     <Box sx={{ p: 1 }}>
                         <IconButton onClick={(event) => {
                                 handleCloseB(event, idNamePair._id)
@@ -554,7 +541,7 @@ function ListCard(props) {
                         <button onClick={(event) => {
                                 handleDeleteList(event, idNamePair._id)
                             }} style={{fontSize:'14pt', marginLeft: '10px'}}>Delete</button>
-                        <button style={{fontSize:'14pt', marginLeft: '10px'}}>Duplicate</button>
+                        <button onClick = {handleDuplicate} style={{fontSize:'14pt', marginLeft: '10px'}}>Duplicate</button>
                     </Box>
                 </Grid>
                 <Grid item container>
@@ -591,21 +578,21 @@ function ListCard(props) {
                 <Grid item container>
                     <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}<div style={{marginLeft: '5px', fontSize:'14pt'}}>By: {idNamePair.ownerUserName}</div></Box>
                     <Box sx={{ p: 1 }}>
-                        <IconButton onClick={handleToggleEdit} aria-label='edit'>
-                            <ThumbUpAltIcon style={{fontSize:'28pt'}} /><div style = {{marginLeft: "10px"}}>0</div>
+                        <IconButton onClick={(event) => {handleLike(event, idNamePair._id)}} aria-label='edit'>
+                            <ThumbUpAltIcon style={{fontSize:'28pt'}} /><div style = {{marginLeft: "10px", fontWeight:'bold', color: 'black'}}>{idNamePair.likes}</div>
                         </IconButton>
                     </Box>
                     <Box sx={{ p: 1 }}>
                         <IconButton onClick={(event) => {
                                 handleDeleteList(event, idNamePair._id)
                             }} aria-label='delete'>
-                            <ThumbDownAltIcon style={{fontSize:'28pt'}} /><div style = {{marginLeft: "10px"}}>0</div>
+                            <ThumbDownAltIcon style={{fontSize:'28pt'}} /><div style = {{marginLeft: "10px", fontWeight:'bold', color: 'black'}}>{idNamePair.dislikes}</div>
                         </IconButton>
                     </Box>
                 </Grid>
                 <Grid item container>
-                <Box sx={{ p: 1, flexGrow: 1 }} style={{marginTop: '30px', fontSize:'15pt'}}>Published: <span style = {{color: 'green'}}>{idNamePair.updatedAt}</span> </Box>
-                <Box sx={{ p: 1, flexGrow: 1 }} style={{marginTop: '30px', fontSize:'15pt'}}>Listens: </Box>
+                <Box sx={{ p: 1, flexGrow: 1 }} style={{marginTop: '30px', fontSize:'15pt'}}>Published: <span style = {{color: 'green'}}>{idNamePair.publishedDate}</span> </Box>
+                <Box sx={{ p: 1, flexGrow: 1 }} style={{marginTop: '30px', fontSize:'15pt'}}>Listens: <span style = {{color:'red'}}>{idNamePair.listens}</span></Box>
                     <Box sx={{ p: 1 }}>
                         <IconButton onClick={(event) => {
                                 handleOpen(event, idNamePair._id)
@@ -619,7 +606,7 @@ function ListCard(props) {
     </Box>
     }
 
-    if(store.allLists && store.currentList == null)
+    if(store.allLists && (store.currentList == null || idNamePair._id !== store.currentList._id))
     {
         cardElement = <Box>
             <ListItem
@@ -637,21 +624,21 @@ function ListCard(props) {
                     <Grid item container>
                         <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}<div style={{marginLeft: '5px', fontSize:'14pt'}}>By: {idNamePair.ownerUserName}</div></Box>
                         <Box sx={{ p: 1 }}>
-                            <IconButton onClick={handleToggleEdit} aria-label='edit'>
-                                <ThumbUpAltIcon style={{fontSize:'28pt'}} /><div style = {{marginLeft: "10px"}}>0</div>
+                            <IconButton onClick={(event) => {handleLike(event, idNamePair._id)}} aria-label='edit'>
+                                <ThumbUpAltIcon style={{fontSize:'28pt'}} /><div style = {{marginLeft: "10px", fontWeight:'bold', color: 'black'}}>{idNamePair.likes}</div>
                             </IconButton>
                         </Box>
                         <Box sx={{ p: 1 }}>
                             <IconButton onClick={(event) => {
                                     handleDeleteList(event, idNamePair._id)
                                 }} aria-label='delete'>
-                                <ThumbDownAltIcon style={{fontSize:'28pt'}} /><div style = {{marginLeft: "10px"}}>0</div>
+                                <ThumbDownAltIcon style={{fontSize:'28pt'}} /><div style = {{marginLeft: "10px", fontWeight:'bold', color: 'black'}}>{idNamePair.dislikes}</div>
                             </IconButton>
                         </Box>
                     </Grid>
                     <Grid item container>
-                    <Box sx={{ p: 1, flexGrow: 1 }} style={{marginTop: '30px', fontSize:'15pt'}}>Published: <span style = {{color: 'green'}}>{idNamePair.updatedAt}</span> </Box>
-                    <Box sx={{ p: 1, flexGrow: 1 }} style={{marginTop: '30px', fontSize:'15pt'}}>Listens: </Box>
+                    <Box sx={{ p: 1, flexGrow: 1 }} style={{marginTop: '30px', fontSize:'15pt'}}>Published: <span style = {{color: 'green'}}>{idNamePair.publishedDate}</span> </Box>
+                    <Box sx={{ p: 1, flexGrow: 1 }} style={{marginTop: '30px', fontSize:'15pt'}}>Listens: <span style = {{color:'red'}}>{idNamePair.listens}</span></Box>
                         <Box sx={{ p: 1 }}>
                             <IconButton onClick={(event) => {
                                     handleOpen(event, idNamePair._id)
@@ -679,15 +666,15 @@ function ListCard(props) {
                 <Grid item container>
                     <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}<div style={{marginLeft: '5px', fontSize:'14pt'}}>By:{idNamePair.ownerUserName}</div></Box>
                     <Box sx={{ p: 1 }}>
-                        <IconButton onClick={handleToggleEdit} aria-label='edit'>
-                            <ThumbUpAltIcon style={{fontSize:'28pt'}} /><div style = {{marginLeft: "10px"}}>0</div>
+                        <IconButton onClick={(event) => {handleLike(event, idNamePair._id)}} aria-label='edit'>
+                            <ThumbUpAltIcon style={{fontSize:'28pt'}} /><div style = {{marginLeft: "10px", fontWeight:'bold', color: 'black'}}>{idNamePair.likes}</div>
                         </IconButton>
                     </Box>
                     <Box sx={{ p: 1 }}>
                         <IconButton onClick={(event) => {
                                 handleDeleteList(event, idNamePair._id)
                             }} aria-label='delete'>
-                            <ThumbDownAltIcon style={{fontSize:'28pt'}} /><div style = {{marginLeft: "10px"}}>0</div>
+                            <ThumbDownAltIcon style={{fontSize:'28pt'}} /><div style = {{marginLeft: "10px", fontWeight:'bold', color: 'black'}}>{idNamePair.dislikes}</div>
                         </IconButton>
                     </Box>
                 </Grid>
@@ -709,12 +696,12 @@ function ListCard(props) {
                         {idNamePair.ownerEmail === auth.user.email && <button onClick={(event) => {
                                 handleDeleteList(event, idNamePair._id)
                             }} style={{fontSize:'14pt', marginLeft: '10px'}}>Delete</button>}
-                        <button style={{fontSize:'14pt', marginLeft: '10px'}}>Duplicate</button>
+                        <button onClick = {handleDuplicate} style={{fontSize:'14pt', marginLeft: '10px'}}>Duplicate</button>
                     </Box>
                 </Grid>
                 <Grid item container>
-                <Box sx={{ p: 1, flexGrow: 1 }} style={{marginTop: '30px', fontSize:'15pt'}}>Published: <span style = {{color: 'green'}}>{idNamePair.updatedAt}</span></Box>
-                <Box sx={{ p: 1, flexGrow: 1 }} style={{marginTop: '30px', fontSize:'15pt'}}>Listens: </Box>
+                <Box sx={{ p: 1, flexGrow: 1 }} style={{marginTop: '30px', fontSize:'15pt'}}>Published: <span style = {{color: 'green'}}>{idNamePair.publishedDate}</span></Box>
+                <Box sx={{ p: 1, flexGrow: 1 }} style={{marginTop: '30px', fontSize:'15pt'}}>Listens: <span style = {{color:'red'}}>{idNamePair.listens}</span></Box>
                     <Box sx={{ p: 1 }}>
                         <IconButton onClick={(event) => {
                                 handleCloseB(event, idNamePair._id)

@@ -206,6 +206,7 @@ deletePublishedPlaylist = async (req, res) => {
 
 
 getPlaylistById = async (req, res) => {
+    console.log(req.params.id);
     await Playlist.findById({ _id: req.params.id }, (err, list) => {
         if (err) {
             return res.status(400).json({ success: false, error: err });
@@ -227,6 +228,7 @@ getPlaylistById = async (req, res) => {
 }
 
 getPublishedPlaylistById = async (req, res) => {
+    console.log("Mader it to back end");
     await PublishedPlaylist.findById({ _id: req.params.id }, (err, list) => {
         if (err) {
             return res.status(400).json({ success: false, error: err });
@@ -319,6 +321,10 @@ updatePlaylist = async (req, res) => {
                     list.comments = body.playlist.comments;
                     list.published = body.playlist.published;
                     list.publishedID = body.playlist.publishedID;
+                    list.publishedDate = body.playlist.publishedDate;
+                    list.likes = body.playlist.likes;
+                    list.dislikes = body.playlist.dislikes;
+                    list.listens = body.playlist.listens;
                     list
                         .save()
                         .then(() => {
@@ -362,12 +368,18 @@ updatePublishedPlaylist = async (req, res) => {
             })
         }
 
-     
-                    playlist.name = body.playlist.name;
-                    playlist.songs = body.playlist.songs; 
-                    playlist.comments = body.playlist.comments;
-                    playlist.published = body.playlist.published;
-                    playlist
+
+
+        async function asyncFindUser(list) {
+            await User.findOne({ email: list.ownerEmail }, (err, user) => {
+                    list.name = body.playlist.name;
+                    list.songs = body.playlist.songs; 
+                    list.comments = body.playlist.comments;
+                    list.published = body.playlist.published;
+                    list.likes = body.playlist.likes;
+                    list.dislikes = body.playlist.dislikes;
+                    list.listens = body.playlist.listens;
+                    list
                         .save()
                         .then(() => {
                             return res.status(200).json({
@@ -382,7 +394,9 @@ updatePublishedPlaylist = async (req, res) => {
                                 message: 'Playlist not updated!',
                             })
                         })
-
+            });
+        }
+        asyncFindUser(playlist);
     })
 }
 module.exports = {
