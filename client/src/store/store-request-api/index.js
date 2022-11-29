@@ -22,7 +22,7 @@ const api = axios.create({
 // WORK, AND SOME REQUIRE DATA, WHICH WE WE WILL FORMAT HERE, FOR WHEN
 // WE NEED TO PUT THINGS INTO THE DATABASE OR IF WE HAVE SOME
 // CUSTOM FILTERS FOR QUERIES
-export const createPlaylist = (newListName, pID, newSongs, userName, userEmail, pb, pbDate, cmt, like, dislike, listen) => {
+export const createPlaylist = (newListName, pID, newSongs, userName, userEmail, pb, pbDate, cmt, like, dislike, listen, lUsers, dlUsers) => {
     return api.post(`/playlist/`, {
         // SPECIFY THE PAYLOAD
         name: newListName,
@@ -35,10 +35,12 @@ export const createPlaylist = (newListName, pID, newSongs, userName, userEmail, 
         dislikes: dislike,
         listens: listen,
         ownerEmail: userEmail,
-        ownerUserName: userName
+        ownerUserName: userName,
+        likedUsers: lUsers,
+        dislikedUsers: dlUsers
     })
 }
-export const createPublishedPlaylist = (newListName, unpID, newSongs, userName, userEmail, pb, pbDate, cmt, like, dislike, listen) => {
+export const createPublishedPlaylist = (newListName, unpID, newSongs, userName, userEmail, pb, pbDate, cmt, like, dislike, listen, lUsers, dlUsers) => {
     return api.post(`/publishplaylist/`, {
         // SPECIFY THE PAYLOAD
         name: newListName,
@@ -51,7 +53,9 @@ export const createPublishedPlaylist = (newListName, unpID, newSongs, userName, 
         listens: listen,
         comments: cmt,
         ownerEmail: userEmail,
-        ownerUserName: userName
+        ownerUserName: userName,
+        likedUsers: lUsers,
+        dislikedUsers: dlUsers
     })
 }
 export const deletePlaylistById = (id) => api.delete(`/playlist/${id}`)

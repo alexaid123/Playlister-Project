@@ -33,6 +33,20 @@ function ListCard(props) {
     const { idNamePair, selected } = props;
     const { auth } = useContext(AuthContext);
 
+    console.log(idNamePair);
+
+    let likeIcon = <span><ThumbUpAltIcon style={{fontSize:'28pt'}} /><div style = {{marginLeft: "10px", fontWeight:'bold', color: 'black'}}>{idNamePair.likes}</div></span>;
+    let dislikeIcon = <span><ThumbDownAltIcon style={{fontSize:'28pt'}} /><div style = {{marginLeft: "10px", fontWeight:'bold', color: 'black'}}>{idNamePair.dislikes}</div></span>;
+
+    if(idNamePair.likedUsers.includes(auth.user.email))
+    {
+        likeIcon = <span><ThumbUpAltIcon style={{fontSize:'28pt', color: 'blue'}} /><div style = {{marginLeft: "10px", fontWeight:'bold', color: 'black'}}>{idNamePair.likes}</div></span>;
+    }
+
+    if(idNamePair.dislikedUsers.includes(auth.user.email))
+    {
+        dislikeIcon = <span><ThumbDownAltIcon style={{fontSize:'28pt', color: 'red'}} /><div style = {{marginLeft: "10px", fontWeight:'bold', color: 'black'}}>{idNamePair.dislikes}</div></span>;
+    }
 
     let modalJSX = "";
     if (store.isEditSongModalOpen()) {
@@ -124,12 +138,23 @@ function ListCard(props) {
         event.stopPropagation();
         if (!event.target.disabled) {
             let _id = event.target.id;
-            console.log("THE ID FOR THUIS IS " + id);
             if (_id.indexOf('list-card-text-') >= 0)
                 _id = ("" + _id).substring("list-card-text-".length);
 
             // CHANGE THE CURRENT LIST
            store.incrementLikes(id);
+        }
+    }
+
+    function handleDislike(event, id) {
+        event.stopPropagation();
+        if (!event.target.disabled) {
+            let _id = event.target.id;
+            if (_id.indexOf('list-card-text-') >= 0)
+                _id = ("" + _id).substring("list-card-text-".length);
+
+            // CHANGE THE CURRENT LIST
+           store.incrementDislikes(id);
         }
     }
 
@@ -280,14 +305,12 @@ function ListCard(props) {
                         <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}<div style={{marginLeft: '5px', fontSize:'14pt'}}>By: {idNamePair.ownerUserName}</div></Box>
                         <Box sx={{ p: 1 }}>
                             <IconButton onClick={(event) => {handleLike(event, idNamePair._id)}} aria-label='edit'>
-                                <ThumbUpAltIcon style={{fontSize:'28pt'}} /><div style = {{marginLeft: "10px", fontWeight:'bold', color: 'black'}}>{idNamePair.likes}</div>
+                                {likeIcon}
                             </IconButton>
                         </Box>
                         <Box sx={{ p: 1 }}>
-                            <IconButton onClick={(event) => {
-                                    handleDeleteList(event, idNamePair._id)
-                                }} aria-label='delete'>
-                                <ThumbDownAltIcon style={{fontSize:'28pt'}} /><div style = {{marginLeft: "10px", fontWeight:'bold', color: 'black'}}>{idNamePair.dislikes}</div>
+                            <IconButton onClick={(event) => {handleDislike(event, idNamePair._id)}} aria-label='delete'>
+                                {dislikeIcon}
                             </IconButton>
                         </Box>
                     </Grid>
@@ -326,14 +349,12 @@ function ListCard(props) {
                         <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}<div style={{marginLeft: '5px', fontSize:'14pt'}}>By: {idNamePair.ownerUserName}</div></Box>
                         <Box sx={{ p: 1 }}>
                             <IconButton onClick={(event) => {handleLike(event, idNamePair._id)}} aria-label='edit'>
-                                <ThumbUpAltIcon style={{fontSize:'28pt'}} /><div style = {{marginLeft: "10px", fontWeight:'bold', color: 'black'}}>{idNamePair.likes}</div>
+                               {likeIcon}
                             </IconButton>
                         </Box>
                         <Box sx={{ p: 1 }}>
-                            <IconButton onClick={(event) => {
-                                    handleDeleteList(event, idNamePair._id)
-                                }} aria-label='delete'>
-                                <ThumbDownAltIcon style={{fontSize:'28pt'}} /><div style = {{marginLeft: "10px", fontWeight:'bold', color: 'black'}}>{idNamePair.dislikes}</div>
+                            <IconButton  onClick={(event) => {handleDislike(event, idNamePair._id)}} aria-label='delete'>
+                                {dislikeIcon}
                             </IconButton>
                         </Box>
                     </Grid>
@@ -388,14 +409,12 @@ function ListCard(props) {
                     <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}<div style={{marginLeft: '5px', fontSize:'14pt'}}>By:{idNamePair.ownerUserName}</div></Box>
                     <Box sx={{ p: 1 }}>
                         <IconButton onClick={(event) => {handleLike(event, idNamePair._id)}} aria-label='edit'>
-                            <ThumbUpAltIcon style={{fontSize:'28pt'}} /><div style = {{marginLeft: "10px", fontWeight:'bold', color: 'black'}}>{idNamePair.likes}</div>
+                           {likeIcon}
                         </IconButton>
                     </Box>
                     <Box sx={{ p: 1 }}>
-                        <IconButton onClick={(event) => {
-                                handleDeleteList(event, idNamePair._id)
-                            }} aria-label='delete'>
-                            <ThumbDownAltIcon style={{fontSize:'28pt'}} /><div style = {{marginLeft: "10px", fontWeight:'bold', color: 'black'}}>{idNamePair.dislikes}</div>
+                        <IconButton  onClick={(event) => {handleDislike(event, idNamePair._id)}} aria-label='delete'>
+                           {dislikeIcon}
                         </IconButton>
                     </Box>
                 </Grid>
@@ -452,14 +471,12 @@ function ListCard(props) {
                     <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}<div style={{marginLeft: '5px', fontSize:'14pt'}}>By:{idNamePair.ownerUserName}</div></Box>
                     <Box sx={{ p: 1 }}>
                         <IconButton onClick={(event) => {handleLike(event, idNamePair._id)}} aria-label='edit'>
-                            <ThumbUpAltIcon style={{fontSize:'28pt'}} /><div style = {{marginLeft: "10px", fontWeight:'bold', color: 'black'}}>{idNamePair.likes}</div>
+                            {likeIcon}
                         </IconButton>
                     </Box>
                     <Box sx={{ p: 1 }}>
-                        <IconButton onClick={(event) => {
-                                handleDeleteList(event, idNamePair._id)
-                            }} aria-label='delete'>
-                            <ThumbDownAltIcon style={{fontSize:'28pt'}} /><div style = {{marginLeft: "10px", fontWeight:'bold', color: 'black'}}>{idNamePair.dislikes}</div>
+                        <IconButton  onClick={(event) => {handleDislike(event, idNamePair._id)}} aria-label='delete'>
+                            {dislikeIcon}
                         </IconButton>
                     </Box>
                 </Grid>
@@ -579,14 +596,12 @@ function ListCard(props) {
                     <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}<div style={{marginLeft: '5px', fontSize:'14pt'}}>By: {idNamePair.ownerUserName}</div></Box>
                     <Box sx={{ p: 1 }}>
                         <IconButton onClick={(event) => {handleLike(event, idNamePair._id)}} aria-label='edit'>
-                            <ThumbUpAltIcon style={{fontSize:'28pt'}} /><div style = {{marginLeft: "10px", fontWeight:'bold', color: 'black'}}>{idNamePair.likes}</div>
+                           {likeIcon}
                         </IconButton>
                     </Box>
                     <Box sx={{ p: 1 }}>
-                        <IconButton onClick={(event) => {
-                                handleDeleteList(event, idNamePair._id)
-                            }} aria-label='delete'>
-                            <ThumbDownAltIcon style={{fontSize:'28pt'}} /><div style = {{marginLeft: "10px", fontWeight:'bold', color: 'black'}}>{idNamePair.dislikes}</div>
+                        <IconButton  onClick={(event) => {handleDislike(event, idNamePair._id)}} aria-label='delete'>
+                            {dislikeIcon}
                         </IconButton>
                     </Box>
                 </Grid>
@@ -625,14 +640,12 @@ function ListCard(props) {
                         <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}<div style={{marginLeft: '5px', fontSize:'14pt'}}>By: {idNamePair.ownerUserName}</div></Box>
                         <Box sx={{ p: 1 }}>
                             <IconButton onClick={(event) => {handleLike(event, idNamePair._id)}} aria-label='edit'>
-                                <ThumbUpAltIcon style={{fontSize:'28pt'}} /><div style = {{marginLeft: "10px", fontWeight:'bold', color: 'black'}}>{idNamePair.likes}</div>
+                               {likeIcon}
                             </IconButton>
                         </Box>
                         <Box sx={{ p: 1 }}>
-                            <IconButton onClick={(event) => {
-                                    handleDeleteList(event, idNamePair._id)
-                                }} aria-label='delete'>
-                                <ThumbDownAltIcon style={{fontSize:'28pt'}} /><div style = {{marginLeft: "10px", fontWeight:'bold', color: 'black'}}>{idNamePair.dislikes}</div>
+                            <IconButton onClick={(event) => {handleDislike(event, idNamePair._id)}} aria-label='delete'>
+                                {dislikeIcon}
                             </IconButton>
                         </Box>
                     </Grid>
@@ -667,14 +680,12 @@ function ListCard(props) {
                     <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}<div style={{marginLeft: '5px', fontSize:'14pt'}}>By:{idNamePair.ownerUserName}</div></Box>
                     <Box sx={{ p: 1 }}>
                         <IconButton onClick={(event) => {handleLike(event, idNamePair._id)}} aria-label='edit'>
-                            <ThumbUpAltIcon style={{fontSize:'28pt'}} /><div style = {{marginLeft: "10px", fontWeight:'bold', color: 'black'}}>{idNamePair.likes}</div>
+                            {likeIcon}
                         </IconButton>
                     </Box>
                     <Box sx={{ p: 1 }}>
-                        <IconButton onClick={(event) => {
-                                handleDeleteList(event, idNamePair._id)
-                            }} aria-label='delete'>
-                            <ThumbDownAltIcon style={{fontSize:'28pt'}} /><div style = {{marginLeft: "10px", fontWeight:'bold', color: 'black'}}>{idNamePair.dislikes}</div>
+                        <IconButton onClick={(event) => {handleDislike(event, idNamePair._id)}} aria-label='delete'>
+                           {dislikeIcon}
                         </IconButton>
                     </Box>
                 </Grid>

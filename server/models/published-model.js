@@ -15,6 +15,8 @@ const publishedPlaylistSchema = new Schema(
         published:{type: Boolean, required: true},
         publishedDate:{type: String, required: true},
         likes:{type: Number, required: true},
+        likedUsers: {type : Array, required: true},
+        dislikedUsers: {type : Array, required: true},
         dislikes:{type: Number, required: true},
         listens:{type: Number, required: true},
         comments: { type: [{
