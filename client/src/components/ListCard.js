@@ -33,8 +33,6 @@ function ListCard(props) {
     const { idNamePair, selected } = props;
     const { auth } = useContext(AuthContext);
 
-    console.log(idNamePair);
-
     let likeIcon = <span><ThumbUpAltIcon style={{fontSize:'28pt'}} /><div style = {{marginLeft: "10px", fontWeight:'bold', color: 'black'}}>{idNamePair.likes}</div></span>;
     let dislikeIcon = <span><ThumbDownAltIcon style={{fontSize:'28pt'}} /><div style = {{marginLeft: "10px", fontWeight:'bold', color: 'black'}}>{idNamePair.dislikes}</div></span>;
 
@@ -97,7 +95,6 @@ function ListCard(props) {
         event.stopPropagation();
         if (!event.target.disabled) {
             let _id = event.target.id;
-            console.log("THE ID FOR THUIS IS " + id);
             if (_id.indexOf('list-card-text-') >= 0)
                 _id = ("" + _id).substring("list-card-text-".length);
 
@@ -121,7 +118,6 @@ function ListCard(props) {
     function toggleEdit() {
         let newActive = !editActive;
         if (newActive) {
-            console.log("enetered");
             store.setIsListNameEditActive();
         }
         setEditActive(newActive);
@@ -165,7 +161,6 @@ function ListCard(props) {
         store.publishCurrentList();
         store.updateCurrentList();  
         store.loadPublishedPlaylists();
-        console.log("Published is " + store.currentList.published);
     }
 
     function handleKeyPress(event) {
@@ -183,7 +178,6 @@ function ListCard(props) {
 
     function handleDuplicate()
     {
-        console.log("SUccess");
         store.duplicateCurrentList();
     }
 
@@ -194,14 +188,20 @@ function ListCard(props) {
 
     function handleClick(event, id)
     {
-        console.log("Clicked " + event.detail);
         event.stopPropagation();
         if (event.detail === 2) {
            handleToggleEdit(event);
         }
         else
         {
-            handleOpen(event, id);
+            if(idNamePair.published)
+            {
+                store.playPublishedList(id);
+            }
+            else
+            {
+                store.playList(id);
+            }
         }
     }
 
@@ -232,7 +232,7 @@ function ListCard(props) {
             >
                 <Grid container>
                     <Grid item container>
-                        <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name} test<div style={{marginLeft: '5px', fontSize:'14pt'}}>By: {idNamePair.ownerUserName} </div></Box>
+                        <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}<div style={{marginLeft: '5px', fontSize:'14pt'}}>By: {idNamePair.ownerUserName} </div></Box>
                        
                     </Grid>
                     <Grid item container>
@@ -262,7 +262,7 @@ function ListCard(props) {
                 style={{borderRadius: '20px', left: '5%', width: '90%', fontSize: '28pt'}}
                 button
                 onClick={(event) => {
-                    handleLoadList(event, idNamePair._id)
+                    handleClick(event, idNamePair._id)
                 }}
             >
                 <Grid container>
@@ -296,8 +296,8 @@ function ListCard(props) {
                 sx={{backgroundColor: 'Beige', marginTop: '15px', display: 'flex', p: 1 }}
                 style={{borderRadius: '20px', left: '5%', width: '90%', fontSize: '28pt'}}
                 button
-                onClick={(event) => {
-                    handleLoadList(event, idNamePair._id)
+                 onClick={(event) => {
+                    handleClick(event, idNamePair._id)
                 }}
             >
                 <Grid container>
@@ -341,7 +341,7 @@ function ListCard(props) {
                 style={{borderRadius: '20px', left: '5%', width: '90%', fontSize: '28pt'}}
                 button
                 onClick={(event) => {
-                    handleLoadList(event, idNamePair._id)
+                    handleClick(event, idNamePair._id)
                 }}
             >
                 <Grid container>
@@ -588,7 +588,7 @@ function ListCard(props) {
             style={{borderRadius: '20px', left: '5%', width: '90%', fontSize: '28pt'}}
             button
             onClick={(event) => {
-                handleLoadList(event, idNamePair._id)
+                handleClick(event, idNamePair._id)
             }}
         >
             <Grid container>
@@ -632,7 +632,7 @@ function ListCard(props) {
                 style={{borderRadius: '20px', left: '5%', width: '90%', fontSize: '28pt'}}
                 button
                 onClick={(event) => {
-                    handleLoadList(event, idNamePair._id)
+                    handleClick(event, idNamePair._id)
                 }}
             >
                 <Grid container>

@@ -45,7 +45,11 @@ function SongCard(props) {
         }
         else
         {
-            store.setCurrentSong(index);
+            if(store.currentList._id === store.playingList._id)
+            {
+                store.setCurrentSong(index);
+            }
+            
         }
     }
 

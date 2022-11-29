@@ -32,8 +32,7 @@ const HomeScreen = () => {
     const { store } = useContext(GlobalStoreContext);
     const[open, setOpen] = useState(false);
     const[anchorElm, setAnchorElm] = useState(null);
-    console.log("published lists is " + store.publicLists);
-    
+
 
     
     useEffect(() => {
@@ -56,7 +55,7 @@ const HomeScreen = () => {
         {
             store.loadPublishedPlaylists();
         }
-        if(one && !two && !three)
+        if((one && !two && !three) || (!one && !two && three))
         {
             store.loadIdNamePairs();
         }
@@ -65,7 +64,6 @@ const HomeScreen = () => {
         store.allUserPublished = three;
         store.currentList = null;
         store.altUserLists(one, two, three);
-        console.log(store.allUserLists);
     }
 
     function handleCreateNewList() {
@@ -74,13 +72,11 @@ const HomeScreen = () => {
 
     function handlePl()
     {
-        console.log("Insidee");
         store.altPlayer(false);
     }
 
     function handleYT()
     {
-        console.log("Insidee");
         store.altPlayer(true);
     }
 

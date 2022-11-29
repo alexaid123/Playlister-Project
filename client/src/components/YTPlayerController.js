@@ -31,15 +31,15 @@ export default function YTPlayerController(props) {
     let bSClass = "controllerButtons";
     let bPClass = "controllerButtons";
     let bRSClass = "controllerButtons";
-    if(store.currentList != null && (count < 0 ))
+    if(store.playingList != null && (count < 0 ))
     {
         bSClass = "disableController";
     }
-    if(store.currentList == null || store.currentList.songs == null)
+    if(store.playingList == null || store.playingList.songs == null || store.playingList.length === 0)
     {
         bPClass = "disableController";
     }
-    if(store.currentList == null || (store.currentList.songs == null))
+    if(store.playingList == null || (store.playingList.songs == null) || store.playingList.length === 0)
     {
         bSClass = "disableController";
         bPClass = "disableController";
@@ -48,7 +48,7 @@ export default function YTPlayerController(props) {
 
     function nextSong()
     {
-        if(store.currentList != null && store.currentSongIndex < store.currentList.songs.length - 1)
+        if(store.playingList != null && store.currentSongIndex < store.playingList.songs.length - 1)
         {
             store.changeCurSong(1);
         }
@@ -63,10 +63,10 @@ export default function YTPlayerController(props) {
     }
 
    
-    if(store.currentList != null && store.currentList.songs != null && store.currentList.songs[store.currentSongIndex] != null)
+    if(store.playingList != null && store.playingList.songs != null && store.playingList.songs[store.currentSongIndex] != null)
     {
         console.log("Playing song " + store.currentSongIndex);
-        vid = "https://www.youtube.com/watch?v=" + store.currentList.songs[store.currentSongIndex].youTubeId;
+        vid = "https://www.youtube.com/watch?v=" + store.playingList.songs[store.currentSongIndex].youTubeId;
         if(!ReactPlayer.canPlay(vid))
         {
             vid = "";
@@ -103,21 +103,21 @@ export default function YTPlayerController(props) {
 
                 <Grid item xs = {1} sm = {1} md={1}></Grid>
                 <Grid item xs = {11} sm = {11} md={11}>
-                    <div className='fCont'> Playlist: {store.currentList != null && store.currentList.songs != null && store.currentList.songs[store.currentSongIndex] != null && store.currentList.name} </div>
+                    <div className='fCont'> Playlist: {store.playingList != null && store.playingList.songs != null && store.playingList.songs[store.currentSongIndex] != null && store.playingList.name} </div>
                 </Grid>
 
                 <Grid item xs = {1} sm = {1} md={1}></Grid>
                 <Grid item xs = {11} sm = {11} md={11}>
-                    <div className='fCont'> Song #: {store.currentList != null && store.currentList.songs != null && store.currentList.songs[store.currentSongIndex] != null && store.currentSongIndex + 1} </div>
+                    <div className='fCont'> Song #: {store.playingList != null && store.playingList.songs != null && store.playingList.songs[store.currentSongIndex] != null && store.currentSongIndex + 1} </div>
                 </Grid>
 
                 <Grid item xs = {1} sm = {1} md={1}></Grid>
                 <Grid item xs = {11} sm = {11} md={11}>
-                    <div className='fCont'> Title: {store.currentList != null && store.currentList.songs != null && store.currentList.songs[store.currentSongIndex] != null && store.currentList.songs[store.currentSongIndex].title} </div>
+                    <div className='fCont'> Title: {store.playingList != null && store.playingList.songs != null && store.playingList.songs[store.currentSongIndex] != null && store.playingList.songs[store.currentSongIndex].title} </div>
                 </Grid>
                 <Grid item xs = {1} sm = {1} md={1}></Grid>
                 <Grid item xs = {11} sm = {11} md={11}>
-                    <div className='fCont'> Artist: {store.currentList != null && store.currentList.songs != null && store.currentList.songs[store.currentSongIndex] != null && store.currentList.songs[store.currentSongIndex].artist} </div>
+                    <div className='fCont'> Artist: {store.playingList != null && store.playingList.songs != null && store.playingList.songs[store.currentSongIndex] != null && store.playingList.songs[store.currentSongIndex].artist} </div>
                 </Grid>
             </Grid>
 
