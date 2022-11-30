@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from 'react'
+import { createContext, StrictMode, useContext, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import jsTPS from '../common/jsTPS'
 import api from './store-request-api'
@@ -563,21 +563,40 @@ function GlobalStoreContextProvider(props) {
 
     // THIS FUNCTION CREATES A NEW LIST
     store.createNewList = async function () {
+
+
+        /*async function checkName(name) {
+            let response = await api.getPlaylistByName(name);
+            if (!response.data.found) {
+                console.log("found");
+              
+            }
+            else
+            {
+                console.log("not made");
+            }
+        }
+        checkName("Untitled 1");*/
+
+
         let newListName = "Untitled " + store.newListCounter;
         const response = await api.createPlaylist(newListName, "null", [], auth.user.userName, auth.user.email, false, "null", [], 0, 0, 0, [], []);
         if (response.status === 201) {
             tps.clearAllTransactions();
             let newList = response.data.playlist;
+            console.log(newList._id);
+
             /*storeReducer({
                 type: GlobalStoreActionType.CREATE_NEW_LIST,
                 payload: store.newListCounter + 1
             });*/
             store.loadIdNamePairs();
-            // IF IT'S A VALID LIST THEN LET'S START EDITING IT
-        }
-        else {
-            console.log("API FAILED TO CREATE A NEW LIST");
-        }
+                // IF IT'S A VALID LIST THEN LET'S START EDITING IT
+}
+else {
+    console.log("API FAILED TO CREATE A NEW LIST");
+}
+        
     }
 
     store.duplicateCurrentList= function ()
@@ -624,7 +643,7 @@ function GlobalStoreContextProvider(props) {
 
     store.incrementLikes = function (id)
     {
-        if(store.allLists)
+        if(store.allLists || store.allUserPublished)
         {
             async function getListToLike(id) {
                 let response = await api.getPublishedPlaylistById(id);
@@ -790,7 +809,7 @@ function GlobalStoreContextProvider(props) {
 
     store.incrementDislikes = function (id)
     {
-        if(store.allLists)
+        if(store.allLists || store.allUserPublished)
         {
             async function getListToLike(id) {
                 let response = await api.getPublishedPlaylistById(id);
@@ -951,7 +970,60 @@ function GlobalStoreContextProvider(props) {
 
 
 
-
+    store.searchPlaylists = function (text)
+    {
+        if(store.allLists)
+        {
+            async function asyncGetLists() {
+                const response = await api.getPublishedPlaylistsSearch(text);
+                if (response.data.success) {
+                    let pairsArray = response.data.data;
+                    storeReducer({
+                        type: GlobalStoreActionType.LOAD_PUBLISHED_LISTS,
+                        payload: pairsArray
+                    });
+                }
+                else {
+                    console.log("API FAILED TO GET THE LIST PAIRS");
+                }
+            }
+            asyncGetLists();
+        }
+        else if(store.allUserLists)
+        {
+            async function asyncGetLists() {
+                const response = await api.getPlaylistsSearch(text, auth.user.email);
+                if (response.data.success) {
+                    let pairsArray = response.data.data;
+                    storeReducer({
+                        type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
+                        payload: {pairs: pairsArray, count: store.newListCounter + 1}
+                    });
+                }
+                else {
+                    console.log("API FAILED TO GET THE LIST PAIRS");
+                }
+            }
+            asyncGetLists();
+        }
+        else if(store.allUserPublished)
+        {
+            async function asyncGetLists() {
+                const response = await api.getPlaylistsSearchUser(text);
+                if (response.data.success) {
+                    let pairsArray = response.data.idNamePairs;
+                    storeReducer({
+                        type: GlobalStoreActionType.LOAD_PUBLISHED_LISTS,
+                        payload: pairsArray
+                    });
+                }
+                else {
+                    console.log("API FAILED TO GET THE LIST PAIRS");
+                }
+            }
+            asyncGetLists();
+        }
+    }
 
 
 
@@ -1147,7 +1219,7 @@ function GlobalStoreContextProvider(props) {
         asyncSetCurrentList(id);
     }
 
-    store.playList = function (id)
+    store.playList = function (id, index)
     {
         async function asyncSetCurrentList(id) {
             let response = await api.getPlaylistById(id);
@@ -1163,7 +1235,7 @@ function GlobalStoreContextProvider(props) {
                         }
                         storeReducer({
                             type: GlobalStoreActionType.SET_CURRENT_LIST,
-                            payload: {list: store.currentList, index: ind, public: store.publicLists, pArray: store.idNamePairs, plist: playlist}
+                            payload: {list: store.currentList, index: index, public: store.publicLists, pArray: store.idNamePairs, plist: playlist}
                         });
                     }
                 

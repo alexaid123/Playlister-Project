@@ -45,9 +45,13 @@ function SongCard(props) {
         }
         else
         {
-            if(store.currentList._id === store.playingList._id)
+            if(store.playingList != null && store.currentList._id === store.playingList._id)
             {
                 store.setCurrentSong(index);
+            }
+            else
+            {
+                store.playList(store.currentList._id, index);
             }
             
         }
@@ -64,7 +68,7 @@ function SongCard(props) {
             onDragEnter={handleDragEnter}
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
-            draggable="true"
+            draggable={!store.currentList.published}
             onClick={handleClick}
         >
             {index + 1}.

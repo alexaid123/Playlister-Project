@@ -61,9 +61,13 @@ export const createPublishedPlaylist = (newListName, unpID, newSongs, userName, 
 export const deletePlaylistById = (id) => api.delete(`/playlist/${id}`)
 export const deletePublishedPlaylistById = (id) => api.delete(`/publishedplaylist/${id}`)
 export const getPlaylistById = (id) => api.get(`/playlist/${id}`)
+export const getPlaylistByName = (name) => api.get(`/playlistname/${name}`)
 export const getPublishedPlaylistById = (id) => api.get(`/publishedplaylist/${id}`)
 export const getPlaylistPairs = () => api.get(`/playlistpairs/`)
 export const getPublishedPlaylists = () => api.get(`/pbplaylists/`)
+export const getPublishedPlaylistsSearch = (str) => api.get(`/publishedsearch/${str}`)
+export const getPlaylistsSearch = (str, email) => api.get(`/playlistsearch/${str}/${email}`)
+export const getPlaylistsSearchUser = (str) => api.get(`/usersearch/${str}`)
 export const updatePlaylistById = (id, playlist) => {
     return api.put(`/playlist/${id}`, {
         // SPECIFY THE PAYLOAD
@@ -77,15 +81,20 @@ export const updatePublishedPlaylistById = (id, playlist) => {
     })
 }
 
+
 const apis = {
     createPlaylist,
     deletePlaylistById,
     deletePublishedPlaylistById,
     getPlaylistById,
+    getPlaylistByName,
     getPublishedPlaylistById,
     getPlaylistPairs,
     getPublishedPlaylists,
     updatePlaylistById,
+    getPublishedPlaylistsSearch,
+    getPlaylistsSearch,
+    getPlaylistsSearchUser,
     updatePublishedPlaylistById,
     createPublishedPlaylist
 }

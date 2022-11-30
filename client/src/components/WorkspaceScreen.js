@@ -37,7 +37,7 @@ function WorkspaceScreen() {
             id="playlist-cards" 
             sx={{ height: '300px', overflowY: 'scroll', overflowY: 'scroll', width: '100%', bgcolor: 'background.paper' }}
         >
-            {
+            {store.currentList != null && 
                 store.currentList.songs.map((song, index) => (
                     <SongCard
                         id={'playlist-song-' + (index)}
@@ -50,7 +50,7 @@ function WorkspaceScreen() {
             <Grid container>
             <Grid item xs = {1} sm = {1} md = {1} lg = {1}></Grid>
             <Grid item xs = {10} sm = {10} md = {10} lg = {10}>
-            {!store.currentList.published && <div className = "LCard" style = {{height: '50%'}}>
+            {store.currentList != null && !store.currentList.published && <div className = "LCard" style = {{height: '50%'}}>
                  <IconButton style={{marginLeft: '46%'}} onClick={(event) => { addSong() }}>
                 <AddIcon style={{fontSize:'28pt'}} />
                 </IconButton>

@@ -17,7 +17,7 @@ import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import Comments from './Comments.js';
 import {Menu, MenuItem} from "@mui/material";
-
+import {useRef} from 'react';
 
 //import YouTubePlayerExample from './PlaylisterYouTubePlayer.js'
 
@@ -32,9 +32,32 @@ const HomeScreen = () => {
     const { store } = useContext(GlobalStoreContext);
     const[open, setOpen] = useState(false);
     const[anchorElm, setAnchorElm] = useState(null);
-
+    const [text, setText] = useState("");
+    const inputRef = useRef(null);
 
     
+    function handleKeyPress(event) {
+        event.stopPropagation();
+        if (event.code === "Enter") {
+            if(text != "")
+            {
+                console.log(text);
+                inputRef.current.value = "";
+                store.searchPlaylists(text);
+                
+                setText("");
+            }
+           
+            
+        }
+    }
+    function handleUpdateText(event) {
+        event.stopPropagation();
+        setText(event.target.value);
+    }
+
+
+
     useEffect(() => {
         store.loadIdNamePairs();
     }, []);
@@ -51,11 +74,11 @@ const HomeScreen = () => {
 
     function handlePage(one, two, three)
     {
-        if(!one && two && !three)
+        if((!one && two && !three)  || (!one && !two && three))
         {
             store.loadPublishedPlaylists();
         }
-        if((one && !two && !three) || (!one && !two && three))
+        if((one && !two && !three))
         {
             store.loadIdNamePairs();
         }
@@ -63,6 +86,8 @@ const HomeScreen = () => {
         store.allLists = two;
         store.allUserPublished = three;
         store.currentList = null;
+        store.playingList = null;
+        store.currentSongIndex = -1;
         store.altUserLists(one, two, three);
     }
 
@@ -102,7 +127,7 @@ const HomeScreen = () => {
         pbutton = <div id = "plBContainer" onClick={handleYT}> <Typography id = "plB" variant="h6"  >Player</Typography> </div>
         cbutton = <div id = "plBContainerP" onClick={handlePl}> <Typography id = "plB" variant="h6" >Comments</Typography> </div>
     }
-    if (store && store.allUserLists || store.allUserPublished) {
+    if (store && store.allUserLists) {
         listCard = 
             <List>
             {
@@ -143,7 +168,12 @@ const HomeScreen = () => {
                     <PersonOutlineIcon onClick = {() => handlePage(false, false, true)} id = "cHo" sx = {{padding: "0 10px"}} fontSize="large"></PersonOutlineIcon>
                 </div>
                 <div>
-                    <input type="text" placeholder = "Search" className = "searchBar" label="Search" variant="outlined" />
+                    <input type="text" 
+                    ref={inputRef}
+                    onKeyPress={handleKeyPress}
+                    onChange={handleUpdateText} 
+                    defaultValue={text}
+                    placeholder = "Search" className = "searchBar" label="Search" variant="outlined" />
                 </div>
                 <div style = {{display: "flex"}}>
                     <div style = {{marginTop: "6px",fontSize: "17pt", marginRight: "5px"}}>Sort By </div>

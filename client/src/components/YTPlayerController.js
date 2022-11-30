@@ -16,7 +16,7 @@ import ReactPlayer from 'react-player';
 export default function YTPlayerController(props) {
     const { store } = useContext(GlobalStoreContext);
     const [count, setCount] = useState(0);
-    const [playing, setPlaying] = useState(true); 
+    const [playing, setPlaying] = useState(store.currentSongIndex !== 0); 
 
 
     let vid = "https://www.youtube.com/watch?v=";
