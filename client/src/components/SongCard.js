@@ -58,7 +58,12 @@ function SongCard(props) {
     }
 
     let cardClass = "list-card unselected-list-card";
+    if(store.playingList != null && store.currentSongIndex === index && store.currentList._id === store.playingList._id)
+    {
+        cardClass = "llist-card"
+    }
     return (
+        
         <div
             key={index}
             id={'song-' + index + '-card'}

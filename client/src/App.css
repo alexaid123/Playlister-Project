@@ -536,6 +536,15 @@ body {
   border-radius: 25px;
 }
 
+.llist-card
+{
+  font-size: 18pt;
+  margin: 10px;
+  padding: 20px;
+  border-radius: 25px;
+  background-color: lightseagreen;
+}
+
 .list-card:aria-disabled,
 .list-card[aria-disabled] {
   border: 1px solid #999999;

@@ -357,7 +357,7 @@ getPlaylistsSearch = async (req, res) => {
 
 getPlaylistsSearchUser = async (req, res) => {
     console.log("eimaste back " + req.params.str);
-    await User.findOne({userName: {$regex: "" + req.params.str}}, (err, user) => {
+    await User.findOne({userName: {$regex: req.params.str}}, (err, user) => {
         async function asyncFindList(email) {
             await PublishedPlaylist.find({ ownerEmail: email }, (err, playlists) => {
                 if (err) {
@@ -379,7 +379,7 @@ getPlaylistsSearchUser = async (req, res) => {
                         };
                         pairs.push(list);
                     }
-                    return res.status(200).json({ success: true, idNamePairs: pairs })
+                    return res.status(200).json({ success: true, idNamePairs: playlists })
                 }
             }).catch(err => console.log(err))
         }

@@ -14,7 +14,7 @@ function CommentCard(props) {
             
                
                 <div><a href = "test">{comment.user}</a> </div> 
-                <div>{comment.comment}</div>    
+                <div style = {{marginTop: '10px'}}>{comment.comment}</div>    
             
         </div>
     );
