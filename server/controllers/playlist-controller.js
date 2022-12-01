@@ -261,6 +261,63 @@ getPublishedPlaylistById = async (req, res) => {
     }).catch(err => console.log(err))
 }
 
+getSortedByPublish = async (req, res) => {
+    await User.findOne({ _id: req.userId }, (err, user) => {
+        async function asyncFindList(email) {
+           const result = await Playlist.find({ ownerEmail: email }).sort({publishedDate: -1});
+           return res.status(200).json({ success: true, idNamePairs: result });
+        }
+        asyncFindList(user.email);
+    }).catch(err => console.log(err))
+}
+
+getSortedByCreate = async (req, res) => {
+    await User.findOne({ _id: req.userId }, (err, user) => {
+        async function asyncFindList(email) {
+           const result = await Playlist.find({ ownerEmail: email }).sort({createdAt: 1});
+           return res.status(200).json({ success: true, idNamePairs: result });
+        }
+        asyncFindList(user.email);
+    }).catch(err => console.log(err))
+}
+
+getSortedByEdit = async (req, res) => {
+    await User.findOne({ _id: req.userId }, (err, user) => {
+        async function asyncFindList(email) {
+           const result = await Playlist.find({ ownerEmail: email }).sort({updatedAt: -1});
+           return res.status(200).json({ success: true, idNamePairs: result });
+        }
+        asyncFindList(user.email);
+    }).catch(err => console.log(err))
+}
+
+
+
+
+
+getPSortedByPublish = async (req, res) => {
+    const result = await PublishedPlaylist.find({}).sort({publishedDate: -1});
+    return res.status(200).json({success: true, idNamePairs: result });
+}
+
+getPSortedByCreate = async (req, res) => {
+    const result = await PublishedPlaylist.find({}).sort({createdAt: 1});
+    return res.status(200).json({success: true, idNamePairs: result });
+}
+
+getPSortedByEdit = async (req, res) => {
+    const result = await PublishedPlaylist.find({}).sort({updatedAt: -1});
+    return res.status(200).json({ success: true, idNamePairs: result });
+}
+
+
+
+
+
+
+
+
+
 getPlaylistPairs = async (req, res) => {
     await User.findOne({ _id: req.userId }, (err, user) => {
         async function asyncFindList(email) {
@@ -507,5 +564,11 @@ module.exports = {
     getPlaylistsSearchUser,
     updatePlaylist,
     updatePublishedPlaylist,
-    createPublishedPlaylist
+    createPublishedPlaylist,
+    getSortedByPublish,
+    getSortedByCreate,
+    getSortedByEdit,
+    getPSortedByPublish,
+    getPSortedByCreate,
+    getPSortedByEdit
 }

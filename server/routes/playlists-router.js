@@ -21,6 +21,13 @@ router.get('/playlistsearch/:str/:email', PlaylistController.getPlaylistsSearch)
 router.get('/usersearch/:str', PlaylistController.getPlaylistsSearchUser)
 
 router.get('/playlistpairs', auth.verify, PlaylistController.getPlaylistPairs)
+router.get('/sortedpublish', auth.verify, PlaylistController.getSortedByPublish)
+router.get('/sortedcreate', auth.verify, PlaylistController.getSortedByCreate)
+router.get('/sortededit', auth.verify, PlaylistController.getSortedByEdit)
+router.get('/psortedpublish', auth.verify, PlaylistController.getPSortedByPublish)
+router.get('/psortedcreate', auth.verify, PlaylistController.getPSortedByCreate)
+router.get('/psortededit', auth.verify, PlaylistController.getPSortedByEdit)
+
 router.get('/playlists', auth.verify, PlaylistController.getPlaylists)
 router.get('/pbplaylists', auth.verify, PlaylistController.getPublishedPlaylists)
 router.put('/playlist/:id', auth.verify, PlaylistController.updatePlaylist)

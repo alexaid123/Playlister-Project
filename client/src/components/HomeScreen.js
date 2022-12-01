@@ -82,7 +82,7 @@ const HomeScreen = () => {
 
     function handlePage(one, two, three)
     {
-        if((!one && two && !three)  || (!one && !two && three))
+        if((!one && two && !three))
         {
             store.loadPublishedPlaylists();
         }

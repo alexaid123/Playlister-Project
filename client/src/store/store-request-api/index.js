@@ -64,6 +64,12 @@ export const getPlaylistById = (id) => api.get(`/playlist/${id}`)
 export const getPlaylistByName = (name) => api.get(`/playlistname/${name}`)
 export const getPublishedPlaylistById = (id) => api.get(`/publishedplaylist/${id}`)
 export const getPlaylistPairs = () => api.get(`/playlistpairs/`)
+export const getSortedPublish = () => api.get(`/sortedpublish/`)
+export const getSortedCreate = () => api.get(`/sortedcreate/`)
+export const getSortedEdit = () => api.get(`/sortededit/`)
+export const getPSortedPublish = () => api.get(`/psortedpublish/`)
+export const getPSortedCreate = () => api.get(`/psortedcreate/`)
+export const getPSortedEdit = () => api.get(`/psortededit/`)
 export const getPublishedPlaylists = () => api.get(`/pbplaylists/`)
 export const getPublishedPlaylistsSearch = (str) => api.get(`/publishedsearch/${str}`)
 export const getPlaylistsSearch = (str, email) => api.get(`/playlistsearch/${str}/${email}`)
@@ -96,7 +102,13 @@ const apis = {
     getPlaylistsSearch,
     getPlaylistsSearchUser,
     updatePublishedPlaylistById,
-    createPublishedPlaylist
+    createPublishedPlaylist,
+    getSortedPublish,
+    getSortedCreate,
+    getSortedEdit,
+    getPSortedPublish,
+    getPSortedCreate,
+    getPSortedEdit
 }
 
 export default apis

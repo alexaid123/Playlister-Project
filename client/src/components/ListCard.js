@@ -184,7 +184,11 @@ function ListCard(props) {
     function handleUClick(event)
     {
         event.stopPropagation();
-        console.log("clicked");
+        store.allUserPublished = true;
+        store.allLists = false;
+        store.allUserLists = false;
+        store.searchPlaylists(idNamePair.ownerUserName);
+        console.log("clicked " + idNamePair.ownerUserName);
     }
 
     function handleUpdateText(event) {
@@ -202,7 +206,7 @@ function ListCard(props) {
         {
             if(store.allLists)
             {
-                store.playPublishedList(id);
+                store.playPublishedList(id, 0);
             }
             else
             {

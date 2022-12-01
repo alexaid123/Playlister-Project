@@ -49,9 +49,13 @@ function SongCard(props) {
             {
                 store.setCurrentSong(index);
             }
-            else
+            else if(!store.currentList.published)
             {
                 store.playList(store.currentList._id, index);
+            }
+            else
+            {
+                store.playPublishedList(store.currentList._id, index);
             }
             
         }
