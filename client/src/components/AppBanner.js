@@ -33,6 +33,7 @@ export default function AppBanner() {
     const handleLogout = () => {
         handleMenuClose();
         store.closeCurrentList();
+        store.resetAll();
         auth.logoutUser();
     }
 
@@ -94,7 +95,7 @@ export default function AppBanner() {
                         sx={{ display: { xs: 'none', sm: 'block' } }}                        
                     >
                         
-                        <Link style={{ textDecoration: 'none', color: 'white' }} to='/'> <img style = {{marginLeft: '-12%', width: 200, height: 70}} id = "logo" sx={{maxheight: 10 }} src={logoImage}></img></Link>
+                        <Link onClick={handleLogout} style={{ textDecoration: 'none', color: 'white' }} to='/'> <img style = {{marginLeft: '-12%', width: 200, height: 70}} id = "logo" sx={{maxheight: 10 }} src={logoImage}></img></Link>
                     </Typography>
                     <Box sx={{ flexGrow: 1 }}>{editToolbar}</Box>
                     <Box sx={{ display: { xs: 'none', md: 'flex' } }}>

@@ -69,7 +69,7 @@ export default function YTPlayerController(props) {
         vid = "https://www.youtube.com/watch?v=" + store.playingList.songs[store.currentSongIndex].youTubeId;
         if(!ReactPlayer.canPlay(vid))
         {
-            vid = "";
+           // vid = "";
         }
     }
 

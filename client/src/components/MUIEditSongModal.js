@@ -3,6 +3,7 @@ import GlobalStoreContext from '../store';
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
+import ReactPlayer from 'react-player';
 
 const style = {
     position: 'absolute',
@@ -29,7 +30,14 @@ export default function MUIEditSongModal() {
             artist: artist,
             youTubeId: youTubeId
         };
-        store.addUpdateSongTransaction(store.currentSongIndex, newSongData);        
+        if(!ReactPlayer.canPlay(youTubeId))
+        {
+            store.invalidSong();
+        }
+        else
+        {
+            store.addUpdateSongTransaction(store.currentSongIndex, newSongData);     
+        }
     }
 
     function handleCancelEditSong() {

@@ -71,7 +71,7 @@ function ListCard(props) {
             // CHANGE THE CURRENT LIST
             else
             {
-                if(store.allLists)
+                if(store.allLists || store.allUserPublished)
                 {
                     store.setPublishedList(id);
                 }
@@ -120,7 +120,10 @@ function ListCard(props) {
         if (newActive) {
             store.setIsListNameEditActive();
         }
-        setEditActive(newActive);
+        if(store.error == null)
+        {
+            setEditActive(newActive);
+        }
     }
 
     async function handleDeleteList(event, id) {
@@ -199,13 +202,14 @@ function ListCard(props) {
     function handleClick(event, id)
     {
         event.stopPropagation();
-        if (event.detail === 2) {
+        if (event.detail === 2 && !idNamePair.published) {
            handleToggleEdit(event);
         }
         else
         {
-            if(store.allLists)
+            if(store.allLists || store.allUserPublished)
             {
+               
                 store.playPublishedList(id, 0);
             }
             else
@@ -312,7 +316,7 @@ function ListCard(props) {
             >
                 <Grid container>
                     <Grid item container>
-                        <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}<div style={{marginLeft: '5px', fontSize:'14pt'}}>By: <span onClick = {handleUClick} style = {{textDecoration: 'underline', color: 'blue', cursor: 'pointer'}}>{idNamePair.ownerUserName}</span></div></Box>
+                        <Box sx={{ p: 1, flexGrow: 1 }}><span onClick={(event) => {handleClick(event, idNamePair._id)}} >{idNamePair.name}</span><div style={{marginLeft: '5px', fontSize:'14pt'}}>By: <span onClick = {handleUClick} style = {{textDecoration: 'underline', color: 'blue', cursor: 'pointer'}}>{idNamePair.ownerUserName}</span></div></Box>
                         <Box sx={{ p: 1 }}>
                             <IconButton onClick={(event) => {handleLike(event, idNamePair._id)}} aria-label='edit'>
                                 {likeIcon}
@@ -416,7 +420,7 @@ function ListCard(props) {
         >
             <Grid container>
                 <Grid item container>
-                    <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}<div style={{marginLeft: '5px', fontSize:'14pt'}}>By: <span onClick = {handleUClick} style = {{textDecoration: 'underline', color: 'blue', cursor: 'pointer'}}>{idNamePair.ownerUserName}</span></div></Box>
+                    <Box sx={{ p: 1, flexGrow: 1 }}><span onClick={(event) => {handleClick(event, idNamePair._id)}} >{idNamePair.name}</span><div style={{marginLeft: '5px', fontSize:'14pt'}}>By: <span onClick = {handleUClick} style = {{textDecoration: 'underline', color: 'blue', cursor: 'pointer'}}>{idNamePair.ownerUserName}</span></div></Box>
                     <Box sx={{ p: 1 }}>
                         <IconButton onClick={(event) => {handleLike(event, idNamePair._id)}} aria-label='edit'>
                            {likeIcon}
@@ -478,7 +482,7 @@ function ListCard(props) {
         >
             <Grid container>
                 <Grid item container>
-                    <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}<div style={{marginLeft: '5px', fontSize:'14pt'}}>By: <span onClick = {handleUClick} style = {{textDecoration: 'underline', color: 'blue', cursor: 'pointer'}}>{idNamePair.ownerUserName}</span></div></Box>
+                    <Box sx={{ p: 1, flexGrow: 1 }}><span onClick={(event) => {handleClick(event, idNamePair._id)}} >{idNamePair.name}</span><div style={{marginLeft: '5px', fontSize:'14pt'}}>By: <span onClick = {handleUClick} style = {{textDecoration: 'underline', color: 'blue', cursor: 'pointer'}}>{idNamePair.ownerUserName}</span></div></Box>
                     <Box sx={{ p: 1 }}>
                         <IconButton onClick={(event) => {handleLike(event, idNamePair._id)}} aria-label='edit'>
                             {likeIcon}
@@ -540,7 +544,7 @@ function ListCard(props) {
         >
             <Grid container>
                 <Grid item container>
-                    <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}<div style={{marginLeft: '5px', fontSize:'14pt'}}>By: <span onClick = {handleUClick} style = {{textDecoration: 'underline', color: 'blue', cursor: 'pointer'}}>{idNamePair.ownerUserName}</span></div></Box>
+                    <Box sx={{ p: 1, flexGrow: 1 }}><span onClick={(event) => {handleClick(event, idNamePair._id)}} >{idNamePair.name}</span><div style={{marginLeft: '5px', fontSize:'14pt'}}>By: <span onClick = {handleUClick} style = {{textDecoration: 'underline', color: 'blue', cursor: 'pointer'}}>{idNamePair.ownerUserName}</span></div></Box>
                     <Box sx={{ p: 1 }}>
                      
                     </Box>
@@ -603,7 +607,7 @@ function ListCard(props) {
         >
             <Grid container>
                 <Grid item container>
-                    <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}<div style={{marginLeft: '5px', fontSize:'14pt'}}>By: <span onClick = {handleUClick} style = {{textDecoration: 'underline', color: 'blue', cursor: 'pointer'}}>{idNamePair.ownerUserName}</span></div></Box>
+                    <Box sx={{ p: 1, flexGrow: 1 }}><span onClick={(event) => {handleClick(event, idNamePair._id)}} >{idNamePair.name}</span><div style={{marginLeft: '5px', fontSize:'14pt'}}>By: <span onClick = {handleUClick} style = {{textDecoration: 'underline', color: 'blue', cursor: 'pointer'}}>{idNamePair.ownerUserName}</span></div></Box>
                     <Box sx={{ p: 1 }}>
                         <IconButton onClick={(event) => {handleLike(event, idNamePair._id)}} aria-label='edit'>
                            {likeIcon}
@@ -687,7 +691,7 @@ function ListCard(props) {
         >
             <Grid container>
                 <Grid item container>
-                    <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}<div style={{marginLeft: '5px', fontSize:'14pt'}}>By: <span onClick = {handleUClick} style = {{textDecoration: 'underline', color: 'blue', cursor: 'pointer'}}>{idNamePair.ownerUserName}</span></div></Box>
+                    <Box sx={{ p: 1, flexGrow: 1 }}><span onClick={(event) => {handleClick(event, idNamePair._id)}} >{idNamePair.name}</span><div style={{marginLeft: '5px', fontSize:'14pt'}}>By: <span onClick = {handleUClick} style = {{textDecoration: 'underline', color: 'blue', cursor: 'pointer'}}>{idNamePair.ownerUserName}</span></div></Box>
                     <Box sx={{ p: 1 }}>
                         <IconButton onClick={(event) => {handleLike(event, idNamePair._id)}} aria-label='edit'>
                             {likeIcon}
@@ -824,7 +828,7 @@ function ListCard(props) {
             >
                 <Grid container>
                     <Grid item container>
-                        <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}<div style={{marginLeft: '5px', fontSize:'14pt'}}>By: <span onClick = {handleUClick} style = {{textDecoration: 'underline', color: 'blue', cursor: 'pointer'}}>{idNamePair.ownerUserName}</span> </div></Box>
+                        <Box sx={{ p: 1, flexGrow: 1 }}><span onClick={(event) => {handleClick(event, idNamePair._id)}} >{idNamePair.name}</span><div style={{marginLeft: '5px', fontSize:'14pt'}}>By: <span onClick = {handleUClick} style = {{textDecoration: 'underline', color: 'blue', cursor: 'pointer'}}>{idNamePair.ownerUserName}</span> </div></Box>
                        
                     </Grid>
                     <Grid item container>
@@ -859,7 +863,7 @@ function ListCard(props) {
             >
                 <Grid container>
                     <Grid item container>
-                        <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}<div style={{marginLeft: '5px', fontSize:'14pt'}}>By: <span onClick = {handleUClick} style = {{textDecoration: 'underline', color: 'blue', cursor: 'pointer'}}>{idNamePair.ownerUserName}</span></div></Box>
+                        <Box sx={{ p: 1, flexGrow: 1 }}><span onClick={(event) => {handleClick(event, idNamePair._id)}} >{idNamePair.name}</span><div style={{marginLeft: '5px', fontSize:'14pt'}}>By: <span onClick = {handleUClick} style = {{textDecoration: 'underline', color: 'blue', cursor: 'pointer'}}>{idNamePair.ownerUserName}</span></div></Box>
                         <Box sx={{ p: 1 }}>
                             <IconButton onClick={(event) => {handleLike(event, idNamePair._id)}} aria-label='edit'>
                                 {likeIcon}
@@ -963,7 +967,7 @@ function ListCard(props) {
         >
             <Grid container>
                 <Grid item container>
-                    <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}<div style={{marginLeft: '5px', fontSize:'14pt'}}>By: <span onClick = {handleUClick} style = {{textDecoration: 'underline', color: 'blue', cursor: 'pointer'}}>{idNamePair.ownerUserName}</span></div></Box>
+                    <Box sx={{ p: 1, flexGrow: 1 }}><span onClick={(event) => {handleClick(event, idNamePair._id)}} >{idNamePair.name}</span><div style={{marginLeft: '5px', fontSize:'14pt'}}>By: <span onClick = {handleUClick} style = {{textDecoration: 'underline', color: 'blue', cursor: 'pointer'}}>{idNamePair.ownerUserName}</span></div></Box>
                     <Box sx={{ p: 1 }}>
                         <IconButton onClick={(event) => {handleLike(event, idNamePair._id)}} aria-label='edit'>
                            {likeIcon}
@@ -1025,7 +1029,7 @@ function ListCard(props) {
         >
             <Grid container>
                 <Grid item container>
-                    <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}<div style={{marginLeft: '5px', fontSize:'14pt'}}>By: <span onClick = {handleUClick} style = {{textDecoration: 'underline', color: 'blue', cursor: 'pointer'}}>{idNamePair.ownerUserName}</span></div></Box>
+                    <Box sx={{ p: 1, flexGrow: 1 }}><span onClick={(event) => {handleClick(event, idNamePair._id)}} >{idNamePair.name}</span><div style={{marginLeft: '5px', fontSize:'14pt'}}>By: <span onClick = {handleUClick} style = {{textDecoration: 'underline', color: 'blue', cursor: 'pointer'}}>{idNamePair.ownerUserName}</span></div></Box>
                     <Box sx={{ p: 1 }}>
                         <IconButton onClick={(event) => {handleLike(event, idNamePair._id)}} aria-label='edit'>
                             {likeIcon}
@@ -1087,7 +1091,7 @@ function ListCard(props) {
         >
             <Grid container>
                 <Grid item container>
-                    <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}<div style={{marginLeft: '5px', fontSize:'14pt'}}>By: <span onClick = {handleUClick} style = {{textDecoration: 'underline', color: 'blue', cursor: 'pointer'}}>{idNamePair.ownerUserName}</span></div></Box>
+                    <Box sx={{ p: 1, flexGrow: 1 }}><span onClick={(event) => {handleClick(event, idNamePair._id)}} >{idNamePair.name}</span><div style={{marginLeft: '5px', fontSize:'14pt'}}>By: <span onClick = {handleUClick} style = {{textDecoration: 'underline', color: 'blue', cursor: 'pointer'}}>{idNamePair.ownerUserName}</span></div></Box>
                     <Box sx={{ p: 1 }}>
                      
                     </Box>
@@ -1150,7 +1154,7 @@ function ListCard(props) {
         >
             <Grid container>
                 <Grid item container>
-                    <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}<div style={{marginLeft: '5px', fontSize:'14pt'}}>By: <span onClick = {handleUClick} style = {{textDecoration: 'underline', color: 'blue', cursor: 'pointer'}}>{idNamePair.ownerUserName}</span></div></Box>
+                    <Box sx={{ p: 1, flexGrow: 1 }}><span onClick={(event) => {handleClick(event, idNamePair._id)}} >{idNamePair.name}</span><div style={{marginLeft: '5px', fontSize:'14pt'}}>By: <span onClick = {handleUClick} style = {{textDecoration: 'underline', color: 'blue', cursor: 'pointer'}}>{idNamePair.ownerUserName}</span></div></Box>
                     <Box sx={{ p: 1 }}>
                         <IconButton onClick={(event) => {handleLike(event, idNamePair._id)}} aria-label='edit'>
                            {likeIcon}
@@ -1234,7 +1238,7 @@ function ListCard(props) {
         >
             <Grid container>
                 <Grid item container>
-                    <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}<div style={{marginLeft: '5px', fontSize:'14pt'}}>By: <span onClick = {handleUClick} style = {{textDecoration: 'underline', color: 'blue', cursor: 'pointer'}}>{idNamePair.ownerUserName}</span></div></Box>
+                    <Box sx={{ p: 1, flexGrow: 1 }}><span onClick={(event) => {handleClick(event, idNamePair._id)}} >{idNamePair.name}</span><div style={{marginLeft: '5px', fontSize:'14pt'}}>By: <span onClick = {handleUClick} style = {{textDecoration: 'underline', color: 'blue', cursor: 'pointer'}}>{idNamePair.ownerUserName}</span></div></Box>
                     <Box sx={{ p: 1 }}>
                         <IconButton onClick={(event) => {handleLike(event, idNamePair._id)}} aria-label='edit'>
                             {likeIcon}
@@ -1282,9 +1286,6 @@ function ListCard(props) {
         </ListItem>
    </Box>
     }
-
-   
-
 
     return (
         cardElement

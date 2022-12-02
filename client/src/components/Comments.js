@@ -32,8 +32,8 @@ export default function Comments() {
                 console.log(text);
                 inputRef.current.value = "";
                 let cm = {user: auth.user.userName, comment: text};
-                store.currentList.comments.push(cm);
-                if(store.allLists)
+                store.playingList.comments.push(cm);
+                if(store.allLists || store.allUserPublished)
                 {
                     store.updatePuplishedCurrent();
                 }
@@ -57,13 +57,13 @@ export default function Comments() {
             <div id = "yComp3" style = {{width: '100%'}}>
            
             <Box>
-                    {store.currentList != null && <List 
+                    {store.playingList != null && <List 
                         className="bCom"
                         id="playlist-cards" 
                         sx={{marginTop: '-25px', height: '390px', overflowY: 'scroll', width: '100%'}}
                     >
                         {
-                            store.currentList != null && store.currentList.comments != null && store.currentList.comments.map((comment, index) => (
+                            store.playingList != null && store.playingList.comments != null && store.playingList.comments.map((comment, index) => (
                                 <CommentCard
                                     id={'playlist-comment-' + (index)}
                                     key={'playlist-comment-' + (index)}
@@ -90,7 +90,7 @@ export default function Comments() {
 
 
 
-           {store.currentList != null && <input 
+           {store.playingList != null && <input 
                 ref={inputRef}
                 onKeyPress={handleKeyPress}
                 onChange={handleUpdateText}

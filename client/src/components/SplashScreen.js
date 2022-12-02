@@ -3,11 +3,28 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import { Link } from 'react-router-dom'
 
+import { useContext } from 'react';
+import AuthContext from '../auth';
+import { GlobalStoreContext } from '../store';
+
 export default function SplashScreen() {
 
-    function handleCreateAccount()
+    const { auth } = useContext(AuthContext);
+    const { store } = useContext(GlobalStoreContext);
+
+    function handleGuest()
     {
-        
+        auth.registerUser(
+            store,
+           null,
+           null,
+           null,
+           null,
+           null,
+           null,
+            true
+        );
+
     }
 
     return (
@@ -19,13 +36,13 @@ export default function SplashScreen() {
          
         <Box id = "SplashButtons" sx={{ '& button': { m: 1 } }}>
             <div>
-                <Button  sx={{fontSize: 20, height: 50, width: 250, padding: 1, margin: 2}} variant="contained" size="large">
+                <Button onClick = {handleGuest} sx={{fontSize: 20, height: 50, width: 250, padding: 1, margin: 2}} variant="contained" size="large">
                 GUEST
                 </Button>
                 <Button  sx={{fontSize: 20, height: 50, width: 250, padding: 1, margin: 2}} variant="contained" size="large"><Link  style={{ textDecoration: 'none', color: 'white' }} to='/login/'>
                 LOGIN
                 </ Link></Button>
-                <Button onClick = {handleCreateAccount} sx={{fontSize: 20, height: 50, width: 250, padding: 1, margin: 2}} variant="contained" size="large"><Link  style={{ textDecoration: 'none', color: 'white' }}to='/register/'>
+                <Button sx={{fontSize: 20, height: 50, width: 250, padding: 1, margin: 2}} variant="contained" size="large"><Link  style={{ textDecoration: 'none', color: 'white' }}to='/register/'>
                 CREATE ACCOUNT
                 </ Link></Button>
             </div>

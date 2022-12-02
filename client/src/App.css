@@ -564,6 +564,12 @@ body {
   word-wrap: break-word;
 }
 
+.cwrapp
+{
+  word-wrap: break-word;
+  overflow: hidden;
+}
+
 .list-cardComment:aria-disabled,
 .list-cardComment[aria-disabled] {
   border: 1px solid #999999;

@@ -94,9 +94,38 @@ logoutUser = async (req, res) => {
 }
 
 registerUser = async (req, res) => {
+
+    const{userName, firstName, lastName, email, password, passwordVerify, guest} = req.body;
+    if(guest)
+    {
+        const token = auth.signToken('a');
+
+        try{
+        res.cookie("token", token, {
+            httpOnly: true,
+            secure: true,
+            sameSite: true
+        }).status(200).json({
+            success: true,
+            user: {
+                guest: true,
+                userName: 'a',
+                firstName: 'a',
+                lastName: 'a',  
+                email: 'a'             
+            }
+        })
+    } catch (err) {
+        console.error(err);
+        res.status(500).send();
+    }
+    }
+    else
+    {
     try {
-        const {userName, firstName, lastName, email, password, passwordVerify } = req.body;
-        if (!userName || !firstName || !lastName || !email || !password || !passwordVerify) {
+        const {userName, firstName, lastName, email, password, passwordVerify, guest} = req.body;
+
+        if ((!userName || !firstName || !lastName || !email || !password || !passwordVerify && !guest)) {
             return res.status(400).json({ errorMessage: "Please enter all required fields." });
         }
         if (password.length < 8) {
@@ -122,13 +151,23 @@ registerUser = async (req, res) => {
                     errorMessage: "An account with this email address already exists."
                 })
         }
+        
+        const exU = await User.findOne({ userName: userName });
+        if (exU) {
+            return res
+                .status(400)
+                .json({
+                    success: false,
+                    errorMessage: "An account with this Username already exists."
+                })
+        }
 
         const saltRounds = 10;
         const salt = await bcrypt.genSalt(saltRounds);
         const passwordHash = await bcrypt.hash(password, salt);
 
         const newUser = new User({
-            userName, firstName, lastName, email, passwordHash
+           guest, userName, firstName, lastName, email, passwordHash
         });
         const savedUser = await newUser.save();
 
@@ -142,6 +181,7 @@ registerUser = async (req, res) => {
         }).status(200).json({
             success: true,
             user: {
+                guest: savedUser.guest,
                 userName: savedUser.userName,
                 firstName: savedUser.firstName,
                 lastName: savedUser.lastName,  
@@ -153,6 +193,7 @@ registerUser = async (req, res) => {
         console.error(err);
         res.status(500).send();
     }
+}
 }
 
 module.exports = {

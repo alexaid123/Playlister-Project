@@ -18,6 +18,8 @@ import Paper from '@mui/material/Paper';
 import Comments from './Comments.js';
 import {Menu, MenuItem} from "@mui/material";
 import {useRef} from 'react';
+import AuthContext from '../auth'
+import MUIErrorAlert from './MUIErrorAlert'
 
 //import YouTubePlayerExample from './PlaylisterYouTubePlayer.js'
 
@@ -33,16 +35,16 @@ const HomeScreen = () => {
     const[open, setOpen] = useState(false);
     const[anchorElm, setAnchorElm] = useState(null);
     const [text, setText] = useState("");
-    const [view, setView] = useState(false);
+  //  const [view, setView] = useState(false);
     const inputRef = useRef(null);
-
-    
+    const { auth } = useContext(AuthContext);
     function handleKeyPress(event) {
         event.stopPropagation();
         if (event.code === "Enter") {
                 if(text !== "")
                 {
-                    setView(true);
+                   // setView(true);
+                   store.viewSearch = true;
                 }
                 console.log(text);
                 inputRef.current.value = "";
@@ -86,7 +88,7 @@ const HomeScreen = () => {
         {
             store.loadPublishedPlaylists();
         }
-        if((one && !two && !three))
+        if((one && !two && !three) && !auth.user.guest)
         {
             store.loadIdNamePairs();
         }
@@ -119,8 +121,10 @@ const HomeScreen = () => {
     let listCard = "";
     let cardClass = "list-card unselected-list-card";
     let comCLass = "cmDisabled";
-    if(store.currentList != null && store.currentList.published)
+    console.log("SEARCH IS " + store.viewSearch)
+    if(store.playingList != null && store.playingList.published)
     {
+        console.log("Unlocked");
         comCLass = "plbContainer";
     }
     if(store.player)
@@ -150,7 +154,7 @@ const HomeScreen = () => {
             }
             </List>;
     }
-    else if((store.publicLists.length !== 0 && store.allLists) || (store.allUserPublished && view))
+    else if((store.publicLists.length !== 0 && store.allLists) || (store.allUserPublished && store.viewSearch))
     {
         listCard = 
             <List>
@@ -185,7 +189,7 @@ const HomeScreen = () => {
                 </div>
                 <div style = {{display: "flex"}}>
                     <div style = {{marginTop: "6px",fontSize: "17pt", marginRight: "5px"}}>Sort By </div>
-                    <SortIcon onClick = {handleOpen} id = "cHo" fontSize="large" label="Search" variant="outlined" />
+                    {!store.allUserLists &&  <span><SortIcon onClick = {handleOpen} id = "cHo" fontSize="large" label="Search" variant="outlined" />
                     <Menu anchorOrigin={{vertical: 'bottom', horizontal: 'right'}}
                     transformOrigin={{vertical: 'top', horizontal: 'right'}}
                     anchorEl = {anchorElm} open = {open} onClose={handleClose}>
@@ -194,13 +198,20 @@ const HomeScreen = () => {
                     <MenuItem onClick = {() => handleSort(false, false, true, false, false, false, false) } sx = {{border: "1px solid grey"}}>Listens (High - Low)</MenuItem>
                     <MenuItem onClick = {() => handleSort(false, false, false, true, false, false, false) } sx = {{border: "1px solid grey"}}>Likes (High - Low)</MenuItem>
                     <MenuItem onClick = {() => handleSort(false, false, false, false, true, false, false) } sx = {{border: "1px solid grey"}}>Dislikes (High - Low)</MenuItem>
-                    <MenuItem onClick = {() => handleSort(false, false, false, false, false, true, false) } sx = {{border: "1px solid grey"}}>Creation Date (Old - New)</MenuItem>
-                    <MenuItem onClick = {() => handleSort(false, false, false, false, false, false, true) } sx = {{border: "1px solid grey"}}>Last Edit Date (New - Old)</MenuItem>
                     
-                    </Menu>
+                    </Menu></span>}
+                    {store.allUserLists &&  <span><SortIcon onClick = {handleOpen} id = "cHo" fontSize="large" label="Search" variant="outlined" />
+                    <Menu anchorOrigin={{vertical: 'bottom', horizontal: 'right'}}
+                    transformOrigin={{vertical: 'top', horizontal: 'right'}}
+                    anchorEl = {anchorElm} open = {open} onClose={handleClose}>
+                    <MenuItem onClick = {() => handleSort(false, false, false, false, false, true, false) } sx = {{marginTop: '-8px', border: "1px solid grey"}}>Creation Date (Old - New)</MenuItem>
+                    <MenuItem onClick = {() => handleSort(false, false, false, false, false, false, true) } sx = {{border: "1px solid grey"}}>Last Edit Date (New - Old)</MenuItem>
+                    <MenuItem onClick = {() => handleSort(true, false, false, false, false, false, false) } sx  = {{ border: "1px solid grey"}}>Name (A-Z)</MenuItem>
+                   
+                    </Menu></span>}
                 </div>
             </div>
-
+            <MUIErrorAlert />
             <Grid container id = "mid">
                 <Grid item xs = {7.2} sm = {7.2} md={7.2}>
                 <Paper>
@@ -232,6 +243,7 @@ const HomeScreen = () => {
                 <Box id = "addLB">
                 {store.allUserLists && <AddIcon style={{fontSize:'48pt'}}id = "cHo" sx = {{verticalAlign: "middle", marginTop: "5px"}}onClick={handleCreateNewList} fontSize='large'/>}
                 {store.allUserLists && <Typography sx = {{marginTop: "18px"}} variant="h4">Your Lists</Typography> }
+                {store.allLists && <Typography sx = {{marginTop: "18px"}} variant="h4">Viewing {store.searchText} Lists</Typography>}
                 </Box>
             </div>
             
