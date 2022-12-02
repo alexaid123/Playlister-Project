@@ -183,7 +183,7 @@ function GlobalStoreContextProvider(props) {
                     sortEditDate: store.sortEditDate,
                     sortCreate: store.sortCreate,
                     viewSearch: store.viewSearch,
-                    searchText: ""
+                    searchText: store.searchText
                 })
             }
             // CREATE A NEW LIST
@@ -276,7 +276,7 @@ function GlobalStoreContextProvider(props) {
                     sortEditDate: payload.sEditDate,
                     sortCreate: payload.sCreate,
                     viewSearch: store.viewSearch,
-                    searchText: ""
+                    searchText: store.searchText
                 });
             }
             // PREPARE TO DELETE A LIST
@@ -307,7 +307,7 @@ function GlobalStoreContextProvider(props) {
                     sortEditDate: store.sortEditDate,
                     sortCreate: store.sortCreate,
                     viewSearch: store.viewSearch,
-                    searchText: ""
+                    searchText: store.searchText
                 });
             }
 
@@ -339,7 +339,7 @@ function GlobalStoreContextProvider(props) {
                     sortEditDate: store.sortEditDate,
                     sortCreate: store.sortCreate,
                     viewSearch: store.viewSearch,
-                    searchText: ""
+                    searchText: store.searchText
                 });
             }
             // START EDITING A LIST NAME
@@ -554,7 +554,7 @@ function GlobalStoreContextProvider(props) {
                     sortEditDate: store.sortEditDate,
                     sortCreate: store.sortCreate,
                     viewSearch: store.viewSearch,
-                    searchText: ""
+                    searchText: store.searchText
                 });
             }
 
@@ -687,6 +687,7 @@ function GlobalStoreContextProvider(props) {
 
     store.altUserLists = function (first, second, third)
     {
+        store.searchText = "";
         if(third)
         {
             store.viewSearch = false;
@@ -1258,7 +1259,8 @@ function GlobalStoreContextProvider(props) {
             else
             {
                 store.viewSearch = true;
-                console.log("GEORGE " + store.allUserPublished);
+                store.searchText = text;
+                console.log("GEORGE " + text);
             async function asyncGetLists() {
                 const response = await api.getPlaylistsSearchUser(text);
                 if (response.data.success) {

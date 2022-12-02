@@ -31,19 +31,30 @@ export default function YTPlayerController(props) {
     let bSClass = "controllerButtons";
     let bPClass = "controllerButtons";
     let bRSClass = "controllerButtons";
-    if(store.playingList != null && (count < 0 ))
+    let bRPClass = 'controllerButtons';
+    
+    if(store.playingList != null && (store.currentSongIndex + 1 >= store.playingList.songs.length))
     {
         bSClass = "disableController";
     }
-    if(store.playingList == null || store.playingList.songs == null || store.playingList.length === 0)
+    if(store.playingList == null || store.playingList.songs == null || store.playingList.length === 0 || store.currentSongIndex - 1 < 0)
     {
         bPClass = "disableController";
+    }
+    if(playing)
+    {
+        bRSClass = "disableController";
+    }
+    else
+    {
+        bRPClass = "disableController";
     }
     if(store.playingList == null || (store.playingList.songs == null) || store.playingList.length === 0)
     {
         bSClass = "disableController";
         bPClass = "disableController";
         bRSClass = "disableController";
+        bRPClass= "disableController";
     }
 
     function nextSong()
@@ -129,7 +140,7 @@ export default function YTPlayerController(props) {
                         <SkipPreviousIcon onClick = {prevSong} sx={{marginTop: '5px', boxShadow: 2 }} className={bPClass} fontSize="large"></SkipPreviousIcon>
                     </Grid>
                     <Grid item xs = {1.5} sm = {1.5} md={1.5} lg = {1.5}>
-                        <StopIcon onClick={() => setPlaying(false)} sx={{marginTop: '5px', boxShadow: 2 }} className={bRSClass} fontSize="large"></StopIcon>
+                        <StopIcon onClick={() => setPlaying(false)} sx={{marginTop: '5px', boxShadow: 2 }} className={bRPClass} fontSize="large"></StopIcon>
                     </Grid>
                     <Grid item xs = {1.5} sm = {1.5} md={1.5} lg = {1.5}>
                         <PlayCircleFilledWhiteSharpIcon onClick={() => setPlaying(true)} sx={{ marginTop: '5px',boxShadow: 2 }}className={bRSClass} fontSize = 'large' variant="contained"></PlayCircleFilledWhiteSharpIcon>

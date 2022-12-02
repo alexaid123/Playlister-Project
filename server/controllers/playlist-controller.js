@@ -415,6 +415,10 @@ getPlaylistsSearch = async (req, res) => {
 getPlaylistsSearchUser = async (req, res) => {
     console.log("eimaste back " + req.params.str);
     await User.findOne({userName: {$regex: req.params.str}}, (err, user) => {
+        if(user == null)
+        {
+            return res.status(200).json({ success: true, idNamePairs: [] })
+        }
         async function asyncFindList(email) {
             await PublishedPlaylist.find({ ownerEmail: email }, (err, playlists) => {
                 if (err) {
