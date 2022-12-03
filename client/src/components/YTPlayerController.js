@@ -76,7 +76,6 @@ export default function YTPlayerController(props) {
    
     if(store.playingList != null && store.playingList.songs != null && store.playingList.songs[store.currentSongIndex] != null)
     {
-        console.log("Playing song " + store.currentSongIndex);
         vid = "https://www.youtube.com/watch?v=" + store.playingList.songs[store.currentSongIndex].youTubeId;
         if(!ReactPlayer.canPlay(vid))
         {

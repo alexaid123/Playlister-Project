@@ -48,7 +48,6 @@ export default function MUIErrorAlert() {
       </Dialog>
       </div>;
     }
-    console.log("Error is " + store.error);
         return (
             <div >
             {modalJSX}

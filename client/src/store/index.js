@@ -110,7 +110,7 @@ function GlobalStoreContextProvider(props) {
                     allUserLists: true,
                     allLists: false,
                     allUserPublished: false,
-                    publicLists: [],
+                    publicLists: store.publicLists,
                     playingList: null,
                     sortName: false,
                     sortPDate: false,
@@ -604,7 +604,6 @@ function GlobalStoreContextProvider(props) {
     store.changeListName = function (id, newName) {
         if(store.idNamePairs.filter(value=> value.name === newName).length > 0)
         {
-            console.log("found " + newName);
             store.error = "Cant have the same name";
             storeReducer({
                 type: GlobalStoreActionType.CHANGE_LIST_NAME,
@@ -620,10 +619,8 @@ function GlobalStoreContextProvider(props) {
         // GET THE LIST
                 async function asyncChangeListName(id) {
                     let response = await api.getPlaylistById(id);
-                    console.log(newName)
                     if (response.data.success) {
                         let playlist = response.data.playlist;
-                        console.log(newName + " is ");
                         playlist.name = newName;
                             async function updateList(playlist) {
                                 
@@ -650,9 +647,6 @@ function GlobalStoreContextProvider(props) {
                     }
                 }
                 asyncChangeListName(id);
-                
-            
-            console.log(id + " is ")
         }
     }
 
@@ -698,8 +692,8 @@ function GlobalStoreContextProvider(props) {
         }
         else
         {
+            console.log("edo einai " + store.sortListens)
             let p = store.sortPlaylists(store.sortName, store.sortPDate, store.sortListens, store.sortLikes, store.sortDislikes, store.sortEditDate, store.sortCreate);
-            console.log("inside here broo");
             storeReducer({
                 type: GlobalStoreActionType.SWITCHPAGE_USER,
                 payload: {one: first, two: second, three: third, pArray: p}
@@ -780,7 +774,6 @@ function GlobalStoreContextProvider(props) {
             let i = 0;
             while(store.idNamePairs.filter(value=> value.name === ("Untitled" + " " + i)).length > 0)
             {
-                console.log("found Untitled " + i);
                 i++;
             }
         
@@ -791,7 +784,7 @@ function GlobalStoreContextProvider(props) {
         if (response.status === 201) {
             tps.clearAllTransactions();
             let newList = response.data.playlist;
-            console.log(newList._id);
+          
                                       
             store.loadIdNamePairs();
                 // IF IT'S A VALID LIST THEN LET'S START EDITING IT
@@ -810,7 +803,6 @@ function GlobalStoreContextProvider(props) {
             let i = 0;
             while(store.idNamePairs.filter(value=> value.name === (store.currentList.name + " " + i)).length > 0)
             {
-                console.log("found Copy of " + store.currentList.name + " " + i);
                 i++;
             }
            newName = store.currentList.name + " " + i;
@@ -1275,12 +1267,10 @@ function GlobalStoreContextProvider(props) {
             {
                 store.viewSearch = true;
                 store.searchText = text;
-                console.log("GEORGE " + text);
             async function asyncGetLists() {
                 const response = await api.getPlaylistsSearchUser(text);
                 if (response.data.success) {
                     let pairsArray = response.data.idNamePairs;
-                    console.log("PAUL");
                     let p = store.sortPlaylists(store.sortName, store.sortPDate, store.sortListens, store.sortLikes, store.sortDislikes, store.sortEditDate, store.sortCreate, pairsArray);
                                       
                     storeReducer({
@@ -1304,7 +1294,6 @@ function GlobalStoreContextProvider(props) {
         if(pl != null)
         {
            p = pl;
-           console.log(pl);
         }
        
         if((store.allLists || store.allUserPublished) && pl == null)
@@ -1374,6 +1363,7 @@ function GlobalStoreContextProvider(props) {
                     return 0;
             }
             p.sort(compare);
+            let po = {pairs: p, listen: three};
             return p;
         }
         else if(four)
@@ -1478,14 +1468,14 @@ function GlobalStoreContextProvider(props) {
         }
        
        
-        if(store.allLists || store.allUserPublished && !two)
+        if((store.allLists || store.allUserPublished) && (!two && !six && !seven) && pl == null)
         {
             storeReducer({
                 type: GlobalStoreActionType.LOAD_PUBLISHED_LISTS,
                 payload: {pArray: p, sName: one, sPDate: two, sListens: three, sLikes: four, sDislikes: five, sEditDate: six, sCreate: seven, uLi: store.allUserPublished, txt: store.searchText}
             });
         }
-        else if(!two)
+        else if(!two && !six && !seven && pl == null)
         {
             storeReducer({
                 type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
@@ -1503,6 +1493,7 @@ function GlobalStoreContextProvider(props) {
             const response = await api.getPublishedPlaylists();
             if (response.data.success) {
                 let pairsArray = response.data.data;
+                console.log("Sort Listens is " + store.sortListens);
                 let p = store.sortPlaylists(store.sortName, store.sortPDate, store.sortListens, store.sortLikes, store.sortDislikes, store.sortEditDate, store.sortCreate, pairsArray);
                       
                 storeReducer({
@@ -1816,7 +1807,6 @@ function GlobalStoreContextProvider(props) {
                                         if(store.allUserPublished)
                                         {
                                             let p = store.sortPlaylists(store.sortName, store.sortPDate, store.sortListens, store.sortLikes, store.sortDislikes, store.sortEditDate, store.sortCreate, pairsArray);
-                                            console.log(pairsArray);
                                             storeReducer({
                                                 type: GlobalStoreActionType.SET_CURRENT_LIST,
                                                 payload: {list: store.currentList, index: index, public: p, pArray: store.idNamePairs, plist: playlist, cm: true}

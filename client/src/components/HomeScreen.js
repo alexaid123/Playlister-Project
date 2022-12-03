@@ -46,7 +46,6 @@ const HomeScreen = () => {
                    // setView(true);
                    store.viewSearch = true;
                 }
-                console.log(text);
                 inputRef.current.value = "";
                 store.searchPlaylists(text);
                 
@@ -64,6 +63,14 @@ const HomeScreen = () => {
     function handleSort(one, two, three, four, five, six, seven)
     {
         handleClose();
+        store.sortName = one;
+        store.sortPDate = two;
+        store.sortListens = three;
+        store.sortLikes = four;
+        store.sortDislikes = five;
+        store.sortEditDate = six;
+        store.sortCreate = seven;
+        
         store.sortPlaylists(one, two, three, four, five, six, seven);
     }
 
@@ -122,14 +129,12 @@ const HomeScreen = () => {
     let cardClass = "list-card unselected-list-card";
     let comCLass = "cmDisabled";
     let dClass = "";
-    console.log("SEARCH IS " + store.viewSearch);
     if(auth.user.guest)
     {
         dClass = "dHome";
     }
     if(store.playingList != null && store.playingList.published)
     {
-        console.log("Unlocked");
         comCLass = "plbContainer";
     }
     if(store.player)
@@ -248,8 +253,8 @@ const HomeScreen = () => {
                 <Box id = "addLB">
                 {store.allUserLists && <AddIcon style={{fontSize:'48pt'}}id = "cHo" sx = {{verticalAlign: "middle", marginTop: "5px"}}onClick={handleCreateNewList} fontSize='large'/>}
                 {store.allUserLists && <Typography sx = {{marginTop: "18px"}} variant="h4">Your Lists</Typography> }
-                {store.allLists && <Typography sx = {{marginTop: "18px"}} variant="h4">Viewing {store.searchText} Lists</Typography>}
-                {store.allUserPublished && !store.allLists && <Typography sx = {{marginTop: "18px"}} variant="h4">Viewing {store.searchText} Lists</Typography>}
+                {store.allLists && <Typography sx = {{marginTop: "18px"}} variant="h4">Viewing {store.searchText} Playlists</Typography>}
+                {store.allUserPublished && !store.allLists && <Typography sx = {{marginTop: "18px"}} variant="h4">Viewing {store.searchText} User Playlists</Typography>}
                 </Box>
             </div>
             
