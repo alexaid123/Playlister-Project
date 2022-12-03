@@ -7,31 +7,46 @@ function SongCard(props) {
     const { song, index } = props;
 
     function handleDragStart(event) {
-        event.dataTransfer.setData("song", index);
+        if(!store.currentList.published)
+        {
+            event.dataTransfer.setData("song", index);
+        }
     }
  
     function handleDragOver(event) {
-        event.preventDefault();
+        if(!store.currentList.published)
+        {
+            event.preventDefault();
+        }
     }
 
     function handleDragEnter(event) {
         event.preventDefault();
-        setDraggedTo(true);
+        if(!store.currentList.published)
+        {
+            setDraggedTo(true);
+        }
     }
 
     function handleDragLeave(event) {
         event.preventDefault();
-        setDraggedTo(false);
+        if(!store.currentList.published)
+        {
+            setDraggedTo(false);
+        }
     }
 
     function handleDrop(event) {
         event.preventDefault();
         let targetIndex = index;
         let sourceIndex = Number(event.dataTransfer.getData("song"));
-        setDraggedTo(false);
+        if(!store.currentList.published)
+        {
+         setDraggedTo(false);
 
         // UPDATE THE LIST
         store.addMoveSongTransaction(sourceIndex, targetIndex);
+        }
     }
     function handleRemoveSong(event) {
         event.stopPropagation();

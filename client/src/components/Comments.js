@@ -43,7 +43,7 @@ export default function Comments() {
                 }
                 else
                 {
-                    store.updateCurrentList();
+                    store.updatePlayingList();
                 }
                 setText("");
             }

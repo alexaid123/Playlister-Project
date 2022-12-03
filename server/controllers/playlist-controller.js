@@ -413,38 +413,32 @@ getPlaylistsSearch = async (req, res) => {
 }
 
 getPlaylistsSearchUser = async (req, res) => {
-    console.log("eimaste back " + req.params.str);
-    await User.findOne({userName: {$regex: req.params.str, $options: 'i'}}, (err, user) => {
+   
+    await User.find({userName: {$regex: req.params.str, $options: 'i'}}, (err, user) => {
         if(user == null)
         {
             return res.status(200).json({ success: true, idNamePairs: [] })
         }
-        async function asyncFindList(email) {
-            await PublishedPlaylist.find({ ownerEmail: email }, (err, playlists) => {
-                if (err) {
-                    return res.status(400).json({ success: false, error: err })
-                }
-                if (!playlists) {
-                    return res
-                        .status(404)
-                        .json({ success: false, error: 'Playlists not found' })
-                }
-                else {
-                    // PUT ALL THE LISTS INTO ID, NAME PAIRS
-                    let pairs = [];
-                    for (let key in playlists) {
-                        let list = playlists[key];
-                        let pair = {
-                            _id: list._id,
-                            name: list.name
-                        };
-                        pairs.push(list);
+        let pairs = [];
+        for(let i = 0; i < user.length; i++)
+        {
+            async function asyncFindList(email) {
+                await PublishedPlaylist.find({ ownerEmail: email }, (err, playlists) => {
+                    if(playlists != null && playlists.length !== 0)
+                    {
+                        for(let j = 0; j < playlists.length; j++)
+                        {
+                            pairs.push(playlists[j]);
+                        }
                     }
-                    return res.status(200).json({ success: true, idNamePairs: playlists })
-                }
-            }).catch(err => console.log(err))
+                    if(i === user.length - 1)
+                    {
+                        return res.status(200).json({ success: true, idNamePairs: pairs });
+                    }
+                }).catch(err => console.log(err))
+            }
+            asyncFindList(user[i].email);
         }
-        asyncFindList(user.email);
     }).catch(err => console.log(err))
 }
 
@@ -527,6 +521,7 @@ updatePublishedPlaylist = async (req, res) => {
                     list.name = body.playlist.name;
                     list.songs = body.playlist.songs; 
                     list.comments = body.playlist.comments;
+                    console.log(body.playlist.comments);
                     list.published = body.playlist.published;
                     list.likes = body.playlist.likes;
                     list.dislikes = body.playlist.dislikes;

@@ -42,12 +42,12 @@ function ListCard(props) {
     let likeIcon = <span className = {dClass}><ThumbUpAltIcon style={{fontSize:'28pt'}} /><div style = {{marginLeft: "10px", fontWeight:'bold', color: 'black'}}>{idNamePair.likes}</div></span>;
     let dislikeIcon = <span className = {dClass}><ThumbDownAltIcon style={{fontSize:'28pt'}} /><div style = {{marginLeft: "10px", fontWeight:'bold', color: 'black'}}>{idNamePair.dislikes}</div></span>;
 
-    if(idNamePair.likedUsers.includes(auth.user.email))
+    if(idNamePair.likedUsers != null && idNamePair.likedUsers.includes(auth.user.email))
     {
         likeIcon = <span className = {dClass}><ThumbUpAltIcon style={{fontSize:'28pt', color: 'blue'}} /><div style = {{marginLeft: "10px", fontWeight:'bold', color: 'black'}}>{idNamePair.likes}</div></span>;
     }
 
-    if(idNamePair.dislikedUsers.includes(auth.user.email))
+    if(idNamePair.likedUsers != null && idNamePair.dislikedUsers.includes(auth.user.email))
     {
         dislikeIcon = <span className = {dClass}><ThumbDownAltIcon style={{fontSize:'28pt', color: 'red'}} /><div style = {{marginLeft: "10px", fontWeight:'bold', color: 'black'}}>{idNamePair.dislikes}</div></span>;
     }
