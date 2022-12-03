@@ -23,7 +23,11 @@ export default function Comments() {
     const [text, setText] = useState("");
     const { auth } = useContext(AuthContext);
     const inputRef = useRef(null);
-    
+    let dCom = "";
+    if(auth.user.guest)
+    {
+        dCom = "disCom";
+    }
     function handleKeyPress(event) {
         event.stopPropagation();
         if (event.code === "Enter") {
@@ -91,6 +95,7 @@ export default function Comments() {
 
 
            {store.playingList != null && <input 
+                className = {dCom}
                 ref={inputRef}
                 onKeyPress={handleKeyPress}
                 onChange={handleUpdateText}

@@ -49,7 +49,7 @@ export default function YTPlayerController(props) {
     {
         bRPClass = "disableController";
     }
-    if(store.playingList == null || (store.playingList.songs == null) || store.playingList.length === 0)
+    if(store.playingList == null || (store.playingList.songs == null) || store.playingList.songs.length <= 0)
     {
         bSClass = "disableController";
         bPClass = "disableController";
@@ -114,7 +114,7 @@ export default function YTPlayerController(props) {
 
                 <Grid item xs = {1} sm = {1} md={1}></Grid>
                 <Grid item xs = {11} sm = {11} md={11}>
-                    <div className='fCont'> Playlist: {store.playingList != null && store.playingList.songs != null && store.playingList.songs[store.currentSongIndex] != null && store.playingList.name} </div>
+                    <div className='fCont'> Playlist: {store.playingList != null && store.playingList.name} </div>
                 </Grid>
 
                 <Grid item xs = {1} sm = {1} md={1}></Grid>

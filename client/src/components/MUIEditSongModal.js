@@ -30,7 +30,8 @@ export default function MUIEditSongModal() {
             artist: artist,
             youTubeId: youTubeId
         };
-        if(!ReactPlayer.canPlay(youTubeId))
+        let vid = "https://www.youtube.com/watch?v=" + youTubeId;
+        if(!ReactPlayer.canPlay(vid))
         {
             store.invalidSong();
         }

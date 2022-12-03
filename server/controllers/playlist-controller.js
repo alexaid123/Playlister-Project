@@ -377,7 +377,7 @@ getPublishedPlaylists = async (req, res) => {
 
 
 getPublishedPlaylistsSearch = async (req, res) => {
-    await PublishedPlaylist.find({name: {$regex: "" + req.params.str}}, (err, playlists) => {
+    await PublishedPlaylist.find({name: {$regex: "" + req.params.str, $options: 'i' }}, (err, playlists) => {
         if (err) {
             return res.status(400).json({ success: false, error: err })
         }
@@ -392,7 +392,7 @@ getPublishedPlaylistsSearch = async (req, res) => {
 
 getPlaylistsSearch = async (req, res) => {
     console.log("eimaste back " + req.params.email);
-    await Playlist.find({name: {$regex: "" + req.params.str}}, (err, playlists) => {
+    await Playlist.find({name: {$regex: "" + req.params.str, $options: 'i'}}, (err, playlists) => {
         if (err) {
             return res.status(400).json({ success: false, error: err })
         }
@@ -414,7 +414,7 @@ getPlaylistsSearch = async (req, res) => {
 
 getPlaylistsSearchUser = async (req, res) => {
     console.log("eimaste back " + req.params.str);
-    await User.findOne({userName: {$regex: req.params.str}}, (err, user) => {
+    await User.findOne({userName: {$regex: req.params.str, $options: 'i'}}, (err, user) => {
         if(user == null)
         {
             return res.status(200).json({ success: true, idNamePairs: [] })

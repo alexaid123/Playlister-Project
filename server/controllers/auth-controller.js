@@ -94,34 +94,6 @@ logoutUser = async (req, res) => {
 }
 
 registerUser = async (req, res) => {
-
-    const{userName, firstName, lastName, email, password, passwordVerify, guest} = req.body;
-    if(guest)
-    {
-        const token = auth.signToken('a');
-
-        try{
-        res.cookie("token", token, {
-            httpOnly: true,
-            secure: true,
-            sameSite: true
-        }).status(200).json({
-            success: true,
-            user: {
-                guest: true,
-                userName: 'a',
-                firstName: 'a',
-                lastName: 'a',  
-                email: 'a'             
-            }
-        })
-    } catch (err) {
-        console.error(err);
-        res.status(500).send();
-    }
-    }
-    else
-    {
     try {
         const {userName, firstName, lastName, email, password, passwordVerify, guest} = req.body;
 
@@ -193,7 +165,6 @@ registerUser = async (req, res) => {
         console.error(err);
         res.status(500).send();
     }
-}
 }
 
 module.exports = {

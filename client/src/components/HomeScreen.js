@@ -121,7 +121,12 @@ const HomeScreen = () => {
     let listCard = "";
     let cardClass = "list-card unselected-list-card";
     let comCLass = "cmDisabled";
-    console.log("SEARCH IS " + store.viewSearch)
+    let dClass = "";
+    console.log("SEARCH IS " + store.viewSearch);
+    if(auth.user.guest)
+    {
+        dClass = "dHome";
+    }
     if(store.playingList != null && store.playingList.published)
     {
         console.log("Unlocked");
@@ -175,7 +180,7 @@ const HomeScreen = () => {
         
             <div className='topC'>
                 <div id = "topLeft">
-                    <HomeIcon onClick = {() => handlePage(true, false, false) } id = "cHo" sx = {{padding: "0 10px"}} fontSize="large" ></HomeIcon>
+                    <HomeIcon className = {dClass} onClick = {() => handlePage(true, false, false) } id = "cHo" sx = {{padding: "0 10px"}} fontSize="large" ></HomeIcon>
                     <GroupsIcon onClick = {() => handlePage(false, true, false)} id = "cHo" sx = {{padding: "0 10px"}}  fontSize="large"></GroupsIcon>
                     <PersonOutlineIcon onClick = {() => handlePage(false, false, true)} id = "cHo" sx = {{padding: "0 10px"}} fontSize="large"></PersonOutlineIcon>
                 </div>

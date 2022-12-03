@@ -33,17 +33,23 @@ function ListCard(props) {
     const { idNamePair, selected } = props;
     const { auth } = useContext(AuthContext);
 
-    let likeIcon = <span><ThumbUpAltIcon style={{fontSize:'28pt'}} /><div style = {{marginLeft: "10px", fontWeight:'bold', color: 'black'}}>{idNamePair.likes}</div></span>;
-    let dislikeIcon = <span><ThumbDownAltIcon style={{fontSize:'28pt'}} /><div style = {{marginLeft: "10px", fontWeight:'bold', color: 'black'}}>{idNamePair.dislikes}</div></span>;
+    let dClass = "";
+    if(auth.user.guest)
+    {
+        dClass = "dHome";
+    }
+
+    let likeIcon = <span className = {dClass}><ThumbUpAltIcon style={{fontSize:'28pt'}} /><div style = {{marginLeft: "10px", fontWeight:'bold', color: 'black'}}>{idNamePair.likes}</div></span>;
+    let dislikeIcon = <span className = {dClass}><ThumbDownAltIcon style={{fontSize:'28pt'}} /><div style = {{marginLeft: "10px", fontWeight:'bold', color: 'black'}}>{idNamePair.dislikes}</div></span>;
 
     if(idNamePair.likedUsers.includes(auth.user.email))
     {
-        likeIcon = <span><ThumbUpAltIcon style={{fontSize:'28pt', color: 'blue'}} /><div style = {{marginLeft: "10px", fontWeight:'bold', color: 'black'}}>{idNamePair.likes}</div></span>;
+        likeIcon = <span className = {dClass}><ThumbUpAltIcon style={{fontSize:'28pt', color: 'blue'}} /><div style = {{marginLeft: "10px", fontWeight:'bold', color: 'black'}}>{idNamePair.likes}</div></span>;
     }
 
     if(idNamePair.dislikedUsers.includes(auth.user.email))
     {
-        dislikeIcon = <span><ThumbDownAltIcon style={{fontSize:'28pt', color: 'red'}} /><div style = {{marginLeft: "10px", fontWeight:'bold', color: 'black'}}>{idNamePair.dislikes}</div></span>;
+        dislikeIcon = <span className = {dClass}><ThumbDownAltIcon style={{fontSize:'28pt', color: 'red'}} /><div style = {{marginLeft: "10px", fontWeight:'bold', color: 'black'}}>{idNamePair.dislikes}</div></span>;
     }
 
     let modalJSX = "";
@@ -450,7 +456,7 @@ function ListCard(props) {
                         {idNamePair.ownerEmail === auth.user.email && <button onClick={(event) => {
                                 handleDeleteList(event, idNamePair._id)
                             }} style={{fontSize:'14pt', marginLeft: '10px'}}>Delete</button>}
-                        <button onClick = {handleDuplicate} style={{fontSize:'14pt', marginLeft: '10px'}}>Duplicate</button>
+                        <button className = {dClass} onClick = {handleDuplicate} style={{fontSize:'14pt', marginLeft: '10px'}}>Duplicate</button>
                     </Box>
                 </Grid>
                 <Grid item container>
@@ -512,7 +518,7 @@ function ListCard(props) {
                         {idNamePair.ownerEmail === auth.user.email && <button onClick={(event) => {
                                 handleDeleteList(event, idNamePair._id)
                             }} style={{fontSize:'14pt', marginLeft: '10px'}}>Delete</button>}
-                        <button onClick = {handleDuplicate} style={{fontSize:'14pt', marginLeft: '10px'}}>Duplicate</button>
+                        <button className = {dClass} onClick = {handleDuplicate} style={{fontSize:'14pt', marginLeft: '10px'}}>Duplicate</button>
                     </Box>
                 </Grid>
                 <Grid item container>
@@ -572,7 +578,7 @@ function ListCard(props) {
                         <button onClick={(event) => {
                                 handleDeleteList(event, idNamePair._id)
                             }} style={{fontSize:'14pt', marginLeft: '10px'}}>Delete</button>
-                        <button onClick = {handleDuplicate} style={{fontSize:'14pt', marginLeft: '10px'}}>Duplicate</button>
+                        <button className = {dClass} onClick = {handleDuplicate} style={{fontSize:'14pt', marginLeft: '10px'}}>Duplicate</button>
                     </Box>
                 </Grid>
                 <Grid item container>
@@ -721,7 +727,7 @@ function ListCard(props) {
                         {idNamePair.ownerEmail === auth.user.email && <button onClick={(event) => {
                                 handleDeleteList(event, idNamePair._id)
                             }} style={{fontSize:'14pt', marginLeft: '10px'}}>Delete</button>}
-                        <button onClick = {handleDuplicate} style={{fontSize:'14pt', marginLeft: '10px'}}>Duplicate</button>
+                        <button className = {dClass} onClick = {handleDuplicate} style={{fontSize:'14pt', marginLeft: '10px'}}>Duplicate</button>
                     </Box>
                 </Grid>
                 <Grid item container>
@@ -997,7 +1003,7 @@ function ListCard(props) {
                         {idNamePair.ownerEmail === auth.user.email && <button onClick={(event) => {
                                 handleDeleteList(event, idNamePair._id)
                             }} style={{fontSize:'14pt', marginLeft: '10px'}}>Delete</button>}
-                        <button onClick = {handleDuplicate} style={{fontSize:'14pt', marginLeft: '10px'}}>Duplicate</button>
+                        <button className = {dClass} onClick = {handleDuplicate} style={{fontSize:'14pt', marginLeft: '10px'}}>Duplicate</button>
                     </Box>
                 </Grid>
                 <Grid item container>
@@ -1059,7 +1065,7 @@ function ListCard(props) {
                         {idNamePair.ownerEmail === auth.user.email && <button onClick={(event) => {
                                 handleDeleteList(event, idNamePair._id)
                             }} style={{fontSize:'14pt', marginLeft: '10px'}}>Delete</button>}
-                        <button onClick = {handleDuplicate} style={{fontSize:'14pt', marginLeft: '10px'}}>Duplicate</button>
+                        <button className = {dClass} onClick = {handleDuplicate} style={{fontSize:'14pt', marginLeft: '10px'}}>Duplicate</button>
                     </Box>
                 </Grid>
                 <Grid item container>
@@ -1119,7 +1125,7 @@ function ListCard(props) {
                         <button onClick={(event) => {
                                 handleDeleteList(event, idNamePair._id)
                             }} style={{fontSize:'14pt', marginLeft: '10px'}}>Delete</button>
-                        <button onClick = {handleDuplicate} style={{fontSize:'14pt', marginLeft: '10px'}}>Duplicate</button>
+                        <button className = {dClass} onClick = {handleDuplicate} style={{fontSize:'14pt', marginLeft: '10px'}}>Duplicate</button>
                     </Box>
                 </Grid>
                 <Grid item container>
@@ -1268,7 +1274,7 @@ function ListCard(props) {
                         {idNamePair.ownerEmail === auth.user.email && <button onClick={(event) => {
                                 handleDeleteList(event, idNamePair._id)
                             }} style={{fontSize:'14pt', marginLeft: '10px'}}>Delete</button>}
-                        <button onClick = {handleDuplicate} style={{fontSize:'14pt', marginLeft: '10px'}}>Duplicate</button>
+                        <button className = {dClass} onClick = {handleDuplicate} style={{fontSize:'14pt', marginLeft: '10px'}}>Duplicate</button>
                     </Box>
                 </Grid>
                 <Grid item container>

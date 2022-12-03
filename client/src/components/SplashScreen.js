@@ -16,12 +16,12 @@ export default function SplashScreen() {
     {
         auth.registerUser(
             store,
-           null,
-           null,
-           null,
-           null,
-           null,
-           null,
+            'userName' + Math.floor(Math.random() * 1000),
+            'Guest',
+            'Guest',
+            'email' + Math.floor(Math.random() * 1000), 
+            'passwordahdjhajdhsdjdjdhj',
+            'passwordahdjhajdhsdjdjdhj',
             true
         );
 
