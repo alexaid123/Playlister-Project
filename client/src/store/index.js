@@ -634,8 +634,8 @@ function GlobalStoreContextProvider(props) {
 
 
     // THIS FUNCTION PROCESSES CHANGING A LIST NAME
-    store.changeListName = function (id, newName) {
-        if(store.idNamePairs.filter(value=> value.name === newName).length > 0)
+    store.changeListName = function (id, newName, oldName) {
+        if(store.idNamePairs.filter(value=> value.name === newName).length > 0 && newName !== oldName)
         {
             store.error = "Cant have the same name";
             storeReducer({

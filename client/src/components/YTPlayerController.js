@@ -16,6 +16,7 @@ import ReactPlayer from 'react-player';
 export default function YTPlayerController(props) {
     const { store } = useContext(GlobalStoreContext);
     const [count, setCount] = useState(0);
+    const [rkey, setKey] = useState(0);
     const [playing, setPlaying] = useState(store.currentSongIndex !== 0); 
 
 
@@ -61,6 +62,7 @@ export default function YTPlayerController(props) {
     {
         if(store.playingList != null && store.currentSongIndex < store.playingList.songs.length - 1)
         {
+            setKey(rkey + 1);
             store.changeCurSong(1);
         }
     }
@@ -68,6 +70,7 @@ export default function YTPlayerController(props) {
     {
         if(store.currentSongIndex > 0)
         {
+            setKey(rkey + 1);
             store.changeCurSong(-1);
         }
        
@@ -93,7 +96,7 @@ export default function YTPlayerController(props) {
             <div id = "yComp2">
             <div style = {{marginTop: '-5%'}}>
           <div style = {{position: 'absolute', height: '100%', width: '100%'}}>
-          <ReactPlayer className = "noHigh" playing = {playing} onEnded = {nextSong} opts={playerOptions} controls = {false} style={{ pointerEvents: 'none' }} pip = {false} onReady = {onPlayerReady} width = '100%' height= "100%" url = {vid}
+          <ReactPlayer key = {rkey} className = "noHigh" playing = {playing} onEnded = {nextSong} opts={playerOptions} controls = {false} style={{ pointerEvents: 'none' }} pip = {false} onReady = {onPlayerReady} width = '100%' height= "100%" url = {vid}
            onError={() => console.log('eror')}
            />
         </div> 
