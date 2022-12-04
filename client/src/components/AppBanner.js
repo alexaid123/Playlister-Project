@@ -77,7 +77,7 @@ export default function AppBanner() {
     
     function getAccountMenu(loggedIn) {
         let userInitials = auth.getUserInitials();
-        if (loggedIn) 
+        if (loggedIn && !auth.user.guest) 
             return <div>{userInitials}</div>;
         else
             return <AccountCircle />;

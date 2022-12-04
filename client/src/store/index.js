@@ -869,6 +869,18 @@ function GlobalStoreContextProvider(props) {
 
     // THIS FUNCTION LOADS ALL THE ID, NAME PAIRS SO WE CAN LIST ALL THE LISTS
     store.loadIdNamePairs = function () {
+       
+        if(auth.user.guest)
+        {
+            console.log("ADAM");
+            store.allUserLists = false;
+            store.allLists = true;
+            store.allUserPublished = false;
+            store.altUserLists(false, true, false);
+            store.loadPublishedPlaylists();
+        }
+        else
+        {
         async function asyncLoadIdNamePairs() {
             const response = await api.getPlaylistPairs();
             if (response.data.success) {
@@ -885,6 +897,7 @@ function GlobalStoreContextProvider(props) {
             }
         }
         asyncLoadIdNamePairs();
+        }
     }
 
 
@@ -1229,7 +1242,7 @@ function GlobalStoreContextProvider(props) {
     }
 
 
-    store.searchPlaylists = function (text)
+    store.searchPlaylists = function (text, pl)
     {
         if(store.allLists)
         {
@@ -1243,13 +1256,14 @@ function GlobalStoreContextProvider(props) {
             }
             else
             {
+                console.log("Ftasame"+pl);
                 async function asyncGetLists() {
                     const response = await api.getPublishedPlaylistsSearch(text);
                     if (response.data.success) {
                         let pairsArray = response.data.data;
                         let p = store.sortPlaylists(store.sortName, store.sortPDate, store.sortListens, store.sortLikes, store.sortDislikes, store.sortEditDate, store.sortCreate, pairsArray);
-                                      
-                        storeReducer({
+                        
+                            storeReducer({
                             type: GlobalStoreActionType.LOAD_PUBLISHED_LISTS,
                             payload: {pArray: p, sName: store.sName, sPDate: store.sPDate, sListens: store.sListens, sLikes: store.sLikes, sDislikes: store.sDislikes, sEditDate: store.sEditDate, sCreate: store.sCreate, uLi: store.allUserPublished, txt: text}
                         });
@@ -1359,6 +1373,10 @@ function GlobalStoreContextProvider(props) {
                     const response = await api.getSortedPublish();
                     if (response.data.success) {
                         let pairsArray = response.data.idNamePairs;
+                        if(pl != null)
+                        {
+                            return pairsArray;
+                        }
                         storeReducer({
                             type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
                             payload: {pairs: pairsArray, count: store.newListCounter + 1, sName: one, sPDate: two, sListens: three, sLikes: four, sDislikes: five, sEditDate: six, sCreate: seven}
@@ -1377,6 +1395,10 @@ function GlobalStoreContextProvider(props) {
                     const response = await api.getPSortedPublish();
                     if (response.data.success) {
                         let pairsArray = response.data.idNamePairs;
+                        if(pl != null)
+                        {
+                            return pairsArray;
+                        }
                         storeReducer({
                             type: GlobalStoreActionType.LOAD_PUBLISHED_LISTS,
                             payload: {pArray: pairsArray, sName: one, sPDate: two, sListens: three, sLikes: four, sDislikes: five, sEditDate: six, sCreate: seven, uLi: store.allUserPublished}
@@ -1736,7 +1758,7 @@ function GlobalStoreContextProvider(props) {
                         else
                         {
                             let p = store.sortPlaylists(store.sortName, store.sortPDate, store.sortListens, store.sortLikes, store.sortDislikes, store.sortEditDate, store.sortCreate);
-                                      
+                            
                             storeReducer({
                                 type: GlobalStoreActionType.SET_CURRENT_LIST,
                                 payload: {list: store.currentList, index: index, public: store.publicLists, pArray: p, plist: playlist, cm: true}
@@ -1763,19 +1785,6 @@ function GlobalStoreContextProvider(props) {
                     {
                         store.incrementListens(id, index);
                     }
-                    response = await api.updatePublishedPlaylistById(playlist._id, playlist);
-                    if (response.data.success) {
-                        let ind = store.currentSongIndex + 1;;
-                        if(playlist._id === id && store.currentSongIndex !== -1)
-                        {
-                            ind = store.currentSongIndex;
-                        }
-                       /* storeReducer({
-                            type: GlobalStoreActionType.SET_CURRENT_LIST,
-                            payload: {list: store.currentList, index: ind, public: store.publicLists, pArray: store.idNamePairs, plist: playlist}
-                        });*/
-                    }
-                
             }
         }
         asyncSetCurrentList(id);
@@ -1813,6 +1822,7 @@ function GlobalStoreContextProvider(props) {
     {
         if(store.allLists || store.allUserPublished)
         {
+            console.log("Search is " + store.searchText);
             async function getListToLike(id) {
                 let response = await api.getPublishedPlaylistById(id);
                 if (response.data.success) {
@@ -1836,24 +1846,29 @@ function GlobalStoreContextProvider(props) {
                     }
                     getPListToLike(playlist.unpublishedID);
                         async function updateList(playlist) {
+                            
                             response = await api.updatePublishedPlaylistById(playlist._id, playlist);
                             if (response.data.success) {
                                 async function getPublishedPlaylists() {
                                     const response = await api.getPublishedPlaylists();
                                     if (response.data.success) {
                                         let pairsArray = response.data.data;
+                                       
                                         if(store.allUserPublished)
-                                        {
+                                        { 
                                             let p = store.sortPlaylists(store.sortName, store.sortPDate, store.sortListens, store.sortLikes, store.sortDislikes, store.sortEditDate, store.sortCreate, pairsArray);
+                                            
                                             storeReducer({
                                                 type: GlobalStoreActionType.SET_CURRENT_LIST,
                                                 payload: {list: store.currentList, index: index, public: p, pArray: store.idNamePairs, plist: playlist, cm: true}
                                             });
+                                            console.log(store.allUserLists + " " + store.allLists + " " + store.allUserPublished)
                                         }
                                         else
                                         {
+                                           
                                             let p = store.sortPlaylists(store.sortName, store.sortPDate, store.sortListens, store.sortLikes, store.sortDislikes, store.sortEditDate, store.sortCreate, pairsArray);
-                                      
+                                            
                                             storeReducer({
                                                 type: GlobalStoreActionType.SET_CURRENT_LIST,
                                                 payload: {list: store.currentList, index: index, public: p, pArray: store.idNamePairs, plist: playlist, cm: true}
@@ -2040,7 +2055,6 @@ function GlobalStoreContextProvider(props) {
         async function asyncUpdateCurrentList() {
             const response = await api.updatePlaylistById(store.currentList._id, store.currentList);
             if (response.data.success) {
-                console.log(store.currentList.songs[1].youTubeId);
                 storeReducer({
                     type: GlobalStoreActionType.SET_CURRENT_LIST,
                     payload: {list: store.currentList, index: store.index, public: store.publicLists, pArray: store.idNamePairs, plist: store.currentList, cm: store.player}

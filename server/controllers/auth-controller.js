@@ -85,6 +85,14 @@ loginUser = async (req, res) => {
 }
 
 logoutUser = async (req, res) => {
+    User.findOneAndDelete({guest: true}, function (err, docs) {
+        if (err){
+            console.log(err)
+        }
+        else{
+            console.log("Deleted User : ", docs);
+        }
+    });
     res.cookie("token", "", {
         httpOnly: true,
         expires: new Date(0),

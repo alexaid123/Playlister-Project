@@ -9,7 +9,8 @@ const style = {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 400,
+    width: 760,
+    height: 240,
     bgcolor: 'background.paper',
     border: '2px solid #000',
     boxShadow: 24,
@@ -28,30 +29,46 @@ export default function MUIDeleteModal() {
     function handleCloseModal(event) {
         store.unmarkListForDeletion();
     }
-
+    let modalClass = "modal is-visible";
+    
     return (
-        <Modal
-            open={store.listMarkedForDeletion !== null}
-        >
-            <Box sx={style}>
-                <div className="modal-dialog">
-                <header className="dialog-header">
-                    Delete the {name} Top 5 List?
-                </header>
-                <div id="confirm-cancel-container">
-                    <button
-                        id="dialog-yes-button"
-                        className="modal-button"
-                        onClick={handleDeleteList}
-                    >Confirm</button>
-                    <button
-                        id="dialog-no-button"
-                        className="modal-button"
-                        onClick={handleCloseModal}
-                    >Cancel</button>
+
+
+                <Modal
+                open={store.listMarkedForDeletion !== null}
+            >
+                <Box sx={style}>
+                <div
+            id="remove-song-modal"
+            className={modalClass}
+            data-animation="slideInOutLeft">
+            <div className="modal-root" id='verify-remove-song-root'>
+                <div className="modal-north">
+                    Delete {name}?
+                </div>
+                <div className="modal-center">
+                    <div className="modal-center-content">
+                        Are you sure you wish to permanently delete the {name} playlist?
+                    </div>
+                </div>
+                <div className="modal-south">
+                    <input type="button" 
+                        id="remove-song-confirm-button" 
+                        className="modal-button" 
+                        onClick={handleDeleteList} 
+                        value='Confirm' />
+                    <input 
+                        type="button" 
+                        id="remove-song-cancel-button" 
+                        className="modal-button" 
+                        onClick={handleCloseModal} 
+                        value='Cancel' />
                 </div>
             </div>
-            </Box>
-        </Modal>
+        </div>
+                </Box>
+            </Modal>
+
+        
     );
 }
