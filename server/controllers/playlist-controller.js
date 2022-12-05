@@ -414,7 +414,7 @@ getPlaylistsSearch = async (req, res) => {
 
 getPlaylistsSearchUser = async (req, res) => {
    
-    await User.find({userName: {$regex: req.params.str, $options: 'i'}}, (err, user) => {
+    await User.find({userName: {$regex: "" +  req.params.str, $options: 'i'}}, (err, user) => {
         if(user == null)
         {
             return res.status(200).json({ success: true, idNamePairs: [] })

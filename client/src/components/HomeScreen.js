@@ -91,17 +91,14 @@ const HomeScreen = () => {
 
     function handlePage(one, two, three)
     {
-        if((!one && two && !three))
+        /*if((!one && two && !three))
         {
             store.loadPublishedPlaylists();
         }
         if((one && !two && !three) && !auth.user.guest)
         {
             store.loadIdNamePairs();
-        }
-        store.allUserLists = one;
-        store.allLists = two;
-        store.allUserPublished = three;
+        }*/
         store.currentList = null;
         store.playingList = null;
         store.currentSongIndex = -1;

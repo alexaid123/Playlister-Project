@@ -62,7 +62,10 @@ export default function YTPlayerController(props) {
     {
         if(store.playingList != null && store.currentSongIndex < store.playingList.songs.length - 1)
         {
-            setKey(rkey + 1);
+            if(store.playingList.songs[store.currentSongIndex].youTubeId === store.playingList.songs[store.currentSongIndex + 1].youTubeId)
+            {
+                setKey(rkey + 1);
+            }
             store.changeCurSong(1);
         }
     }
@@ -70,7 +73,10 @@ export default function YTPlayerController(props) {
     {
         if(store.currentSongIndex > 0)
         {
-            setKey(rkey + 1);
+            if(store.playingList.songs[store.currentSongIndex].youTubeId === store.playingList.songs[store.currentSongIndex - 1].youTubeId)
+            {
+                setKey(rkey + 1);
+            }
             store.changeCurSong(-1);
         }
        
