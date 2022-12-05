@@ -1398,12 +1398,12 @@ function GlobalStoreContextProvider(props) {
             }
             else
             {
-            async function asyncGetLists() {
+            /*async function asyncGetLists() {
                 const response = await api.getPlaylistsSearch(text, auth.user.email);
                 if (response.data.success) {
                     let pairsArray = response.data.data;
                     let p = store.sortPlaylists(store.sortName, store.sortPDate, store.sortListens, store.sortLikes, store.sortDislikes, store.sortEditDate, store.sortCreate, pairsArray);
-                                      
+                    p = pairsArray;           
                     storeReducer({
                         type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
                         payload: {pairs: p, count: store.newListCounter + 1, sName: store.sortName, sPDate: store.sortPDate, sListens: store.sortListens, sLikes: store.sortLikes, sDislikes: store.sortDislikes, sEditDate: store.sortEditDate, sCreate: store.sortCreate, text: text}
@@ -1413,7 +1413,19 @@ function GlobalStoreContextProvider(props) {
                     console.log("API FAILED TO GET THE LIST PAIRS");
                 }
             }
-            asyncGetLists();
+            asyncGetLists();*/
+            let p = store.idNamePairs.filter(playlist => {
+                if (playlist.name.toLowerCase().includes(text.toLowerCase())) {
+                  return true;
+                }
+                return false;
+              });
+              p = store.sortPlaylists(store.sortName, store.sortPDate, store.sortListens, store.sortLikes, store.sortDislikes, store.sortEditDate, store.sortCreate, p);
+                    
+              storeReducer({
+                type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
+                payload: {pairs: p, count: store.newListCounter + 1, sName: store.sortName, sPDate: store.sortPDate, sListens: store.sortListens, sLikes: store.sortLikes, sDislikes: store.sortDislikes, sEditDate: store.sortEditDate, sCreate: store.sortCreate, text: text}
+            });
             }
         }
         else if(store.allUserPublished)
@@ -1567,21 +1579,43 @@ function GlobalStoreContextProvider(props) {
                         let pairsArray = response.data.idNamePairs;
                         if(store.searchText !== "")
                         {
-                            pairsArray = pairsArray.filter(playlist => {
-                                if (playlist.ownerUserName.toLowerCase().includes(store.searchText.toLowerCase())) {
-                                return true;
-                                }
-                                return false;
-                            });
+                            console.log("RICK ROLL")
+                            if(store.allLists)
+                            {
+                                pairsArray = pairsArray.filter(playlist => {
+                                    if (playlist.name.toLowerCase().includes(store.searchText.toLowerCase())) {
+                                    return true;
+                                    }
+                                    return false;
+                                });
+                            }
+                            else
+                            {
+                                pairsArray = pairsArray.filter(playlist => {
+                                    if (playlist.ownerUserName.toLowerCase().includes(store.searchText.toLowerCase())) {
+                                    return true;
+                                    }
+                                    return false;
+                                });
+                            }
                         }
                         if(pl != null)
                         {
+                            store.sortPDate = true;
+                            store.sortCreate = false;
+                            store.sortDislikes = false;
+                            store.sortLikes = false;
+                            store.sortName = false;
+                            store.sortListens = false;
+                            store.sortEditDate = false;
                             return pairsArray;
                         }
+                        
                         storeReducer({
                             type: GlobalStoreActionType.LOAD_PUBLISHED_LISTS,
                             payload: {pArray: pairsArray, sName: one, sPDate: two, sListens: three, sLikes: four, sDislikes: five, sEditDate: six, sCreate: seven, uLi: store.allUserPublished, cInd: store.currentSongIndex, plList: store.playingList}
                         });
+                        return pairsArray;
                     }
                     else {
                         console.log("API FAILED TO GET THE LIST PAIRS");
@@ -2044,8 +2078,6 @@ function GlobalStoreContextProvider(props) {
             let response = await api.getPlaylistById(id);
             if (response.data.success) {
                 let playlist = response.data.playlist;
-                    response = await api.updatePlaylistById(playlist._id, playlist);
-                    if (response.data.success) {
                         if(playlist.published)
                         {
                             
@@ -2060,15 +2092,34 @@ function GlobalStoreContextProvider(props) {
                         }
                         else
                         {
-                            let p = store.sortPlaylists(store.sortName, store.sortPDate, store.sortListens, store.sortLikes, store.sortDislikes, store.sortEditDate, store.sortCreate);
+                            /*let p = store.sortPlaylists(store.sortName, store.sortPDate, store.sortListens, store.sortLikes, store.sortDislikes, store.sortEditDate, store.sortCreate);
                             
+                            storeReducer({
+                                type: GlobalStoreActionType.SET_CURRENT_LIST,
+                                payload: {list: store.currentList, index: index, public: store.publicLists, pArray: p, plist: playlist, cm: true}
+                            });*/
+
+
+
+
+                            let p = store.idNamePairs;
+                            if(store.searchText !== "")
+                            {
+                                p = p.filter(playlist => {
+                                if (playlist.name.toLowerCase().includes(store.searchText.toLowerCase())) {
+                                  return true;
+                                }
+                                return false;
+                              });
+                            }
+                           
+                            p = store.sortPlaylists(store.sortName, store.sortPDate, store.sortListens, store.sortLikes, store.sortDislikes, store.sortEditDate, store.sortCreate, p);
+                           
                             storeReducer({
                                 type: GlobalStoreActionType.SET_CURRENT_LIST,
                                 payload: {list: store.currentList, index: index, public: store.publicLists, pArray: p, plist: playlist, cm: true}
                             });
                         }
-                    }
-                
             }
         }
         asyncSetCurrentList(id);
@@ -2188,7 +2239,7 @@ function GlobalStoreContextProvider(props) {
                                               });
                                             }
                                            
-                                            p = store.sortPlaylists(store.sortName, store.sortPDate, store.sortListens, store.sortLikes, store.sortDislikes, store.sortEditDate, store.sortCreate, pairsArray);
+                                            p = store.sortPlaylists(store.sortName, store.sortPDate, store.sortListens, store.sortLikes, store.sortDislikes, store.sortEditDate, store.sortCreate, p);
                                            
                                             storeReducer({
                                                 type: GlobalStoreActionType.SET_CURRENT_LIST,
