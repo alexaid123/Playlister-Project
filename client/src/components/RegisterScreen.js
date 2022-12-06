@@ -42,11 +42,11 @@ export default function RegisterScreen() {
     };
 
     return (
-            <Container component="main" maxWidth="xs">
+            <Container sx = {{marginTop: '-67px'}} component="main" maxWidth="xs">
                 <CssBaseline />
                 <Box
                     sx={{
-                        marginTop: 8,
+                        marginTop: 9,
                         display: 'flex',
                         flexDirection: 'column',
                         alignItems: 'center',
@@ -144,7 +144,7 @@ export default function RegisterScreen() {
                         </Grid>
                     </Box>
                 </Box>
-                <Copyright sx={{ mt: 5 }} />
+                <Copyright sx={{ mt: 1 }} />
             </Container>
     );
 }

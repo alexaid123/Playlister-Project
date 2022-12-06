@@ -47,6 +47,11 @@ export default function SplashScreen() {
                 </ Link></Button>
             </div>
         </Box>
+        <Box sx={{marginLeft: '890px', marginTop: '200px'}}>
+            <div style = {{fontSize: '24px'}}>
+                Created by: Alexandros Aidonis
+            </div>
+        </Box>
         
         </div>
         
