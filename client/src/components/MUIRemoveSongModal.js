@@ -33,13 +33,13 @@ export default function MUIRemoveSongModal() {
         modalClass += " is-visible";
     }
     let songTitle = "";
-    if (store.currentSong) {
-        songTitle = store.currentSong.title;
+    if (store.currentDeleteSong.song) {
+        songTitle = store.currentDeleteSong.song.title;
     }
 
     return (
         <Modal
-            open={store.currentSong !== null}
+            open={store.currentDeleteSong.song !== null}
         >
             <Box sx={style}>
             <div

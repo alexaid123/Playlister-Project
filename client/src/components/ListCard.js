@@ -197,7 +197,6 @@ function ListCard(props) {
         store.allLists = false;
         store.allUserLists = false;
         store.searchPlaylists(idNamePair.ownerUserName);
-        console.log("clicked " + idNamePair.ownerUserName);
     }
 
     function handleUpdateText(event) {

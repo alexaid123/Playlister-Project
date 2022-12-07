@@ -92,19 +92,13 @@ export default function YTPlayerController(props) {
         }
     }
 
-    function onPlayerReady(event)
-    {
-        console.log("started playing");
-    }
-
     return (
         <Grid container direction = "column">
             <div id = "yComp2">
             <div style = {{marginTop: '-5%'}}>
           <div style = {{position: 'absolute', height: '100%', width: '100%'}}>
-          <ReactPlayer key = {rkey} className = "noHigh" playing = {playing} onEnded = {nextSong} opts={playerOptions} controls = {true} style={{ pointerEvents: 'none' }} pip = {false} onReady = {onPlayerReady} width = '100%' height= "100%" url = {vid}
-           onError={() => console.log('eror')}
-           />
+          <ReactPlayer key = {rkey} className = "noHigh" playing = {playing} onEnded = {nextSong} opts={playerOptions} controls = {true} style={{ pointerEvents: 'none', visibility: "visible" }} pip = {false} width = '100%' height= "100%" url = {vid}
+    />
         </div> 
             </div>
             </div>

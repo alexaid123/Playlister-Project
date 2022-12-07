@@ -1,4 +1,3 @@
-
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import { Link } from 'react-router-dom'
@@ -31,9 +30,8 @@ export default function Comments() {
     function handleKeyPress(event) {
         event.stopPropagation();
         if (event.code === "Enter") {
-            if(text != "")
+            if(text !== "")
             {
-                console.log(text);
                 inputRef.current.value = "";
                 let cm = {user: auth.user.userName, comment: text};
                 store.playingList.comments.push(cm);

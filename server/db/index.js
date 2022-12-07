@@ -3,11 +3,12 @@ const mongoose = require('mongoose')
 const dotenv = require('dotenv')
 dotenv.config();
 
-mongoose
+/*mongoose
     .connect(process.env.DB_CONNECT, { useNewUrlParser: true })
     .catch(e => {
         console.error('Connection error', e.message)
-    })
+    })*/
+mongoose.connect(process.env.DB_CONNECT, {useUnifiedTopology: true, useNewUrlParser: true, useCreateIndex: true });
 
 const db = mongoose.connection
 

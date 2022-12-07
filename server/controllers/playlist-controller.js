@@ -391,7 +391,6 @@ getPublishedPlaylistsSearch = async (req, res) => {
 }
 
 getPlaylistsSearch = async (req, res) => {
-    console.log("eimaste back " + req.params.email);
     await Playlist.find({name: {$regex: "" + req.params.str, $options: 'i'}}, (err, playlists) => {
         if (err) {
             return res.status(400).json({ success: false, error: err })
@@ -521,7 +520,6 @@ updatePublishedPlaylist = async (req, res) => {
                     list.name = body.playlist.name;
                     list.songs = body.playlist.songs; 
                     list.comments = body.playlist.comments;
-                    console.log(body.playlist.comments);
                     list.published = body.playlist.published;
                     list.likes = body.playlist.likes;
                     list.dislikes = body.playlist.dislikes;
