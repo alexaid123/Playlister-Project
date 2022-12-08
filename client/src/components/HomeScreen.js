@@ -251,7 +251,7 @@ const HomeScreen = () => {
                 {store.allUserLists && <AddIcon style={{fontSize:'48pt'}}id = "cHo" sx = {{verticalAlign: "middle", marginTop: "5px"}}onClick={handleCreateNewList} fontSize='large'/>}
                 {store.allUserLists && <Typography sx = {{marginTop: "18px"}} variant="h4">Your Lists</Typography> }
                 {store.allLists && <Typography sx = {{marginTop: "18px"}} variant="h4">Viewing {store.searchText} Playlists</Typography>}
-                {store.allUserPublished && !store.allLists && <Typography sx = {{marginTop: "18px"}} variant="h4">Viewing {store.searchText} User Playlists</Typography>}
+                {store.allUserPublished && !store.allLists && <Typography sx = {{marginTop: "18px"}} variant="h4">Viewing {store.searchText !== "" && (store.searchText + "'s")} Playlists</Typography>}
                 </Box>
             </div>
             

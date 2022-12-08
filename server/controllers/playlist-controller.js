@@ -231,7 +231,6 @@ getPlaylistByName = async (req, res) => {
         if (err) {
             return res.status(400).json({ success: false, error: err });
         }
-        console.log(list);
 
         // DOES THIS LIST BELONG TO THIS USER?
         if(list != null)

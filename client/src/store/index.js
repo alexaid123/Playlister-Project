@@ -132,7 +132,7 @@ function GlobalStoreContextProvider(props) {
                 return setStore({
                     currentModal : CurrentModal.NONE,
                     idNamePairs: payload.idNamePairs,
-                    currentList: null,
+                    currentList: store.currentList,
                     currentSongIndex: store.currentSongIndex,
                     currentSong: null,
                     newListCounter: store.newListCounter,
@@ -261,7 +261,7 @@ function GlobalStoreContextProvider(props) {
                 return setStore({
                     currentModal : CurrentModal.NONE,
                     idNamePairs: payload.pairs,
-                    currentList: null,
+                    currentList: store.currentList,
                     currentSongIndex: store.currentSongIndex,
                     currentSong: null,
                     newListCounter: payload.count,
@@ -293,7 +293,7 @@ function GlobalStoreContextProvider(props) {
                 return setStore({
                     currentModal : CurrentModal.NONE,
                     idNamePairs: store.idNamePairs,
-                    currentList: null,
+                    currentList: store.currentList,
                     currentSongIndex: payload.cInd,
                     currentSong: null,
                     newListCounter: store.newListCounter,
@@ -653,7 +653,7 @@ function GlobalStoreContextProvider(props) {
 
     // THIS FUNCTION PROCESSES CHANGING A LIST NAME
     store.changeListName = function (id, newName, oldName) {
-        if(store.idNamePairs.filter(value=> value.name.toLowerCase() === newName.toLowerCase()).length > 0 && newName !== oldName)
+        if(store.idNamePairs.filter(value=> value.name.replace(/\s+/g, '').toLowerCase() === newName.toLowerCase().replace(/\s+/g, '')).length > 0 && newName !== oldName)
         {
             store.error = "Cant have the same name";
             storeReducer({
@@ -1797,6 +1797,13 @@ function GlobalStoreContextProvider(props) {
                         }
                         if(pl != null)
                         {
+                            store.sortPDate = false;
+                            store.sortCreate = false;
+                            store.sortDislikes = false;
+                            store.sortLikes = false;
+                            store.sortName = false;
+                            store.sortListens = false;
+                            store.sortEditDate = true;
                             return pairsArray;
                         }
                         storeReducer({
@@ -2040,6 +2047,7 @@ function GlobalStoreContextProvider(props) {
             if (response.data.success) {
                 let playlist = response.data.playlist;
                     response = await api.updatePlaylistById(playlist._id, playlist);
+                    tps.clearAllTransactions();
                     if (response.data.success) {
                         storeReducer({
                             type: GlobalStoreActionType.SET_CURRENT_LIST,
@@ -2141,6 +2149,7 @@ function GlobalStoreContextProvider(props) {
             let response = await api.getPublishedPlaylistById(id);
             if (response.data.success) {
                 let playlist = response.data.playlist;
+                tps.clearAllTransactions();
                 storeReducer({
                     type: GlobalStoreActionType.SET_CURRENT_LIST,
                     payload: {list: playlist, index: store.currentSongIndex, public: store.publicLists, pArray: store.idNamePairs, plist: store.playingList, cm: true}
@@ -2268,7 +2277,7 @@ function GlobalStoreContextProvider(props) {
                                     if (response.data.success) {
                                         
                                         let pairsArray = response.data.idNamePairs;
-                                        let p = store.sortPlaylists(store.sortName, store.sortPDate, store.sortListens, store.sortLikes, store.sortDislikes, store.sortEditDate, store.sortCreate, pairsArray);
+                                        let p = pairsArray;
                                         if(store.searchText !== "")
                                         {
                                             p = p.filter(playlist => {
@@ -2278,6 +2287,8 @@ function GlobalStoreContextProvider(props) {
                                                 return false;
                                             });
                                         }
+                                        p = store.sortPlaylists(store.sortName, store.sortPDate, store.sortListens, store.sortLikes, store.sortDislikes, store.sortEditDate, store.sortCreate, pairsArray);
+                                       
                                         storeReducer({
                                             type: GlobalStoreActionType.SET_CURRENT_LIST,
                                             payload: {list: store.currentList, index: index, public: store.publicLists, pArray: p, plist: playlist, cm: store.player}
